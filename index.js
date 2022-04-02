@@ -10,7 +10,7 @@ global.rooms = {
     "gold":{}
   }
 };
-global.playersize = 75;
+global.playersize = 50;
 
 app.use(express.static("public"));
 const { random, generateCode} = require("./functions");
