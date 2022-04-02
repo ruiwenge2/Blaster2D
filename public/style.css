@@ -1,0 +1,44 @@
+body {
+  margin:0;
+  overflow:hidden;
+  font-family:Arial;
+  text-align:center;
+  background:black;
+  color:white;
+}
+
+#join {
+  height:100%;
+  overflow:auto;
+}
+
+h1 {
+  font-size:50px;
+}
+
+label {
+  font-size:20px;
+}
+
+input {
+  height:25px;
+  font-size:20px;
+}
+
+button {
+  min-width:150px;
+  height:60px;
+  margin:10px;
+  background:white;
+  color:blue;
+  border:2px solid blue;
+  border-radius:10px;
+  cursor:pointer;
+  user-select:none;
+  transition:all 0.3s ease-in-out;
+  font-size:20px;
+}
+button:hover {
+  background:blue;
+  color:white;
+}

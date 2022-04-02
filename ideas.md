@@ -1,0 +1,4 @@
+- multiplayer obv
+- different types of guns(sniper, pistol, machine gun)
+- obstacles in the map
+- public and private servers
