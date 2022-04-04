@@ -3,7 +3,7 @@ var height = window.innerHeight;
 const size = 3000;
 const playersize = 50;
 const coinsize = 37.5;
-const ratio = size / 500;
+const ratio = size / 60;
 
 function random(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;

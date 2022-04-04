@@ -15,7 +15,7 @@ class gamescene extends Phaser.Scene {
   preload() {
     this.load.image("player", "/img/player.png");
     this.load.image("coin", "/img/coin.png");
-    this.load.image("grass", "/img/grass.png");
+    this.load.image("grass", "/img/tile.png");
     this.load.image("bullet", "/img/bullet.png");
     this.load.image("pistol", "/img/pistol.png");
     this.load.image("obstacle", "/img/obstacle.png");
@@ -46,9 +46,9 @@ class gamescene extends Phaser.Scene {
         if(oplayer != this.socket.id){
           let otherplayer = this.otherplayers.create(data.players[oplayer].x, data.players[oplayer].y, "player").setScale(0.5, 0.5).setDepth(1);
           otherplayer.id = oplayer;
-          let gun = this.otherguns.create(oplayer.x + Math.cos(0) * (playersize / 2 + 28), oplayer.y + Math.sin(0) * (playersize / 2 + 28), "pistol").setDepth(2);
-          gun.angle = 0;
-          gun.angle2 = 0;
+          let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(2);
+          gun.angle = data.players[oplayer].angle;
+          gun.angle2 = data.players[oplayer].angle2;
           gun.id = oplayer;
         }
       }
@@ -121,7 +121,7 @@ class gamescene extends Phaser.Scene {
     this.obstacle3 = this.physics.add.staticSprite(750, 1500, "obstacle2").setDepth(0);
     this.obstacle4 = this.physics.add.staticSprite(2250, 1500, "obstacle2").setDepth(0);
 
-    this.physics.add.sprite(1500, 1500, "tree").setDepth(10);
+    this.physics.add.staticSprite(1500, 1500, "tree").setDepth(10);
 
     this.coins = this.physics.add.group();
     for(let i = 0; i < random(30, 50); i++){
@@ -169,8 +169,8 @@ class gamescene extends Phaser.Scene {
       }
     }, 1000);
 
-    this.physics.add.collider(this.player, this.coins, (player2, coin) => {
-      this.collect(player2, coin);
+    this.physics.add.collider(this.player, this.coins, (player, coin) => {
+      this.collect(player, coin);
     });
 
     this.physics.add.collider(this.bullets, this.obstacle1, (obstacle, bullet) => {
@@ -217,7 +217,7 @@ class gamescene extends Phaser.Scene {
     // });
   }
 
-  collect(player2, coin){
+  collect(player, coin){
     this.gold += 1;
     this.goldtext.setText("Gold: " + this.gold);
     coin.destroy();

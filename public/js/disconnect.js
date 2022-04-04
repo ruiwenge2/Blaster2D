@@ -19,7 +19,7 @@ class disconnect_scene extends Phaser.Scene {
     this.button.x = this.text.x - (this.text.width / 2) - 5;
     this.button.y = this.text.y - (this.text.height / 2) - 5;
     this.button.setInteractive().on('pointerdown', () => {
-      this.canvas.remove();
+      location.reload();
     });
   }
   

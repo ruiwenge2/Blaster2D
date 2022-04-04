@@ -19,6 +19,8 @@ module.exports = socket => {
     socket.broadcast.emit("other player move", socket.id, x, y, angle, angle2);
     rooms.main.players[socket.id].x = x;
     rooms.main.players[socket.id].y = y;
+    rooms.main.players[socket.id].angle = angle;
+    rooms.main.players[socket.id].angle2 = angle2;
   });
 
   socket.on("disconnect", () => {
