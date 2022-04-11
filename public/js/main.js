@@ -34,7 +34,7 @@ function startGame(){
   
   game.scene.add("gamescene", gamescene);
   game.scene.add("joinscene", joinscene);
-  game.scene.add("howtoplay", howtoplay)
+  game.scene.add("howtoplay", howtoplay);
   game.scene.add("diedscene", diedscene);
   game.scene.add("bestscores", bestscores);
   game.scene.add("disconnect_scene", disconnect_scene);
@@ -45,7 +45,7 @@ function startGame(){
     game.scale.resize(window.innerWidth, window.innerHeight);
   });
   
-  document.getElementById("join").style.display = "none";
+  document.querySelector("main").style.display = "none";
 }
 
 if(localStorage.getItem("name")){
