@@ -39,6 +39,7 @@ function startGame(){
   game.scene.add("bestscores", bestscores);
   game.scene.add("disconnect_scene", disconnect_scene);
   game.scene.start("gamescene");
+  document.querySelector("canvas").style.cursor = "crosshair";
   
   window.addEventListener("resize", () => {
     game.scale.resize(window.innerWidth, window.innerHeight);
