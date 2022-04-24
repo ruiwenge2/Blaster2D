@@ -3,7 +3,6 @@ const { random, generateCode, checkUser } = require("./functions");
 module.exports = socket => {
   socket.on("join", name => {
     if(Object.keys(rooms.main.players).length == 0){
-      console.log("yess")
       const coinsize = 37.5;
       const treesize = 300;
       const size = 3000;

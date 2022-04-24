@@ -1,6 +1,19 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
+const { exec } = require("child_process");
+exec("npm run build", (error, stdout, stderr) => {
+  if (error) {
+    console.log(`${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.log(`${stderr}`);
+    return;
+  }
+  console.log(`${stdout}`);
+});
+
 global.io = require("socket.io")(server);
 global.rooms = {
   main: {
