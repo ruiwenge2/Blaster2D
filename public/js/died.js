@@ -6,7 +6,7 @@ class diedscene extends Phaser.Scene {
   }
   
   preload(){
-    
+     
   }
   
   create(){

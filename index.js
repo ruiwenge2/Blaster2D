@@ -4,16 +4,16 @@ const server = require("http").Server(app);
 global.io = require("socket.io")(server);
 global.rooms = {
   main: {
-    "players": {},
-    "trees": {},
-    "bullets": {},
-    "gold":{}
+    players: {},
+    trees: [],
+    bullets: {},
+    coins:[]
   }
 };
 global.playersize = 50;
 
 app.use(express.static("public"));
-const { random, generateCode} = require("./functions");
+const { random, generateCode } = require("./functions");
 const socketfunc = require("./socket");
 
 app.get("/", (req, res) => {

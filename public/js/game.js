@@ -1,4 +1,4 @@
-import { size, playersize, coinsize, ratio, random, checkMovement } from "./functions.js";
+import { size, playersize, coinsize, ratio, random, checkMovement, treesize } from "./functions.js";
 const speed = 300;
 
 const weapons = {
@@ -29,8 +29,10 @@ class gamescene extends Phaser.Scene {
     this.socket = io();
     this.otherplayers = this.physics.add.group();
     this.otherguns = this.physics.add.group();
+    this.coins = this.physics.add.group();
+    this.trees = this.physics.add.group();
     this.socket.emit("join", localStorage.getItem("name"));
-    this.socket.on("gamedata", data => {
+    this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(0.5, 0.5).setDepth(1);
@@ -41,31 +43,42 @@ class gamescene extends Phaser.Scene {
         angle: 0,
         angle2:0
       };
+
+      for(let i of data.coins){
+        let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
+        coin.id = i.id;
+        console.log(coin);
+      }
+
+      for(let i of data.trees){
+        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10);
+        tree.id = i.id;
+      }
       
       for(let oplayer of Object.keys(data.players)){
         if(oplayer != this.socket.id){
           let otherplayer = this.otherplayers.create(data.players[oplayer].x, data.players[oplayer].y, "player").setScale(0.5, 0.5).setDepth(1);
           otherplayer.id = oplayer;
-          let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(2);
+          let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(15);
           gun.angle = data.players[oplayer].angle;
           gun.angle2 = data.players[oplayer].angle2;
           gun.id = oplayer;
         }
       }
       this.main();
-      
+        
     });
 
-    this.socket.on("new player", (data, id) => {
+    this.socket.on("new player", (data, id) => { // when new player joins
       let otherplayer = this.otherplayers.create(data.x, data.y, "player").setScale(0.5, 0.5).setDepth(1);
-      let gun = this.otherguns.create(data.x + Math.cos(0) * (playersize / 2 + 28), data.y + Math.sin(0) * (playersize / 2 + 28), "pistol").setDepth(2);
+      let gun = this.otherguns.create(data.x + Math.cos(0) * (playersize / 2 + 28), data.y + Math.sin(0) * (playersize / 2 + 28), "pistol").setDepth(15);
       gun.angle = 0;
       gun.angle2 = 0;
       otherplayer.id = id;
       gun.id = id;
     });
 
-    this.socket.on("other player move", (id, x, y, angle, angle2) => {
+    this.socket.on("other player move", (id, x, y, angle, angle2) => { // when other player moves
       this.otherplayers.getChildren().forEach(oplayer => {
         if(oplayer.id == id){
           oplayer.setPosition(x, y);
@@ -121,15 +134,8 @@ class gamescene extends Phaser.Scene {
     this.obstacle3 = this.physics.add.staticSprite(750, 1500, "obstacle2").setDepth(0);
     this.obstacle4 = this.physics.add.staticSprite(2250, 1500, "obstacle2").setDepth(0);
 
-    this.physics.add.staticSprite(1500, 1500, "tree").setDepth(10);
-
-    this.coins = this.physics.add.group();
-    for(let i = 0; i < random(30, 50); i++){
-      this.coins.create(random(coinsize / 2, size - coinsize / 2), random(coinsize / 2, size - coinsize / 2), "coin").setScale(0.75, 0.75);
-    }
-
   
-    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(2);
+    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(15);
 
     this.gun.angle2 = 0;
 
@@ -240,7 +246,7 @@ class gamescene extends Phaser.Scene {
     window.addEventListener("mousedown", e => {
       if(!this.useweapon) return;
       var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
-      let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (playersize / 2 + 23), this.player.y + Math.sin(angle) * (playersize / 2 + 23), "bullet").setScale(0.5, 2);
+      let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (playersize / 2 + 23), this.player.y + Math.sin(angle) * (playersize / 2 + 23), "bullet").setScale(0.5, 2).setDepth(13);
       bullet.angle = ((angle * 180 / Math.PI) + 360) % 360;
       bullet.setVelocityX(Math.cos(angle) * 1500);
       bullet.setVelocityY(Math.sin(angle) * 1500);

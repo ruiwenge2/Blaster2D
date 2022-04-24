@@ -4,6 +4,7 @@ const size = 3000;
 const playersize = 50;
 const coinsize = 37.5;
 const ratio = size / 60;
+const treesize = 300;
 
 function random(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;
@@ -24,4 +25,4 @@ function checkMovement(direction, x, y){
   return true;
 }
 
-export { width, height, size, playersize, coinsize, ratio, random, checkMovement }
+export { width, height, size, playersize, coinsize, ratio, random, checkMovement, treesize }
