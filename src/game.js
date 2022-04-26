@@ -47,7 +47,6 @@ class gamescene extends Phaser.Scene {
       for(let i of data.coins){
         let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
         coin.id = i.id;
-        console.log(coin);
       }
 
       for(let i of data.trees){
@@ -87,15 +86,21 @@ class gamescene extends Phaser.Scene {
             if(gun.id == id){
               gun.angle = angle;
               gun.angle2 = angle2;
-              console.log(gun.angle2);
               gun.x = oplayer.body.position.x + playersize / 2 + Math.cos(gun.angle2) * (playersize / 2 + 28);
               gun.y = oplayer.body.position.y + playersize / 2 + Math.sin(gun.angle2) * (playersize / 2 + 28);
             }
           });
         }
       });
+    });
 
-      
+    this.socket.on("collected gold", id => {
+      for(let coin of this.coins.children.entries){
+        if(coin.id == id){
+          coin.destroy();
+          console.log("deleted coin");
+        }
+      }
     });
 
     this.socket.on("left", id => {
@@ -175,7 +180,7 @@ class gamescene extends Phaser.Scene {
       }
     }, 1000);
 
-    this.physics.add.collider(this.player, this.coins, (player, coin) => {
+    this.physics.add.collider(this.player, this.coins, (player, coin) => { // player collects coin
       this.collect(player, coin);
     });
 
@@ -224,6 +229,8 @@ class gamescene extends Phaser.Scene {
   }
 
   collect(player, coin){
+    this.socket.emit("collect gold", coin.id);
+    console.log(coin.id)
     this.gold += 1;
     this.goldtext.setText("Gold: " + this.gold);
     coin.destroy();

@@ -30,7 +30,8 @@ module.exports = socket => {
       x: random(playersize, 3000 - playersize),
       y: random(playersize, 3000 - playersize),
       health: 100,
-      gun:"pistol"
+      gun:"pistol",
+      ammo: 10
     }
     socket.emit("gamedata", rooms.main);
     socket.broadcast.emit("new player", rooms.main.players[socket.id], socket.id);
@@ -43,6 +44,13 @@ module.exports = socket => {
     rooms.main.players[socket.id].y = y;
     rooms.main.players[socket.id].angle = angle;
     rooms.main.players[socket.id].angle2 = angle2;
+  });
+
+  socket.on("collect gold", id => {
+    if(!checkUser(socket.id)) return socket.emit("leave");
+    rooms.main.coins.splice(id, 1);
+    socket.broadcast.emit("collected gold", id);
+    console.log("collected " + id)
   });
 
   socket.on("disconnect", () => {
