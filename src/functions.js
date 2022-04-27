@@ -1,5 +1,3 @@
-var width = window.innerWidth;
-var height = window.innerHeight;
 const size = 3000;
 const playersize = 50;
 const coinsize = 37.5;
@@ -25,4 +23,4 @@ function checkMovement(direction, x, y){
   return true;
 }
 
-export { width, height, size, playersize, coinsize, ratio, random, checkMovement, treesize }
+export { size, playersize, coinsize, ratio, random, checkMovement, treesize }

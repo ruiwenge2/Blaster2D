@@ -1,11 +1,9 @@
-import gamescene from "./game.js";
+import gamescene from "./game/game.js";
 import joinscene from "./join.js";
 import howtoplay from "./howtoplay.js";
 import diedscene from "./died.js";
 import bestscores from "./best.js";
 import disconnect_scene from "./disconnect.js";
-
-import { width, height } from "./functions.js";
 
 const config = {
   type: Phaser.AUTO,
@@ -30,6 +28,7 @@ function startGame(){
     return;
   }
   localStorage.setItem("name", name);
+  
   const game = new Phaser.Game(config);
   
   game.scene.add("gamescene", gamescene);

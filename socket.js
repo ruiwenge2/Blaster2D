@@ -13,14 +13,13 @@ module.exports = socket => {
       gun:"pistol",
       ammo: 10
     }
-    console.log(rooms.main)
     socket.emit("gamedata", rooms.main);
     socket.broadcast.emit("new player", rooms.main.players[socket.id], socket.id);
   });
 
   socket.on("player move", data => {
     if(!checkUser(socket.id)) return socket.emit("leave");
-    socket.broadcast.emit("other player move", data);
+    socket.broadcast.emit("other player move", socket.id, data);
     rooms.main.players[socket.id].x = data.x;
     rooms.main.players[socket.id].y = data.y;
     rooms.main.players[socket.id].angle = data.angle;
@@ -29,7 +28,6 @@ module.exports = socket => {
 
   socket.on("collect gold", id => {
     if(!checkUser(socket.id)) return socket.emit("leave");
-    console.log(rooms.main.coins.length)
     rooms.main.coins.splice(id, 1);
     console.log(rooms.main.coins.length)
     socket.broadcast.emit("collected gold", id);

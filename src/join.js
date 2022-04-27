@@ -1,5 +1,3 @@
-import { width, height } from "./functions.js";
-
 class joinscene extends Phaser.Scene {
   constructor(){
     super();

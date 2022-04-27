@@ -1,5 +1,3 @@
-import { width, height } from "./functions.js";
-
 class disconnect_scene extends Phaser.Scene {
   constructor(){
     super();

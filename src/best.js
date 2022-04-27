@@ -1,5 +1,3 @@
-import { width, height } from "./functions.js";
-
 class bestscores extends Phaser.Scene {
   constructor(){
     super();

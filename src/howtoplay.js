@@ -1,5 +1,3 @@
-import { width, height } from "./functions.js";
-
 class howtoplay extends Phaser.Scene {
   constructor(){
     super();
