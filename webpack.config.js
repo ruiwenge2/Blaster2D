@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   entry: "./src/main.js",
   output: {
-    filename: "js/game.js",
+    filename: "game.js",
     path: path.resolve(__dirname, "public"),
   },
   mode: "production"
