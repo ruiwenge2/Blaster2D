@@ -1,9 +1,9 @@
 import gamescene from "./game/game.js";
-import joinscene from "./join.js";
-import howtoplay from "./howtoplay.js";
-import diedscene from "./died.js";
-import bestscores from "./best.js";
-import disconnect_scene from "./disconnect.js";
+import joinscene from "./scenes/join.js";
+import howtoplay from "./scenes/howtoplay.js";
+import diedscene from "./scenes/died.js";
+import bestscores from "./scenes/best.js";
+import disconnect_scene from "./scenes/disconnect.js";
 
 const config = {
   type: Phaser.AUTO,
