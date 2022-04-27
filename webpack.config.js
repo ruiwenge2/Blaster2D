@@ -6,5 +6,5 @@ module.exports = {
     filename: "js/game.js",
     path: path.resolve(__dirname, "public"),
   },
-  mode: "production"
+  mode: "development"
 };

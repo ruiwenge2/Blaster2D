@@ -86,8 +86,7 @@ class gamescene extends Phaser.Scene {
             if(gun.id == id){
               gun.angle = angle;
               gun.angle2 = angle2;
-              gun.x = oplayer.body.position.x + playersize / 2 + Math.cos(gun.angle2) * (playersize / 2 + 28);
-              gun.y = oplayer.body.position.y + playersize / 2 + Math.sin(gun.angle2) * (playersize / 2 + 28);
+              gun.setPosition(oplayer.body.position.x + playersize / 2 + Math.cos(gun.angle2) * (playersize / 2 + 28), oplayer.body.position.y + playersize / 2 + Math.sin(gun.angle2) * (playersize / 2 + 28));
             }
           });
         }
@@ -301,7 +300,9 @@ class gamescene extends Phaser.Scene {
       this.data.y = this.player.y;
       this.data.angle = this.gun.angle;
       this.data.angle2 = this.gun.angle2;
-      this.socket.emit("player move", this.data.x, this.data.y, this.data.angle, this.data.angle2);
+      this.data.gunx = this.gun.x;
+      this.data.guny = this.gun.y
+      this.socket.emit("player move", this.data);
     }
   }
 }

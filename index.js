@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const { exec } = require("child_process");
+
 exec("npm run build", (error, stdout, stderr) => {
   if (error) {
     console.log(`${error.message}`);
