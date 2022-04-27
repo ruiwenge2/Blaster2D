@@ -9,13 +9,13 @@ class gamescene extends Phaser.Scene {
   
   preload() {
     this.load.image("player", "/img/player.png");
-    this.load.image("coin", "/img/game_objects/coin.png");
-    this.load.image("grass", "/img/game_objects/tile.png");
-    this.load.image("bullet", "/img/game_objects/bullet.png");
+    this.load.image("coin", "/img/gameObjects/coin.png");
+    this.load.image("grass", "/img/gameObjects/tile.png");
+    this.load.image("bullet", "/img/gameObjects/bullet.png");
     this.load.image("pistol", "/img/guns/pistol.png");
-    this.load.image("obstacle", "/img/game_objects/obstacle.png");
-    this.load.image("obstacle2", "/img/game_objects/obstacle2.png");
-    this.load.image("tree", "/img/game_objects/tree.png");
+    this.load.image("obstacle", "/img/gameObjects/obstacle.png");
+    this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
+    this.load.image("tree", "/img/gameObjects/tree.png");
     this.loadingtext = this.add.text(window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontFamily: "Arial", fontSize: 50 }).setOrigin(0.5);
   }
 
