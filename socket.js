@@ -40,4 +40,4 @@ module.exports = socket => {
     io.emit("left", socket.id);
     console.log(name + " left");
   });
-}
+};

@@ -1,5 +1,6 @@
 import { size, playersize, coinsize, ratio, random, checkMovement, treesize } from "../functions.js";
 import socketfunc from "./socket.js";
+import Text from "../objects/text.js";
 const speed = 300;
 
 class gamescene extends Phaser.Scene {
@@ -16,7 +17,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
-    this.loadingtext = this.add.text(window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontFamily: "Arial", fontSize: 50 }).setOrigin(0.5);
+    this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", {fontSize: 50}).setOrigin(0.5);
   }
 
   create() {
@@ -55,9 +56,7 @@ class gamescene extends Phaser.Scene {
     this.bullets = this.physics.add.group();
 
     this.health = 100;
-    this.healthtext = this.add.text(100, 50, "Health", { fontFamily: "Arial", fontSize: 30 }).setDepth(10);
-    this.healthtext.scrollFactorX = 0;
-    this.healthtext.scrollFactorY = 0;
+    this.healthtext = new Text(this, 100, 50, "Health");
 
     this.healthbar = this.add.rectangle(200, 100, 200, 20, 0x0ffffff).setDepth(10);
     this.healthbar.scrollFactorX = 0;
@@ -69,14 +68,10 @@ class gamescene extends Phaser.Scene {
 
     this.score = 0;
 
-    this.scoretext = this.add.text(window.innerWidth - 200, 100, "Score: " + this.score, { fontFamily: "Arial", fontSize: 30 }).setDepth(10);
-    this.scoretext.scrollFactorX = 0;
-    this.scoretext.scrollFactorY = 0;
+    this.scoretext = new Text(this, window.innerWidth - 200, 100, "Score: " + this.score);
 
     this.gold = 0;
-    this.goldtext = this.add.text(window.innerWidth - 200, 150, "Gold: " + this.gold, { fontFamily: "Arial", fontSize: 30 }).setDepth(10);
-    this.goldtext.scrollFactorX = 0;
-    this.goldtext.scrollFactorY = 0;
+    this.goldtext = new Text(this, window.innerWidth - 200, 150, "Gold: " + this.gold);
 
     this.addWeaponActions();
 
