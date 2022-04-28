@@ -6,5 +6,6 @@ module.exports = {
     filename: "game.js",
     path: path.resolve(__dirname, "public"),
   },
+  devtool: "source-map",
   mode: "production"
 };
