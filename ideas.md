@@ -2,3 +2,5 @@
 - different types of guns(sniper, pistol, machine gun)
 - obstacles in the map
 - public and private servers
+- login or sign up to buy skins
+- gold as money for skins
