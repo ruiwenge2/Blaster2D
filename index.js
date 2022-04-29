@@ -4,11 +4,11 @@ const server = require("http").Server(app);
 const { exec } = require("child_process");
 
 exec("npm run build", (error, stdout, stderr) => {
-  if (error) {
+  if(error) {
     console.log(`${error.message}`);
     return;
   }
-  if (stderr) {
+  if(stderr) {
     console.log(`${stderr}`);
     return;
   }
@@ -29,10 +29,6 @@ global.playersize = 50;
 app.use(express.static("public"));
 const { random, generateCode } = require("./functions");
 const socketfunc = require("./socket");
-
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
 
 io.on("connection", socketfunc);
 

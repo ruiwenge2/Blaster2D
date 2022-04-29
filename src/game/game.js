@@ -1,7 +1,7 @@
 import { size, playersize, coinsize, ratio, random, checkMovement, treesize } from "../functions.js";
 import socketfunc from "./socket.js";
 import Text from "../objects/text.js";
-const speed = 300;
+const speed = 275;
 
 class gamescene extends Phaser.Scene {
   constructor(){
@@ -17,7 +17,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
-    this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", {fontSize: 50}).setOrigin(0.5);
+    this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", {fontSize: 100}).setOrigin(0.5);
   }
 
   create() {
@@ -180,6 +180,10 @@ class gamescene extends Phaser.Scene {
 
   update() {
     if(!this.loaded) return;
+    if(!this.fpstext){
+      this.fpstext = new Text(this, window.innerWidth - 200, 200, "Loading FPS...");
+    }
+    this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
     
     this.player.setVelocityX(0);

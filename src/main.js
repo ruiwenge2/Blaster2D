@@ -50,4 +50,5 @@ function startGame(){
 if(localStorage.getItem("name")){
   document.getElementById("input").value = localStorage.getItem("name");
 }
+
 document.getElementById("playbtn").addEventListener("click", startGame);

@@ -3,7 +3,6 @@ const { random, generateCode, checkUser, setUpRoom } = require("./functions");
 module.exports = socket => {
   socket.on("join", name => {
     setUpRoom();
-    console.log(rooms.main.coins.length)
     console.log(name + " joined");
     rooms.main.players[socket.id] = {
       name: name,
@@ -29,7 +28,6 @@ module.exports = socket => {
   socket.on("collect gold", id => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     rooms.main.coins.splice(id, 1);
-    console.log(rooms.main.coins.length)
     socket.broadcast.emit("collected gold", id);
   });
 
