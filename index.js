@@ -27,10 +27,18 @@ global.rooms = {
 global.playersize = 50;
 
 app.use(express.static("public"));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use(express.urlencoded({extended: true}));
+
 const { random, generateCode } = require("./functions");
 const socketfunc = require("./socket");
 
 io.on("connection", socketfunc);
+
+app.get("/", (req, res) => {
+  res.render("index.html");
+});
 
 server.listen(3000, () => {
   console.log("server started");

@@ -1,3 +1,5 @@
+import Text from "../objects/text.js";
+
 class disconnect_scene extends Phaser.Scene {
   constructor(){
     super();
@@ -8,7 +10,7 @@ class disconnect_scene extends Phaser.Scene {
   }
   
   create(){
-    this.add.text(window.innerWidth / 2, 100, "You got disconnected", { fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.disconnecttext = new Text(this, window.innerWidth / 2, 100, "You got disconnected", {fontSize: 50}).setOrigin(0.5);
 
     this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
     this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 2, 'OK', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
