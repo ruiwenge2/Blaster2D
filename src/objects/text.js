@@ -5,6 +5,7 @@ class Text extends Phaser.GameObjects.Text {
       style = {};
       style.fontFamily = "Arial";
       style.fontSize = 30;
+      style.background = 0x0000ff;
     }
     if(!("fontFamily" in style)){
       style.fontFamily = "Arial";
