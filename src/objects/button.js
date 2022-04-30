@@ -8,6 +8,7 @@ class Button extends Phaser.GameObjects.Container {
       style = {};
       style.fontSize = 50;
       style.fontFamily = "Arial";
+      style.background = 0x0000ff;
     }
     if(!("fontSize" in style)){
       style.fontSize = 50;
@@ -19,7 +20,9 @@ class Button extends Phaser.GameObjects.Container {
       style.background = 0x0000ff;
     }
     this.text = new Text(scene, x, y, text, {fontSize: style.fontSize, fontFamily: style.fontFamily}).setOrigin(0.5);
-    this.button = scene.add.rectangle(0, 0, 0, 0, style.background);
+    this.button = scene.add.rectangle(0, 0, 0, 0, style.background).setDepth(99);
+    this.button.scrollFactorX = 0;
+    this.button.scrollFactorY = 0;
     this.button.width = this.text.width + 15;
     this.button.height = this.text.height + 15;
     this.button.x = this.text.x - (this.text.width / 2) - 5;

@@ -1,6 +1,7 @@
 import { size, playersize, coinsize, ratio, random, checkMovement, treesize } from "../functions.js";
 import socketfunc from "./socket.js";
 import Text from "../objects/text.js";
+import Button from "../objects/button.js";
 const speed = 275;
 
 class gamescene extends Phaser.Scene {

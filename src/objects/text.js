@@ -16,7 +16,7 @@ class Text extends Phaser.GameObjects.Text {
     super(scene, x, y, text, style);
     this.scrollFactorX = 0;
     this.scrollFactorY = 0;
-    this.setDepth(10);
+    this.setDepth(100);
     scene.add.existing(this);
   }
 }
