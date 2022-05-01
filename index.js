@@ -37,6 +37,10 @@ app.get("/signup", (req, res) => {
   res.render("signup.html");
 });
 
+app.get("/skins", (req, res) => {
+  res.render("skins.html");
+});
+
 app.post("/signup", (req, res) => {
   var newusername = req.body.newusername;
   var newpassword = req.body.newpassword;
