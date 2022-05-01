@@ -6,3 +6,4 @@
 - gold as money for skins
 - different amounts of damage for different distances
 - chat box
+- A NAME: Blaster2d, BattleBlasters
