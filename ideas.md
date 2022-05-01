@@ -5,3 +5,4 @@
 - login or sign up to buy skins
 - gold as money for skins
 - different amounts of damage for different distances
+- chat box

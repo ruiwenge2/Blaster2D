@@ -4,8 +4,8 @@ const server = require("http").Server(app);
 const { exec } = require("child_process");
 const { verify } = require('hcaptcha');
 const bcrypt = require('bcrypt');
-
-global.io = require("socket.io")(server);
+const socketio = require("socket.io");
+global.io = socketio(server);
 
 global.rooms = {
   main: {
