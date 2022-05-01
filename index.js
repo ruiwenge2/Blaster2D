@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const { exec } = require("child_process");
-
+const { verify } = require('hcaptcha');
 global.io = require("socket.io")(server);
+
 global.rooms = {
   main: {
     players: {},
@@ -19,7 +20,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(express.urlencoded({extended: true}));
 
-const { random, generateCode } = require("./functions");
+const { random, generateCode, is_human } = require("./functions");
 const socketfunc = require("./socket");
 
 io.on("connection", socketfunc);
@@ -34,6 +35,21 @@ app.get("/login", (req, res) => {
 
 app.get("/signup", (req, res) => {
   res.render("signup.html");
+});
+
+app.post("/signup", (req, res) => {
+  var newusername = req.body.newusername;
+  var newpassword = req.body.newpassword;
+  let secret = process.env["captcha_secret"];
+  let token = req.body["h-captcha-response"];
+  
+  verify(secret, token).then(data => {
+    if(data.success){
+      res.send("Verified");
+    } else {
+      res.send("Hi robot");
+    }
+  });
 });
 
 server.listen(3000, () => {
