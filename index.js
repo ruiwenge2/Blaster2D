@@ -5,6 +5,7 @@ const { exec } = require("child_process");
 const { verify } = require('hcaptcha');
 const bcrypt = require('bcrypt');
 const socketio = require("socket.io");
+const session = require('express-session');
 const Database = require("@replit/database");
 const db = new Database();
 global.io = socketio(server);
