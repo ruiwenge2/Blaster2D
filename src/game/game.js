@@ -2,6 +2,7 @@ import { size, playersize, coinsize, ratio, random, checkMovement, treesize } fr
 import socketfunc from "./socket.js";
 import Text from "../objects/text.js";
 import Button from "../objects/button.js";
+import Chatbox from "./chat.js";
 
 const speed = 275;
 
