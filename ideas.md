@@ -7,3 +7,4 @@
 - different amounts of damage for different distances
 - chat box
 - A NAME: Blaster2d, BattleBlasters
+- oh yeah tell ppl to open in new tab

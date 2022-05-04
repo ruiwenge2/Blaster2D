@@ -80,3 +80,5 @@ exec("npm run build", (error, stdout, stderr) => {
 });
 
 // https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-2/
+
+// https://www.creativebloq.com/how-to/build-a-progressive-web-app
