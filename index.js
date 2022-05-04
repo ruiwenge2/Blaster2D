@@ -25,7 +25,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(express.urlencoded({extended: true}));
 
-const { random, generateCode, is_human } = require("./functions");
+const { random, generateCode } = require("./functions");
 const socketfunc = require("./socket");
 
 io.on("connection", socketfunc);
@@ -60,6 +60,8 @@ app.post("/signup", (req, res) => {
     }
   });
 });
+
+
 
 server.listen(3000, () => {
   console.log("server started");
