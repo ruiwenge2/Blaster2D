@@ -18,6 +18,7 @@
     "express-session": "^1.17.2",
     "hcaptcha": "^0.1.1",
     "lodash": "^4.17.20",
+    "phaser": "^3.55.2",
     "socket.io": "^4.4.1"
   },
   "devDependencies": {

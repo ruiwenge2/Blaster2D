@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import gamescene from "./game/game.js";
 import joinscene from "./scenes/join.js";
 import howtoplay from "./scenes/howtoplay.js";
