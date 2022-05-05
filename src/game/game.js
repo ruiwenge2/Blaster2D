@@ -12,7 +12,7 @@ class gamescene extends Phaser.Scene {
   }
   
   preload() {
-    this.load.image("player", "/img/player.png");
+    this.load.image("player", "/img/skins/skull.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");
