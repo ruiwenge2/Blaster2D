@@ -15,7 +15,7 @@ global.rooms = {
     players: {},
     trees: [],
     bullets: {},
-    coins:[]
+    coins: []
   }
 };
 global.playersize = 50;
