@@ -8,6 +8,7 @@ const session = require('express-session');
 const Database = require("@replit/database");
 const db = new Database();
 global.io = socketio(server);
+require("./tests/index");
 
 require("./webpack.config.js");
 global.rooms = {
@@ -45,6 +46,10 @@ app.get("/signup", (req, res) => {
 app.get("/skins", (req, res) => {
   res.render("skins.html");
 });
+
+app.post("/login", (req, res) => {
+  res.send("working on it");
+})
 
 app.post("/signup", (req, res) => {
   var newusername = req.body.newusername;
