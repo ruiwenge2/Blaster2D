@@ -8,7 +8,7 @@ const session = require('express-session');
 const Database = require("@replit/database");
 const db = new Database();
 global.io = socketio(server);
-require("./tests/index");
+require("./tests");
 
 require("./webpack.config.js");
 global.rooms = {
