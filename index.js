@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-const { exec } = require("child_process");
 const { verify } = require('hcaptcha');
 const bcrypt = require('bcrypt');
 const socketio = require("socket.io");
@@ -10,6 +9,7 @@ const Database = require("@replit/database");
 const db = new Database();
 global.io = socketio(server);
 
+require("./webpack.config.js");
 global.rooms = {
   main: {
     players: {},
@@ -65,18 +65,6 @@ app.post("/signup", (req, res) => {
 
 server.listen(3000, () => {
   console.log("server started");
-});
-
-exec("npm run build", (error, stdout, stderr) => {
-  if(error) {
-    console.log(`${error.message}`);
-    return;
-  }
-  if(stderr) {
-    console.log(`${stderr}`);
-    return;
-  }
-  console.log(`${stdout}`);
 });
 
 // https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-2/
