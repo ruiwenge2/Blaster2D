@@ -28,6 +28,7 @@ app.use(express.urlencoded({extended: true}));
 
 const { random, generateCode } = require("./functions");
 const socketfunc = require("./socket");
+const skins = require("./skins");
 
 io.on("connection", socketfunc);
 
@@ -44,7 +45,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/skins", (req, res) => {
-  res.render("skins.html");
+  res.render("skins.html", {skins: skins});
 });
 
 app.post("/login", (req, res) => {
@@ -65,8 +66,6 @@ app.post("/signup", (req, res) => {
     }
   });
 });
-
-
 
 server.listen(3000, () => {
   console.log("server started");

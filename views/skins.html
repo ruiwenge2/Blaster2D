@@ -7,6 +7,11 @@
   <body>
     <main>
       <h1>Skins</h1>
+      <% for(i of skins){ %>
+        <div>
+          <img src="/img/skins/<%= i.url %>.png">
+        </div>
+      <% } %>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js">
     <script src="/script.js"></script></script>
