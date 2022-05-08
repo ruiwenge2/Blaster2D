@@ -43,3 +43,7 @@ button:hover {
   background:blue;
   color:white;
 }
+
+.modal-content {
+  color:black;
+}
