@@ -33,7 +33,7 @@ const skins = require("./skins");
 io.on("connection", socketfunc);
 
 app.get("/", (req, res) => {
-  res.render("index.html");
+  res.render("index.html", {skins: JSON.stringify(skins)});
 });
 
 app.get("/login", (req, res) => {
