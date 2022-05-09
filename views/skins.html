@@ -3,17 +3,21 @@
   <head>
     <title>Skins - Blaster2D</title>
     <link href="/style.css" rel="stylesheet">
+    <link href="/skins.css" rel="stylesheet">
   </head>
   <body>
     <main>
       <h1>Skins</h1>
       <% for(i of skins){ %>
-        <div>
+        <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
+          <h3>Cost: <%= i.cost %></h3>
+          <button>Buy</button>
         </div>
       <% } %>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script src="/script.js"></script>
+    <script src="/skins.js"></script>
   </body>
 </html>
