@@ -47,3 +47,17 @@ button:hover {
 .modal-content {
   color:black;
 }
+
+a, a:visited {
+  color:white;
+  font-size:30px;
+}
+a:hover, a:active {
+  text-decoration:none;
+}
+
+#links {
+  position: absolute;
+  top:20px;
+  right:20px;
+}

@@ -7,7 +7,7 @@ const skins = [
   {
     id: 2,
     url: "smileyface",
-    cost: 30
+    cost: 100
   }
 ]
 
