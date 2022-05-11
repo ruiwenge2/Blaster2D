@@ -135,7 +135,7 @@ app.get("/logout", (req, res) => {
 
 server.listen(3000, () => {
   console.log("server started");
-  console.log(db.key);
+  console.log(`${db.key}/users`);
 });
 
 // https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-2/
