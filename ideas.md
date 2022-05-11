@@ -10,3 +10,4 @@
 - oh yeah tell ppl to open in new tab
 - PWA???
 - maybe use tweens
+- skin ideas: mustache,  target

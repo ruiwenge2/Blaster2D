@@ -8,6 +8,11 @@ const skins = [
     id: 2,
     url: "smileyface",
     cost: 100
+  },
+  {
+    id: 3,
+    url: "target",
+    cost: 100
   }
 ]
 
