@@ -14,8 +14,8 @@ const skins = [
     url: "target",
     cost: 100
   }
-]
+];
 
-skins.sort(function(a, b){return a.cost - b.cost})
+skins.sort(function(a, b){return a.cost - b.cost});
 
 module.exports = skins;
