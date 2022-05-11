@@ -6,12 +6,19 @@
   </head>
   <body>
     <main>
+      <div id="links">
+        <a href="/">Home</a>
+      </div>
       <h1>Login</h1>
       <form action="" method="post">
         <h3>Username: </h3><input name="username" required><br><br>
         <h3>Password: </h3><input type="password" name="password" required><br><br>
-        <input type="submit">
+        <input type="submit" value="Login">
       </form>
+      <% if(error){ %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <p>Or <a href="/signup">sign up</a</p>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script src="/script.js"></script>

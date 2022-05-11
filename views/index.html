@@ -7,8 +7,14 @@
   <body>
     <main>
       <div id="links">
+        <% if(loggedIn){ %>
+        <a href="/skins">Skins</a><br><br>
+        <a href="/logout">Logout</a>
+        <% } else { %>
         <a href="/login">Login</a><br><br>
-        <a href="/signup">Sign Up</a>
+        <a href="/signup">Sign Up</a><br><br>
+        <a href="/skins">Skins</a>
+        <% } %>
       </div>
       <h1>Join Game</h1>
       <label>Enter name:</label> <input id="input">
@@ -16,9 +22,6 @@
       <button id="playbtn">Play</button><br><br>
       <button id="createbtn">Create Private Game</button>
       <button id="joinbtn">Join Private Game</button>
-      <br><br>
-      <br><br>
-      <button onclick="location.href = '/skins'">Skins</button>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script src="/script.js"></script>

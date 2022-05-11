@@ -15,7 +15,7 @@ class gamescene extends Phaser.Scene {
     for(let i of Object.keys(skins)){
       this.load.image(`skin_${skins[i].id}`, `/img/skins/${skins[i].url}.png`);
     }
-    this.load.image("player", "/img/player.png");
+    this.load.image("player", "/img/skins/player.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");

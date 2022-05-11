@@ -1,5 +1,10 @@
 const skins = [
   {
+    id: 0,
+    url: "player",
+    cost: 0
+  },
+  {
     id: 1,
     url: "skull",
     cost: 200

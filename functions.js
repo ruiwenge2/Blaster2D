@@ -1,3 +1,7 @@
+module.exports.loggedIn = function(req){
+  return (req.session.username ? true: false);
+}
+
 module.exports.random = function(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;
 }

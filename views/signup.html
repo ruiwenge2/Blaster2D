@@ -7,13 +7,20 @@
   </head>
   <body>
     <main>
+      <div id="links">
+        <a href="/">Home</a>
+      </div>
       <h1>Sign Up</h1>
       <form action="" method="post">
         <h3>Username: </h3><input name="newusername" required><br><br>
         <h3>Password: </h3><input type="password" name="newpassword" required><br><br>
         <div class="h-captcha" data-sitekey="25dfafd2-fa9b-4c0a-9a14-8648e3c4cc42" data-theme="dark"></div>
-        <input type="submit">
+        <input type="submit" value="Sign Up">
       </form>
+      <% if(error){ %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <p>Or <a href="/login">login</a</p>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script src="/script.js"></script>
