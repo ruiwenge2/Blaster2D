@@ -1,6 +1,5 @@
 class Chatbox {
-  constructor(){
-    
+  constructor(game){
   }
   
   create(){
