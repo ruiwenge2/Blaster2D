@@ -94,3 +94,28 @@ input[type="submit"]:hover {
 p {
   font-size:18px;
 }
+
+#username {
+  color:blue;
+  text-decoration:underline;
+  font-size:30px;
+  margin:5px;
+}
+
+#userActions {
+  position: absolute;
+  top:20px;
+  left:20px;
+}
+
+#hidden {
+  background:white;
+  display:none;
+  height:60px;
+  border-radius:7.5px;
+}
+
+#hidden a {
+  color:black;
+  font-size:18px;
+}

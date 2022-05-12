@@ -50,6 +50,13 @@ module.exports.setUpRoom = function(){
   }
 };
 
-module.exports.deleteUser = function(){
-  
+module.exports.deleteUser = function(user){
+  db.get("users").then(users => {
+    if(Object.keys(users).includes(user)){
+      delete users[user];
+      db.set("users", users).then(() => {console.log(`deleted user ${user}`)});
+      return;
+    }
+    console.log("error occured while deleting user");
+  });
 };

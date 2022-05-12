@@ -21,13 +21,14 @@ global.rooms = {
 };
 global.playersize = 50;
 
+
 app.use(express.static("public"));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-const { random, generateCode, loggedIn } = require("./functions");
+const { random, generateCode, loggedIn, deleteUser } = require("./functions");
 const socketfunc = require("./socket");
 const skins = require("./skins");
 const saltRounds = 10;
@@ -41,10 +42,12 @@ const allchars = [
   '2', '3', '4', '5', '6', '7', '8', '9', '_'
 ];
 
+
+
 io.on("connection", socketfunc);
 
 app.get("/", (req, res) => {
-  res.render("index.html", {loggedIn: loggedIn(req), skins: JSON.stringify(skins)});
+  res.render("index.html", {loggedIn: loggedIn(req), skins: JSON.stringify(skins), username: (loggedIn(req) ? req.session.username: null)});
 });
 
 app.get("/login", (req, res) => {
@@ -114,8 +117,18 @@ app.post("/signup", (req, res) => {
             p: hash,
             s: [],
             c: 0,
-            g: "pistol"
+            g: "pistol",
+            b: 0
           }
+
+          /* 
+          REMEMBER:
+          p = password,
+          s = skins,
+          c = current skin,
+          g = gun,
+          b = balance (how much gold player owns)
+          */
           db.set("users", users);
           console.log("new account created");
           req.session.username = newusername;

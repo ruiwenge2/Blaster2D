@@ -8,14 +8,21 @@
     <main>
       <div id="links">
         <% if(loggedIn){ %>
-        <a href="/skins">Skins</a><br><br>
-        <a href="/logout">Logout</a>
+        <a href="/skins">Skins</a>
         <% } else { %>
         <a href="/login">Login</a><br><br>
         <a href="/signup">Sign Up</a><br><br>
         <a href="/skins">Skins</a>
         <% } %>
       </div>
+      <% if(loggedIn){ %>
+      <div id="userActions">
+        <h2 id="username"><%= username %></h2>
+        <div id="hidden">
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+      <% } %>
       <h1>Join Game</h1>
       <label>Enter name:</label> <input id="input">
       <p style="color:red; display:none">Please enter a name.</p><br><br>
@@ -24,10 +31,11 @@
       <button id="joinbtn">Join Private Game</button>
     </main>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
-    <script src="/script.js"></script>
     <script>
       const skins = <%- skins %>;
+      const homepage = true;
     </script>
+    <script src="/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/game.js" type="module"></script>
