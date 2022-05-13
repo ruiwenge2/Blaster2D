@@ -11,7 +11,7 @@ module.exports = socket => {
       health: 100,
       gun:"pistol",
       ammo: 10
-    }
+    };
     socket.emit("gamedata", rooms.main);
     socket.broadcast.emit("new player", rooms.main.players[socket.id], socket.id);
   });
