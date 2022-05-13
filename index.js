@@ -145,6 +145,14 @@ app.get("/api/buy", (req, res) => {
   res.send("");
 });
 
+app.get("/api/useskin", (req, res) => {
+  res.send("");
+});
+
+app.get("/api/sell", (req, res) => {
+  res.send("");
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
