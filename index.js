@@ -119,7 +119,7 @@ app.post("/signup", (req, res) => {
             c: 0,
             g: "pistol",
             b: 0
-          }
+          };
 
           /* 
           REMEMBER:
@@ -127,7 +127,7 @@ app.post("/signup", (req, res) => {
           s = skins,
           c = current skin,
           g = gun,
-          b = balance (how much gold player owns)
+          b = balance (how much gold a player owns)
           */
           db.set("users", users);
           console.log("new account created");
