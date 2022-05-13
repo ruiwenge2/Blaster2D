@@ -141,6 +141,10 @@ app.post("/signup", (req, res) => {
   });
 });
 
+app.get("/api/buy", (req, res) => {
+  res.send("");
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
