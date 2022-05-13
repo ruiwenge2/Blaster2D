@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-const { verify } = require('hcaptcha');
-const bcrypt = require('bcrypt');
+const { verify } = require("hcaptcha");
+const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
-const session = require('express-session');
+const session = require("express-session");
 const Database = require("@replit/database");
 global.db = new Database();
 global.io = socketio(server);
@@ -21,10 +21,9 @@ global.rooms = {
 };
 global.playersize = 50;
 
-
 app.use(express.static("public"));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+app.engine("html", require("ejs").renderFile);
+app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
@@ -33,16 +32,14 @@ const socketfunc = require("./socket");
 const skins = require("./skins");
 const saltRounds = 10;
 const allchars = [
-  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-  'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-  's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A',
-  'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-  'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-  'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
-  '2', '3', '4', '5', '6', '7', '8', '9', '_'
+  "a", "b", "c", "d", "e", "f", "g", "h", "i",
+  "j", "k", "l", "m", "n", "o", "p", "q", "r",
+  "s", "t", "u", "v", "w", "x", "y", "z", "A",
+  "B", "C", "D", "E", "F", "G", "H", "I", "J",
+  "K", "L", "M", "N", "O", "P", "Q", "R", "S",
+  "T", "U", "V", "W", "X", "Y", "Z", "0", "1",
+  "2", "3", "4", "5", "6", "7", "8", "9", "_"
 ];
-
-
 
 io.on("connection", socketfunc);
 
