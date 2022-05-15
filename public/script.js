@@ -7,7 +7,7 @@ function embedded() {
 }
 
 if(embedded()){
-  alertmodal("", "Please open this in a new tab for best results.", ok="Open").then(() => {window.open("https://blaster2d.ruiwenge2.repl.co" + location.pathname)})
+  alertmodal("", "Please open this in a new tab for best results.", ok="Open").then(() => {window.open("https://blaster2d.ruiwenge2.repl.co" + location.pathname)});
 }
 
 if(homepage && loggedIn){
