@@ -42,6 +42,7 @@ const allchars = [
 ];
 
 io.on("connection", socketfunc);
+require("./update")();
 
 app.get("/", (req, res) => {
   res.render("index.html", {loggedIn: loggedIn(req), skins: JSON.stringify(skins), username: (loggedIn(req) ? req.session.username: null)});
@@ -165,3 +166,5 @@ server.listen(3000, () => {
 // https://www.creativebloq.com/how-to/build-a-progressive-web-app
 
 // https://javascript.plainenglish.io/develop-your-first-multiplayer-browser-game-io-99931c7d3a5b
+
+// https://code.tutsplus.com/tutorials/create-a-multiplayer-pirate-shooter-game-in-your-browser--cms-23311
