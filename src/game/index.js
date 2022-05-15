@@ -35,40 +35,41 @@ class gamescene extends Phaser.Scene {
     
     this.socket.emit("join", localStorage.getItem("name"));
     this.socket.on("gamedata", data => { // when game data arrives
-    this.loaded = true;
-    this.loadingtext.destroy();
-    this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(0.5, 0.5).setDepth(1);
-    this.cameras.main.startFollow(this.player);
-    this.data = {
-      x: data.players[this.socket.id].x,
-      y: data.players[this.socket.id].y,
-      angle: 0,
-      angle2:0
-    };
-
-    for(let i of data.coins){
-      let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
-      coin.id = i.id;
-    }
-
-    for(let i of data.trees){
-      let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10);
-      tree.id = i.id;
-    }
-    
-    for(let oplayer of Object.keys(data.players)){
-      if(oplayer != this.socket.id){
-        let otherplayer = this.otherplayers.create(data.players[oplayer].x, data.players[oplayer].y, "player").setScale(0.5, 0.5).setDepth(1);
-        otherplayer.id = oplayer;
-        let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(15);
-        gun.angle = data.players[oplayer].angle;
-        gun.angle2 = data.players[oplayer].angle2;
-        gun.id = oplayer;
+      this.loaded = true;
+      this.loadingtext.destroy();
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(0.5, 0.5).setDepth(1);
+      this.cameras.main.startFollow(this.player);
+      this.data = {
+        x: data.players[this.socket.id].x,
+        y: data.players[this.socket.id].y,
+        angle: 0,
+        angle2:0
+      };
+  
+      for(let i of data.coins){
+        let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
+        coin.id = i.id;
       }
-    }
-    this.main();
+  
+      for(let i of data.trees){
+        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10);
+        tree.id = i.id;
+      }
       
-  });
+      for(let oplayer of Object.keys(data.players)){
+        if(oplayer != this.socket.id){
+          let otherplayer = this.otherplayers.create(data.players[oplayer].x, data.players[oplayer].y, "player").setScale(0.5, 0.5).setDepth(1);
+          otherplayer.id = oplayer;
+          let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(15);
+          gun.angle = data.players[oplayer].angle;
+          gun.angle2 = data.players[oplayer].angle2;
+          gun.id = oplayer;
+        }
+      }
+      this.main();
+        
+    });
+    
 
     this.socket.on("new player", (data, id) => { // when new player joins
       let otherplayer = this.otherplayers.create(data.x, data.y, "player").setScale(0.5, 0.5).setDepth(1);
@@ -117,6 +118,9 @@ class gamescene extends Phaser.Scene {
         }
       }
     });
+    
+
+    
   
     this.socket.on("leave", () => {
       this.scene.start("disconnect_scene");

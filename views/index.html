@@ -34,6 +34,11 @@
     <script>
       const skins = <%- skins %>;
       const homepage = true;
+      <% if(loggedIn){ %>
+      const loggedIn = true;
+      <% } else { %>
+      const loggedIn = false;
+      <% } %>
     </script>
     <script src="/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>

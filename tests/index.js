@@ -5,7 +5,7 @@ const password = "blah ioddf blah ioddf blah ioddf blah ioddf blah ioddf blah io
 const another = "test hello";
 
 bcrypt.hash(password, saltRounds, function(err, hash) {
-  console.log(hash);
+  // console.log(hash);
   bcrypt.compare(another, hash, function(err, result){
     // console.log(result)
   })
