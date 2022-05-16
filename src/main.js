@@ -23,7 +23,7 @@ const config = {
 
 function startGame(){
   let name = document.getElementById("input").value;
-  if(!name.replace(" ", "")){
+  if(!name.replace(/\s/g, "")){
     document.querySelector("p").style.display = "block";
     return;
   }
@@ -47,8 +47,9 @@ function startGame(){
   document.querySelector("main").style.display = "none";
 }
 
-if(localStorage.getItem("name")){
+if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
 }
+
 
 document.getElementById("playbtn").addEventListener("click", startGame);
