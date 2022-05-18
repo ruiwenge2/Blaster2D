@@ -11,7 +11,7 @@
 - PWA???
 - maybe use tweens
 - skin ideas: mustache,  target
-- new way of using socketio
+- new way of using socketio:
   - whenever player does an action, client tells server the acton
   - every 33 milleseconds or so, server sends to client the game data
   - client recieves data, and passes the data into the phaser object
