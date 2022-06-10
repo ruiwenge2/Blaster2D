@@ -27,6 +27,8 @@ app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
+const api = require("./api");
+
 db.get("users").then(obj => {
   if(!obj) db.set("users", {});
 });
@@ -47,6 +49,8 @@ const allchars = [
 
 io.on("connection", socketfunc);
 require("./update")();
+
+app.use("/api", api);
 
 app.get("/", (req, res) => {
   res.render("index.html", {loggedIn: loggedIn(req), skins: JSON.stringify(skins), username: (loggedIn(req) ? req.session.username: null)});
@@ -143,17 +147,7 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.get("/api/buy", (req, res) => {
-  res.send("");
-});
 
-app.get("/api/useskin", (req, res) => {
-  res.send("");
-});
-
-app.get("/api/sell", (req, res) => {
-  res.send("");
-});
 
 app.get("/logout", (req, res) => {
   req.session.destroy();
