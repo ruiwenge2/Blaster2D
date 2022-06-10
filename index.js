@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-const { verify } = require("hcaptcha");
+const hcaptcha = require("hcaptcha");
 const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
@@ -106,7 +106,7 @@ app.post("/signup", (req, res) => {
       return;
     }
   }
-  verify(secret, token).then(data => {
+  hcaptcha.verify(secret, token).then(data => {
     if(data.success){
       db.get("users").then(users => {
         if(Object.keys(users).includes(newusername)){
