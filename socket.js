@@ -1,6 +1,6 @@
-const { random, generateCode, checkUser, setUpRoom } = require("./functions");
+import { random, generateCode, checkUser, setUpRoom } from "./functions.js";
 
-module.exports = socket => {
+const socketfunc = socket => {
   socket.on("join", name => {
     setUpRoom();
     console.log(name + " joined");
@@ -39,3 +39,5 @@ module.exports = socket => {
     console.log(name + " left");
   });
 };
+
+export default socketfunc;

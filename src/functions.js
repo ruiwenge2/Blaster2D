@@ -23,4 +23,4 @@ function checkMovement(direction, x, y){
   return true;
 }
 
-export { size, playersize, coinsize, ratio, random, checkMovement, treesize }
+export { size, playersize, coinsize, ratio, random, checkMovement, treesize };

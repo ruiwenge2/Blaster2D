@@ -1,4 +1,4 @@
-import gamescene from "./game";
+import gamescene from "./game/index.js";
 import joinscene from "./scenes/join.js";
 import howtoplay from "./scenes/howtoplay.js";
 import diedscene from "./scenes/died.js";

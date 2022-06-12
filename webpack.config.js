@@ -1,5 +1,8 @@
-const path = require("path");
-const webpack = require("webpack");
+import path from "path";
+import webpack from "webpack";
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = {
   entry: "./src/main.js",
@@ -11,7 +14,7 @@ const config = {
 };
 
 const compiler = webpack(config, (err, stats) => {
-  if (err) {
+  if(err) {
     console.error(err);
     return;
   }

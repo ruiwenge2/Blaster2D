@@ -1,12 +1,12 @@
-module.exports.loggedIn = function(req){
+function loggedIn(req){
   return (req.session.username ? true: false);
 };
 
-module.exports.random = function(number1, number2){
+function random(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;
 };
 
-module.exports.generateCode = function(){
+function generateCode(){
   const characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   var code = "";
   for(i = 0; i < 10; i++){
@@ -15,18 +15,16 @@ module.exports.generateCode = function(){
   return code;
 };
 
-module.exports.checkUser = function(id){
+function checkUser(id){
   for(let info of Object.keys(rooms.main.players)){
     if(info == id) return true;
   }
   return false;
 };
 
-module.exports.setUpRoom = function(){
+function setUpRoom(){
   if(Object.keys(rooms.main.players).length == 0){
-    const random = module.exports.random;
     rooms.main.coins = [];
-    rooms.main.trees = [];
     for(let i = 0; i < random(30, 50); i++){
       rooms.main.coins.push({
         id: i,
@@ -38,7 +36,7 @@ module.exports.setUpRoom = function(){
   }
 };
 
-module.exports.deleteUser = function(user){
+function deleteUser(user){
   db.get("users").then(users => {
     if(Object.keys(users).includes(user)){
       delete users[user];
@@ -48,3 +46,5 @@ module.exports.deleteUser = function(user){
     console.log("error occured while deleting user");
   });
 };
+
+export { loggedIn, random, generateCode, checkUser, setUpRoom, deleteUser }

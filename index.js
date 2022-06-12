@@ -1,19 +1,19 @@
-const express = require("express");
+import express from "express";
+import { createServer } from "http";
+
+import hcaptcha from "hcaptcha";
+import bcrypt from "bcrypt";
+import { Server } from "socket.io";
+import session from "express-session";
+import Database from "@replit/database";
+import { renderFile } from "ejs";
+import fs from "fs";
+
 const app = express();
-const server = require("http").Server(app);
-const hcaptcha = require("hcaptcha");
-const bcrypt = require("bcrypt");
-const socketio = require("socket.io");
-const session = require("express-session");
-const Database = require("@replit/database");
-
-const fs = require("fs");
+const server = createServer(app);
+global.io = new Server(server);
 global.db = new Database();
-global.io = socketio(server);
-require("./tests");
 
-
-require("./webpack.config.js");
 global.rooms = {
   main: {
     players: {},
@@ -28,20 +28,26 @@ global.treesize = 300;
 global.coinsize = 37.5;
 
 app.use(express.static("public"));
-app.engine("html", require("ejs").renderFile);
+app.engine("html", renderFile);
 app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-const api = require("./api");
 
 db.get("users").then(obj => {
   if(!obj) db.set("users", {});
 });
 
-const { random, generateCode, loggedIn, deleteUser } = require("./functions");
-const socketfunc = require("./socket");
-const skins = require("./skins");
+import { checkUser, setUpRoom, random, generateCode, loggedIn, deleteUser } from "./functions.js";
+
+import api from "./api.js";
+import socketfunc from "./socket.js";
+import skins from "./skins.js";
+import update from "./update.js";
+
+import "./tests/index.js";
+import "./webpack.config.js";
+
 const saltRounds = 10;
 const allchars = [
   "a", "b", "c", "d", "e", "f", "g", "h", "i",
@@ -70,7 +76,7 @@ fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
 
 
 io.on("connection", socketfunc);
-require("./update")();
+update();
 
 app.use("/api", api);
 
@@ -176,7 +182,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-server.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 80, () => {
   console.log("server started");
   console.log(`${db.key}/users`);
 });

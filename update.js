@@ -4,4 +4,4 @@ const update = () => {
   }, 1000 / 60);
 }
 
-module.exports = update;
+export default update;

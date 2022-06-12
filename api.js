@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
 router.get("/buy", (req, res) => {
@@ -13,4 +13,4 @@ router.get("/sell", (req, res) => {
   res.send("");
 });
 
-module.exports = router;
+export default router;
