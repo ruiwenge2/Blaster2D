@@ -176,7 +176,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-server.listen(3000, () => {
+server.listen(process.env.PORT || 3000, () => {
   console.log("server started");
   console.log(`${db.key}/users`);
 });
