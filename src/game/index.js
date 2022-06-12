@@ -2,6 +2,7 @@ import { size, playersize, coinsize, ratio, random, checkMovement, treesize } fr
 import Text from "../objects/text.js";
 import Button from "../objects/button.js";
 import Chatbox from "./chat.js";
+import trees from "../trees.json";
 
 const speed = 275;
 
@@ -50,8 +51,7 @@ class gamescene extends Phaser.Scene {
         let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
         coin.id = i.id;
       }
-  
-      for(let i of data.trees){
+      for(let i of trees.trees){
         let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10);
         tree.id = i.id;
       }
@@ -139,10 +139,10 @@ class gamescene extends Phaser.Scene {
       }
     }
     
-    this.obstacle1 = this.physics.add.staticSprite(1500, 750, "obstacle").setDepth(0);
-    this.obstacle2 = this.physics.add.staticSprite(1500, 2250, "obstacle").setDepth(0);
-    this.obstacle3 = this.physics.add.staticSprite(750, 1500, "obstacle2").setDepth(0);
-    this.obstacle4 = this.physics.add.staticSprite(2250, 1500, "obstacle2").setDepth(0);
+    this.obstacle1 = this.physics.add.staticSprite(size / 2, size / 2 - 750, "obstacle").setDepth(0);
+    this.obstacle2 = this.physics.add.staticSprite(size / 2, size / 2 + 750, "obstacle").setDepth(0);
+    this.obstacle3 = this.physics.add.staticSprite(size / 2 - 750, size / 2, "obstacle2").setDepth(0);
+    this.obstacle4 = this.physics.add.staticSprite(size / 2 + 750, size / 2, "obstacle2").setDepth(0);
 
   
     this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(15);

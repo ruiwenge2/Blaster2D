@@ -1,4 +1,4 @@
-const size = 3000;
+const size = 6000;
 const playersize = 50;
 const coinsize = 37.5;
 const ratio = size / 60;

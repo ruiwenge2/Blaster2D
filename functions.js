@@ -25,9 +25,6 @@ module.exports.checkUser = function(id){
 module.exports.setUpRoom = function(){
   if(Object.keys(rooms.main.players).length == 0){
     const random = module.exports.random;
-    const coinsize = 37.5;
-    const treesize = 300;
-    const size = 3000;
     rooms.main.coins = [];
     rooms.main.trees = [];
     for(let i = 0; i < random(30, 50); i++){
@@ -37,16 +34,7 @@ module.exports.setUpRoom = function(){
         y: random(coinsize / 2, size - coinsize / 2)
       });
     }
-    for(let i = 0; i < random(10, 15); i++){
-      let percent = random(50, 100);
-      let realsize = treesize * percent / 100;
-      rooms.main.trees.push({
-        id: i,
-        size: realsize,
-        x: random(realsize / 2, size - realsize / 2),
-        y: random(realsize / 2, size - realsize / 2)
-      });
-    }
+    
   }
 };
 

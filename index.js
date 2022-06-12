@@ -6,20 +6,26 @@ const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
 const Database = require("@replit/database");
+
+const fs = require("fs");
 global.db = new Database();
 global.io = socketio(server);
 require("./tests");
+
 
 require("./webpack.config.js");
 global.rooms = {
   main: {
     players: {},
-    trees: [],
     bullets: {},
     coins: []
   }
 };
 global.playersize = 50;
+
+global.size = 6000;
+global.treesize = 300;
+global.coinsize = 37.5;
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
@@ -46,6 +52,24 @@ const allchars = [
   "T", "U", "V", "W", "X", "Y", "Z", "0", "1",
   "2", "3", "4", "5", "6", "7", "8", "9", "_"
 ];
+
+var trees = [];
+
+for(let i = 0; i < random(100, 150); i++){
+  var percent = random(50, 100);
+  var realsize = treesize * percent / 100;
+  trees.push({
+    id: i,
+    size: realsize,
+    x: random(realsize / 2, size - realsize / 2),
+    y: random(realsize / 2, size - realsize / 2)
+  });
+}
+
+console.log(trees)
+
+fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
+
 
 io.on("connection", socketfunc);
 require("./update")();
