@@ -66,8 +66,6 @@ for(let i = 0; i < random(100, 150); i++){
   });
 }
 
-console.log(trees)
-
 fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
 
 
