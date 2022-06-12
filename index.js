@@ -34,11 +34,11 @@ app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
 const api = require("./api");
-
+/*
 db.get("users").then(obj => {
   if(!obj) db.set("users", {});
 });
-
+*/
 const { random, generateCode, loggedIn, deleteUser } = require("./functions");
 const socketfunc = require("./socket");
 const skins = require("./skins");
