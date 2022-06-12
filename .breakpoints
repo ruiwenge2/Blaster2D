@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "public/game.js": [
+      {
+        "id": "0f062235-5420-4654-b191-2f4aab8b52e6",
+        "line": 1,
+        "version": 5,
+        "index": 0
+      }
+    ]
+  }
 }
