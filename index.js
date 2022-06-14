@@ -1,6 +1,5 @@
 import express from "express";
 import { createServer } from "http";
-
 import hcaptcha from "hcaptcha";
 import bcrypt from "bcrypt";
 import { Server } from "socket.io";
@@ -33,11 +32,6 @@ app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-
-db.get("users").then(obj => {
-  if(!obj) db.set("users", {});
-});
-
 import { checkUser, setUpRoom, random, generateCode, loggedIn, deleteUser } from "./functions.js";
 
 import api from "./api.js";
@@ -47,6 +41,13 @@ import update from "./update.js";
 
 import "./tests/index.js";
 import "./webpack.config.js";
+
+
+db.get("users").then(obj => {
+  if(!obj) db.set("users", {});
+});
+
+
 
 const saltRounds = 10;
 const allchars = [
