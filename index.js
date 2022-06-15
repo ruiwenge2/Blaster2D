@@ -10,9 +10,9 @@ import fs from "fs";
 
 const app = express();
 const server = createServer(app);
+
 global.io = new Server(server);
 global.db = new Database();
-
 global.rooms = {
   main: {
     players: {},
@@ -46,8 +46,6 @@ import "./webpack.config.js";
 db.get("users").then(obj => {
   if(!obj) db.set("users", {});
 });
-
-
 
 const saltRounds = 10;
 const allchars = [
