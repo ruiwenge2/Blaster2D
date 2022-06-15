@@ -73,7 +73,6 @@ for(let i = 0; i < random(100, 150); i++){
 
 fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
 
-
 io.on("connection", socketfunc);
 update();
 
