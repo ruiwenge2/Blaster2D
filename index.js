@@ -43,11 +43,11 @@ import update from "./update.js";
 import "./tests/index.js";
 import "./webpack.config.js";
 
-
+/*
 db.get("users").then(obj => {
   if(!obj) db.set("users", {});
 });
-
+*/
 const saltRounds = 10;
 const allchars = [
   "a", "b", "c", "d", "e", "f", "g", "h", "i",
