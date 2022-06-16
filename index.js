@@ -7,7 +7,6 @@ const socketio = require("socket.io");
 const session = require("express-session");
 const Database = require("@replit/database");
 const fs = require("fs");
-console.log(process.env);
 
 global.io = socketio(server);
 global.db = new Database();
