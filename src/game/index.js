@@ -28,7 +28,7 @@ class gamescene extends Phaser.Scene {
 
   create() {
     this.loaded = false;
-    this.socket = io();
+    this.socket = io("https://blaster2d.ruiwenge2.repl.co");
     this.otherplayers = this.physics.add.group();
     this.otherguns = this.physics.add.group();
     this.coins = this.physics.add.group();
