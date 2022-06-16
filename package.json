@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node index.js"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",

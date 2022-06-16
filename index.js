@@ -1,18 +1,15 @@
-import express from "express";
-import { createServer } from "http";
-import hcaptcha from "hcaptcha";
-import bcrypt from "bcrypt";
-import { Server } from "socket.io";
-import session from "express-session";
-import Database from "@replit/database";
-import { renderFile } from "ejs";
-import fs from "fs";
-
+const express = require("express");
 const app = express();
-const server = createServer(app);
+const server = require("http").Server(app);
+const hcaptcha = require("hcaptcha");
+const bcrypt = require("bcrypt");
+const socketio = require("socket.io");
+const session = require("express-session");
+const Database = require("@replit/database");
+const fs = require("fs");
 console.log(process.env.secret);
 
-global.io = new Server(server);
+global.io = socketio(server);
 global.db = new Database();
 global.rooms = {
   main: {
@@ -28,20 +25,20 @@ global.treesize = 300;
 global.coinsize = 37.5;
 
 app.use(express.static("public"));
-app.engine("html", renderFile);
+app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-import { checkUser, setUpRoom, random, generateCode, loggedIn, deleteUser } from "./functions.js";
+const { checkUser, setUpRoom, random, generateCode, loggedIn, deleteUser } = require("./functions.js");
 
-import api from "./api.js";
-import socketfunc from "./socket.js";
-import skins from "./skins.js";
-import update from "./update.js";
+const api = require("./api.js");
+const socketfunc = require("./socket.js");
+const skins = require("./skins.js");
+const update = require("./update.js");
 
-import "./tests/index.js";
-import "./webpack.config.js";
+require("./tests/index.js");
+require("./webpack.config.js");
 
 /*
 db.get("users").then(obj => {

@@ -23,4 +23,4 @@ const skins = [
 
 skins.sort(function(a, b){return a.cost - b.cost});
 
-export default skins;
+module.exports = skins;
