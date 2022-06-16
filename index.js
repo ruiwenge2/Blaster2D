@@ -10,7 +10,6 @@ import fs from "fs";
 
 const app = express();
 const server = createServer(app);
-console.log("hi");
 
 global.io = new Server(server);
 global.db = new Database();
