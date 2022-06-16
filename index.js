@@ -14,9 +14,6 @@ global.io = socketio(server, {
     methods: ["GET", "POST"]
   }
 });
-
-
-
 global.db = new Database();
 global.rooms = {
   main: {
