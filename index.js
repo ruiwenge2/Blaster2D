@@ -37,7 +37,7 @@ const socketfunc = require("./socket.js");
 const skins = require("./skins.js");
 const update = require("./update.js");
 
-require("./tests/index.js");
+require("./tests");
 require("./webpack.config.js");
 
 /*
