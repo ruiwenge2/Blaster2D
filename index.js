@@ -10,7 +10,7 @@ const fs = require("fs");
 
 global.io = socketio(server, {
   cors: {
-    origin: ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com"],
+    origin: ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com", "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co"],
     methods: ["GET", "POST"]
   }
 });
