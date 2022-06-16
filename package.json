@@ -16,9 +16,7 @@
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "hcaptcha": "^0.1.1",
-    "socket.io": "^4.4.1"
-  },
-  "devDependencies": {
-    "webpack": "^5.4.0"
+    "socket.io": "^4.4.1",
+    "webpack": "^5.73.0"
   }
 }
