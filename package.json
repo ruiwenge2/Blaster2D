@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "webpack --config webpack.config.js",
+    "heroku-postbuild": "node setup",
+    "watch": "webpack --config webpack.config.js --watch --progress"
   },
   "keywords": [],
   "author": "",
