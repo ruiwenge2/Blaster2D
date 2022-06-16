@@ -28,8 +28,8 @@ module.exports.setUpRoom = function(){
     for(let i = 0; i < module.exports.random(30, 50); i++){
       rooms.main.coins.push({
         id: i,
-        x: random(coinsize / 2, size - coinsize / 2),
-        y: random(coinsize / 2, size - coinsize / 2)
+        x: module.exports.random(coinsize / 2, size - coinsize / 2),
+        y: module.exports.random(coinsize / 2, size - coinsize / 2)
       });
     }
     
