@@ -9,8 +9,14 @@ const Database = require("@replit/database");
 const fs = require("fs");
 
 global.io = socketio(server, {
-  origins: ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com", "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co"]
+  cors: {
+    origin: ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com"],
+    methods: ["GET", "POST"]
+  }
 });
+
+
+
 global.db = new Database();
 global.rooms = {
   main: {
