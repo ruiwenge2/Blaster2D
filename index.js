@@ -5,7 +5,6 @@ const hcaptcha = require("hcaptcha");
 const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
-const Database = require("@replit/database");
 const fs = require("fs");
 
 global.io = socketio(server, {
@@ -14,7 +13,6 @@ global.io = socketio(server, {
     methods: ["GET", "POST"]
   }
 });
-global.db = new Database();
 global.rooms = {
   main: {
     players: {},
@@ -40,6 +38,9 @@ const api = require("./api.js");
 const socketfunc = require("./socket.js");
 const skins = require("./skins.js");
 const update = require("./update.js");
+const Database = require("./db.js");
+
+global.db = new Database();
 
 require("./tests");
 require("./webpack.config.js");
