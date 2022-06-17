@@ -60,6 +60,8 @@ const allchars = [
   "2", "3", "4", "5", "6", "7", "8", "9", "_"
 ];
 
+/*
+
 var trees = [];
 
 for(let i = 0; i < random(100, 150); i++){
@@ -74,6 +76,8 @@ for(let i = 0; i < random(100, 150); i++){
 }
 
 fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
+
+*/
 
 io.on("connection", socketfunc);
 update();
