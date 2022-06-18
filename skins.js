@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const skins = [
   {
     id: 0,
@@ -20,6 +22,8 @@ const skins = [
     cost: 100
   }
 ];
+
+fs.writeFileSync("src/skins.json", JSON.stringify(skins));
 
 skins.sort(function(a, b){return a.cost - b.cost});
 
