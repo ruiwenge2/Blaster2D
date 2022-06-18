@@ -39,7 +39,7 @@ class gamescene extends Phaser.Scene {
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "skin").setScale(0.5, 0.5).setDepth(1);
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(0.5, 0.5).setDepth(1);
       this.cameras.main.startFollow(this.player);
       this.data = {
         x: data.players[this.socket.id].x,
