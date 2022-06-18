@@ -1,6 +1,5 @@
 const fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args));
 
-
 class db {
   constructor(){
     this.db_url = `https://blaster2d-database.ruiwenge2.repl.co/${process.env["db_key"]}`;
