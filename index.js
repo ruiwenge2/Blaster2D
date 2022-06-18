@@ -80,13 +80,15 @@ fs.writeFileSync("src/trees.json", JSON.stringify({trees:trees}));
 
 */
 
+fs.writeFileSync("src/skins.json", JSON.stringify(skins));
+
 io.on("connection", socketfunc);
 update();
 
 app.use("/api", api);
 
 app.get("/", (req, res) => {
-  res.render("index.html", {loggedIn: loggedIn(req), skins: JSON.stringify(skins), username: (loggedIn(req) ? req.session.username: null)});
+  res.render("index.html", {loggedIn: loggedIn(req), username: (loggedIn(req) ? req.session.username: null)});
 });
 
 app.get("/login", (req, res) => {

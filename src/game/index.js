@@ -3,6 +3,7 @@ import Text from "../objects/text.js";
 import Button from "../objects/button.js";
 import Chatbox from "./chat.js";
 import trees from "../trees.json";
+import skins from "../skins.json";
 
 const speed = 275;
 
@@ -118,9 +119,6 @@ class gamescene extends Phaser.Scene {
         }
       }
     });
-    
-
-    
   
     this.socket.on("leave", () => {
       this.scene.start("disconnect_scene");
