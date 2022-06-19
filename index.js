@@ -20,7 +20,6 @@ global.rooms = {
   }
 };
 global.playersize = 50;
-
 global.size = 6000;
 global.treesize = 300;
 global.coinsize = 37.5;
@@ -41,9 +40,9 @@ const Database = require("./db.js");
 
 global.db = new Database();
 
-require("./tests");
+// require("./tests.js");
+require("./trees.js");
 require("./webpack.config.js");
-
 
 db.get("users").then(obj => {
   if(obj == "Not Found") db.set("users", {});
