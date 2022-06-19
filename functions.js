@@ -36,6 +36,11 @@ module.exports.setUpRoom = function(){
   }
 };
 
+module.exports.getUser = async function(user){
+  let users = await db.get("users");
+  return users[user];
+}
+
 module.exports.deleteUser = function(user){
   db.get("users").then(users => {
     if(Object.keys(users).includes(user)){

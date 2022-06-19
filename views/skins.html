@@ -11,7 +11,31 @@
         <a href="/">Home</a>
       </div>
       <h1>Skins</h1>
+      <% if(!loggedIn){ %>
+      <p>Please login or sign up to access skins.</p>
+        <% } %>
       <% for(i of skins){ %>
+        <div class="skin" data-id="<%= i.id %>">
+          <img src="/img/skins/<%= i.url %>.png">
+          <h3>Cost: <%= i.cost %></h3>
+          <button>Buy</button>
+        </div>
+      <% } %>
+        <% for(i of skins){ %>
+        <div class="skin" data-id="<%= i.id %>">
+          <img src="/img/skins/<%= i.url %>.png">
+          <h3>Cost: <%= i.cost %></h3>
+          <button>Buy</button>
+        </div>
+      <% } %>
+        <% for(i of skins){ %>
+        <div class="skin" data-id="<%= i.id %>">
+          <img src="/img/skins/<%= i.url %>.png">
+          <h3>Cost: <%= i.cost %></h3>
+          <button>Buy</button>
+        </div>
+      <% } %>
+        <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>

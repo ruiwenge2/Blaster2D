@@ -31,7 +31,7 @@ app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-const { checkUser, setUpRoom, random, generateCode, loggedIn, deleteUser } = require("./functions.js");
+const { random, generateCode, loggedIn, getUser, deleteUser } = require("./functions.js");
 
 const api = require("./api.js");
 const socketfunc = require("./socket.js");
@@ -44,11 +44,11 @@ global.db = new Database();
 require("./tests");
 require("./webpack.config.js");
 
-/*
+
 db.get("users").then(obj => {
-  if(!obj) db.set("users", {});
+  if(obj == "Not Found") db.set("users", {});
 });
-*/
+
 const saltRounds = 10;
 const allchars = [
   "a", "b", "c", "d", "e", "f", "g", "h", "i",
@@ -86,7 +86,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/skins", (req, res) => {
-  res.render("skins.html", {skins: skins});
+  res.render("skins.html", {skins: skins, loggedIn: loggedIn(req)});
 });
 
 app.post("/login", (req, res) => {
@@ -134,7 +134,7 @@ app.post("/signup", (req, res) => {
         bcrypt.hash(newpassword, saltRounds, function(err, hash){
           users[newusername] = {
             p: hash,
-            s: [],
+            s: [0],
             c: 0,
             g: "pistol",
             b: 0

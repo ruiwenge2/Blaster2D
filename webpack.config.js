@@ -2,9 +2,12 @@ const path = require("path");
 const webpack = require("webpack");
 
 const config = {
-  entry: "./src/main.js",
+  entry: {
+    game: "./src/main.js",
+    skins: "./src/skins.js"
+  },
   output: {
-    filename: "game.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "public"),
   },
   mode: "production"
