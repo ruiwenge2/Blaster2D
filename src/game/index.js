@@ -1,4 +1,4 @@
-import { size, playersize, coinsize, ratio, random, checkMovement, treesize } from "../functions.js";
+import { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate } from "../functions.js";
 import Text from "../objects/text.js";
 import Button from "../objects/button.js";
 import Chatbox from "./chat.js";
@@ -10,6 +10,11 @@ const speed = 275;
 class gamescene extends Phaser.Scene {
   constructor(){
     super();
+    this.left = false;
+    this.right = false;
+    this.up = false;
+    this.down = false;
+    this.frames = 0;
   }
   
   preload() {
@@ -30,16 +35,21 @@ class gamescene extends Phaser.Scene {
   create() {
     this.loaded = false;
     this.socket = io("https://blaster2d.ruiwenge2.repl.co");
-    this.otherplayers = this.physics.add.group();
-    this.otherguns = this.physics.add.group();
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
-    
+    this.enemies = [];
     this.socket.emit("join", localStorage.getItem("name"));
+    
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(0.5, 0.5).setDepth(1);
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(1);
+
+      this.playerInfo = {
+        x: this.player.x,
+        y: this.player.y
+      };
+      
       this.cameras.main.startFollow(this.player);
       this.data = {
         x: data.players[this.socket.id].x,
@@ -59,12 +69,7 @@ class gamescene extends Phaser.Scene {
       
       for(let oplayer of Object.keys(data.players)){
         if(oplayer != this.socket.id){
-          let otherplayer = this.otherplayers.create(data.players[oplayer].x, data.players[oplayer].y, "player").setScale(0.5, 0.5).setDepth(1);
-          otherplayer.id = oplayer;
-          let gun = this.otherguns.create(data.players[oplayer].x + Math.cos(data.players[oplayer].angle2) * (playersize / 2 + 28), data.players[oplayer].y + Math.sin(data.players[oplayer].angle2) * (playersize / 2 + 28), "pistol").setDepth(15);
-          gun.angle = data.players[oplayer].angle;
-          gun.angle2 = data.players[oplayer].angle2;
-          gun.id = oplayer;
+          
         }
       }
       this.main();
@@ -73,12 +78,7 @@ class gamescene extends Phaser.Scene {
     
 
     this.socket.on("new player", (data, id) => { // when new player joins
-      let otherplayer = this.otherplayers.create(data.x, data.y, "player").setScale(0.5, 0.5).setDepth(1);
-      let gun = this.otherguns.create(data.x + Math.cos(0) * (playersize / 2 + 28), data.y + Math.sin(0) * (playersize / 2 + 28), "pistol").setDepth(15);
-      gun.angle = 0;
-      gun.angle2 = 0;
-      otherplayer.id = id;
-      gun.id = id;
+      this.addPlayer(data);
     });
   
     this.socket.on("other player move", (id, data) => { // when other player moves
@@ -105,6 +105,8 @@ class gamescene extends Phaser.Scene {
         }
       }
     });
+
+    
   
     this.socket.on("left", id => {
       for(let player of this.otherplayers.children.entries){
@@ -126,6 +128,10 @@ class gamescene extends Phaser.Scene {
   }
 
   main(){
+    setInterval(() => {
+      console.log(this.frames);
+      this.frames = 0;
+    }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
@@ -133,7 +139,7 @@ class gamescene extends Phaser.Scene {
 
     for(let i = size / (ratio * 2); i < size; i += size / ratio){
       for(let j = size / (ratio * 2); j < size; j += size / ratio){
-        let grass = this.physics.add.image(i, j, "grass").setDepth(0);
+        let grass = this.physics.add.image(i, j, "grass").setDepth(0).setScale(200 / 60, 200 / 60);
       }
     }
     
@@ -212,6 +218,20 @@ class gamescene extends Phaser.Scene {
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
     });
+
+    this.socket.on("gamestate", data => {
+      this.frames += 1;
+      let self = data.players[this.socket.id];
+      this.playerInfo.x = self.x;
+      this.playerInfo.y = self.y;
+
+      this.tweens.add({
+        targets: this.player,
+        x: this.playerInfo.x,
+        y: this.playerInfo.y,
+        duration: gamestate_rate
+      });
+    });
     
     // this.physics.add.collider(this.bullets, this.demons, (bullet, demon) => {
     //   bullet.destroy();
@@ -223,6 +243,25 @@ class gamescene extends Phaser.Scene {
     //     localStorage.setItem("bestscore", this.score);
     //   }
     // });
+  }
+
+  addPlayer(player){
+    var player = {
+      id: player.id,
+      x: player.x,
+      y: player.y,
+      player: this.add.image(player.x, player.y, "player").setScale(0.5, 0.5).setDepth(1),
+      gun: this.add.image(player.x + playersize / 2, player.y, "pistol").setDepth(15),
+      angle: null,
+      healthbar: undefined,
+      nametext: undefined,
+      
+    }
+    this.enemies.push(player);
+  }
+
+  updatePlayers(data){
+    
   }
 
   collect(player, coin){
@@ -243,7 +282,6 @@ class gamescene extends Phaser.Scene {
     if(this.health < 0) this.health = 0;
     this.healthbarinside.width = 200 * this.health / 100;
   }
-
 
   addWeaponActions(){
     this.useweapon = true;
@@ -279,17 +317,58 @@ class gamescene extends Phaser.Scene {
     }
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
-    
-    this.player.setVelocityX(0);
-    this.player.setVelocityY(0);
     if(cursors.left.isDown || this.a.isDown){
-      if(checkMovement("left", this.player.body.position.x, this.player.body.position.y)) this.player.setVelocityX(-speed);
-    } if(cursors.right.isDown || this.d.isDown){
-      if(checkMovement("right", this.player.body.position.x, this.player.body.position.y)) this.player.setVelocityX(speed);
-    } if(cursors.up.isDown || this.w.isDown){
-      if(checkMovement("up", this.player.body.position.x, this.player.body.position.y)) this.player.setVelocityY(-speed);
-    } if(cursors.down.isDown || this.s.isDown){
-      if(checkMovement("down", this.player.body.position.x, this.player.body.position.y)) this.player.setVelocityY(speed);
+      if(!this.left){
+        this.socket.emit("movement", "left");
+        this.left = true;
+        this.right = false;
+      }
+    } else {
+      if(this.left){
+        this.socket.emit("movement_end", "left");
+        this.left = false;
+      }
+    }
+    
+    if(cursors.right.isDown || this.d.isDown){
+      if(!this.right){
+        this.socket.emit("movement", "right");
+        this.right = true;
+        this.left = false;
+      }
+    } else {
+      if(this.right){
+        this.socket.emit("movement_end", "right");
+        this.right = false;
+      }
+    }
+    
+    if(cursors.up.isDown || this.w.isDown){
+      if(!this.up){
+        this.socket.emit("movement", "up");
+        this.up = true;
+        this.down = false;
+      }
+    } else {
+      if(this.up){
+        this.socket.emit("movement_end", "up");
+        this.up = false;
+      }
+    }
+    
+    if(cursors.down.isDown || this.s.isDown){
+      if(!this.down){
+        this.socket.emit("movement", "down");
+        this.down = true;
+        this.up = false;
+      }
+    } else {
+      if(this.down){
+        this.socket.emit("movement_end", "down");
+        this.down = false;
+      }
+
+      
     }
     
     this.gun.x = this.player.body.position.x + playersize / 2 + Math.cos(this.gun.angle2) * (playersize / 2 + 28);
@@ -298,13 +377,11 @@ class gamescene extends Phaser.Scene {
     this.player.angle = this.gun.angle;
 
     if(this.player.x != this.data.x || this.player.y != this.data.y || this.player.angle != this.data.angle){
-      this.data.x = this.player.x;
-      this.data.y = this.player.y;
       this.data.angle = this.gun.angle;
       this.data.angle2 = this.gun.angle2;
       this.data.gunx = this.gun.x;
       this.data.guny = this.gun.y
-      this.socket.emit("player move", this.data);
+      // this.socket.emit("player move", this.data);
     }
   }
 }

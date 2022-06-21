@@ -23,6 +23,7 @@ global.playersize = 50;
 global.size = 6000;
 global.treesize = 300;
 global.coinsize = 37.5;
+global.speed = 8;
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);

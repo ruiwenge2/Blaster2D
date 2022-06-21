@@ -1,8 +1,9 @@
 const size = 6000;
-const playersize = 50;
+const playersize = 60;
 const coinsize = 37.5;
-const ratio = size / 60;
+const ratio = size / 200;
 const treesize = 300;
+const gamestate_rate = 1000 / 30;
 
 function random(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;
@@ -23,4 +24,4 @@ function checkMovement(direction, x, y){
   return true;
 }
 
-export { size, playersize, coinsize, ratio, random, checkMovement, treesize };
+export { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate };
