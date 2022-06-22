@@ -85,7 +85,6 @@ class gamescene extends Phaser.Scene {
       for(let coin of this.coins.children.entries){
         if(coin.id == id){
           coin.destroy();
-          console.log("deleted coin");
         }
       }
     });
@@ -113,7 +112,7 @@ class gamescene extends Phaser.Scene {
 
   main(){
     setInterval(() => {
-      console.log(this.frames);
+      console.log("TPS: " + this.frames);
       this.frames = 0;
     }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
@@ -260,7 +259,6 @@ class gamescene extends Phaser.Scene {
 
   collect(player, coin){
     this.socket.emit("collect gold", coin.id);
-    console.log(coin.id)
     this.gold += 1;
     this.goldtext.setText("Gold: " + this.gold);
     coin.destroy();

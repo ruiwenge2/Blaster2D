@@ -3,7 +3,7 @@ const playersize = 65;
 const coinsize = 37.5;
 const ratio = size / 500;
 const treesize = 300;
-const gamestate_rate = 1000 / 30;
+const gamestate_rate = 200;
 
 function random(number1, number2){
   return Math.round(Math.random() * (number2 - number1)) + number1;
