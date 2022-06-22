@@ -3,10 +3,7 @@ const { random } = require("./functions.js");
 
 var trees = [];
 
-const size = 6000;
-const treesize = 300;
-
-for(let i = 0; i < random(100, 150); i++){
+for(let i = 0; i < random(50, 75); i++){
   var percent = random(50, 100);
   var realsize = treesize * percent / 100;
   trees.push({

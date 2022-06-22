@@ -1,7 +1,7 @@
-const size = 6000;
-const playersize = 60;
+const size = 5000;
+const playersize = 65;
 const coinsize = 37.5;
-const ratio = size / 200;
+const ratio = size / 500;
 const treesize = 300;
 const gamestate_rate = 1000 / 30;
 

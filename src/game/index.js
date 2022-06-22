@@ -37,7 +37,7 @@ class gamescene extends Phaser.Scene {
     this.socket = io("https://blaster2d.ruiwenge2.repl.co");
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
-    this.enemies = [];
+    this.enemies = {};
     this.socket.emit("join", localStorage.getItem("name"));
     
     this.socket.on("gamedata", data => { // when game data arrives
@@ -79,22 +79,6 @@ class gamescene extends Phaser.Scene {
 
     this.socket.on("new player", (data, id) => { // when new player joins
       this.addPlayer(data);
-    });
-  
-    this.socket.on("other player move", (id, data) => { // when other player moves
-      this.otherplayers.getChildren().forEach(oplayer => {
-        if(oplayer.id == id){
-          oplayer.setPosition(data.x, data.y);
-          oplayer.angle = data.angle;
-          this.otherguns.getChildren().forEach(gun => {
-            if(gun.id == id){
-              gun.angle = data.angle;
-              gun.angle2 = data.angle2;
-              gun.setPosition(data.gunx, data.guny);
-            }
-          });
-        }
-      });
     });
 
     this.socket.on("collected gold", id => {
@@ -139,7 +123,7 @@ class gamescene extends Phaser.Scene {
 
     for(let i = size / (ratio * 2); i < size; i += size / ratio){
       for(let j = size / (ratio * 2); j < size; j += size / ratio){
-        let grass = this.physics.add.image(i, j, "grass").setDepth(0).setScale(200 / 60, 200 / 60);
+        let grass = this.physics.add.image(i, j, "grass").setDepth(0);
       }
     }
     
@@ -231,6 +215,16 @@ class gamescene extends Phaser.Scene {
         y: this.playerInfo.y,
         duration: gamestate_rate
       });
+
+      for(let enemy of Object.keys(data.players)){
+        if(enemy == this.socket.id) continue;
+        this.tweens.add({
+          targets: this.enemies[enemy].player,
+          x: data.players[enemy].x,
+          y: data.players[enemy].y,
+          duration: gamestate_rate
+        });
+      }
     });
     
     // this.physics.add.collider(this.bullets, this.demons, (bullet, demon) => {
@@ -246,18 +240,18 @@ class gamescene extends Phaser.Scene {
   }
 
   addPlayer(player){
-    var player = {
+    var playerObj = {
       id: player.id,
       x: player.x,
       y: player.y,
-      player: this.add.image(player.x, player.y, "player").setScale(0.5, 0.5).setDepth(1),
+      player: this.add.image(player.x, player.y, "player").setScale(playersize / 100, playersize / 100).setDepth(1),
       gun: this.add.image(player.x + playersize / 2, player.y, "pistol").setDepth(15),
       angle: null,
       healthbar: undefined,
       nametext: undefined,
       
     }
-    this.enemies.push(player);
+    this.enemies[player.id] = playerObj;
   }
 
   updatePlayers(data){
@@ -371,8 +365,8 @@ class gamescene extends Phaser.Scene {
       
     }
     
-    this.gun.x = this.player.body.position.x + playersize / 2 + Math.cos(this.gun.angle2) * (playersize / 2 + 28);
-    this.gun.y = this.player.body.position.y + playersize / 2 + Math.sin(this.gun.angle2) * (playersize / 2 + 28);
+    this.gun.x = this.player.body.position.x + playersize / 2 + Math.cos(this.gun.angle2) * (playersize / 2 + 29);
+    this.gun.y = this.player.body.position.y + playersize / 2 + Math.sin(this.gun.angle2) * (playersize / 2 + 29);
 
     this.player.angle = this.gun.angle;
 

@@ -19,8 +19,8 @@ global.rooms = {
     coins: []
   }
 };
-global.playersize = 50;
-global.size = 6000;
+global.playersize = 65;
+global.size = 5000;
 global.treesize = 300;
 global.coinsize = 37.5;
 global.speed = 8;
