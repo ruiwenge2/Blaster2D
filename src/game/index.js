@@ -29,7 +29,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
-    this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", {fontSize: 100}).setOrigin(0.5);
+    this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100 }).setOrigin(0.5);
   }
 
   create() {
@@ -44,6 +44,9 @@ class gamescene extends Phaser.Scene {
       this.loaded = true;
       this.loadingtext.destroy();
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(1);
+      
+      this.fpstext = new Text(this, window.innerWidth - 150, 120, "FPS:", { fontSize: 25 });
+      this.tps = new Text(this, window.innerWidth - 150, 155, "TPS:", { fontSize: 25 });
 
       this.playerInfo = {
         x: this.player.x,
@@ -63,13 +66,13 @@ class gamescene extends Phaser.Scene {
         coin.id = i.id;
       }
       for(let i of trees.trees){
-        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10);
+        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
         tree.id = i.id;
       }
       
       for(let oplayer of Object.keys(data.players)){
         if(oplayer != this.socket.id){
-          
+          this.addPlayer(data.players[oplayer]);
         }
       }
       this.main();
@@ -88,21 +91,9 @@ class gamescene extends Phaser.Scene {
         }
       }
     });
-
-    
   
     this.socket.on("left", id => {
-      for(let player of this.otherplayers.children.entries){
-        if(player.id == id){
-          player.destroy();
-        }
-      }
-  
-      for(let gun of this.otherguns.children.entries){
-        if(gun.id == id){
-          gun.destroy();
-        }
-      }
+      this.enemies[id].player.destroy();
     });
   
     this.socket.on("leave", () => {
@@ -112,7 +103,7 @@ class gamescene extends Phaser.Scene {
 
   main(){
     setInterval(() => {
-      console.log("TPS: " + this.frames);
+      this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
     }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
@@ -132,29 +123,29 @@ class gamescene extends Phaser.Scene {
     this.obstacle4 = this.physics.add.staticSprite(size / 2 + 750, size / 2, "obstacle2").setDepth(0);
 
   
-    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(15);
+    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(1);
 
     this.gun.angle2 = 0;
 
     this.bullets = this.physics.add.group();
 
     this.health = 100;
-    this.healthtext = new Text(this, 100, 50, "Health");
+    // this.healthtext = new Text(this, 100, 50, "Health");
 
-    this.healthbar = this.add.rectangle(200, 100, 200, 20, 0x0ffffff).setDepth(10);
-    this.healthbar.scrollFactorX = 0;
-    this.healthbar.scrollFactorY = 0;
+    // this.healthbar = this.add.rectangle(200, 100, 200, 20, 0x0ffffff).setDepth(10);
+    // this.healthbar.scrollFactorX = 0;
+    // this.healthbar.scrollFactorY = 0;
 
-    this.healthbarinside = this.add.rectangle(200, 100, 200, 20, 0x060f20c).setDepth(10);
-    this.healthbarinside.scrollFactorX = 0;
-    this.healthbarinside.scrollFactorY = 0;
+    // this.healthbarinside = this.add.rectangle(200, 100, 200, 20, 0x060f20c).setDepth(10);
+    // this.healthbarinside.scrollFactorX = 0;
+    // this.healthbarinside.scrollFactorY = 0;
 
     this.score = 0;
 
-    this.scoretext = new Text(this, window.innerWidth - 200, 100, "Score: " + this.score);
+    this.scoretext = new Text(this, window.innerWidth - 150, 50, "Score: " + this.score, { fontSize: 25 });
 
     this.gold = 0;
-    this.goldtext = new Text(this, window.innerWidth - 200, 150, "Gold: " + this.gold);
+    this.goldtext = new Text(this, window.innerWidth - 150, 85, "Gold: " + this.gold, { fontSize: 25 });
 
     this.addWeaponActions();
 
@@ -218,7 +209,7 @@ class gamescene extends Phaser.Scene {
       for(let enemy of Object.keys(data.players)){
         if(enemy == this.socket.id) continue;
         this.tweens.add({
-          targets: this.enemies[enemy].player,
+          targets: [this.enemies[enemy].player, this.enemies[enemy].gun],
           x: data.players[enemy].x,
           y: data.players[enemy].y,
           duration: gamestate_rate
@@ -304,9 +295,6 @@ class gamescene extends Phaser.Scene {
 
   update() {
     if(!this.loaded) return;
-    if(!this.fpstext){
-      this.fpstext = new Text(this, window.innerWidth - 200, 200, "Loading FPS...");
-    }
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
     if(cursors.left.isDown || this.a.isDown){
@@ -363,8 +351,8 @@ class gamescene extends Phaser.Scene {
       
     }
     
-    this.gun.x = this.player.body.position.x + playersize / 2 + Math.cos(this.gun.angle2) * (playersize / 2 + 29);
-    this.gun.y = this.player.body.position.y + playersize / 2 + Math.sin(this.gun.angle2) * (playersize / 2 + 29);
+    this.gun.x = this.player.x + Math.cos(this.gun.angle2) * (playersize / 2 + 29);
+    this.gun.y = this.player.y + Math.sin(this.gun.angle2) * (playersize / 2 + 29);
 
     this.player.angle = this.gun.angle;
 
