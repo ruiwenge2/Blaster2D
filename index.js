@@ -42,7 +42,7 @@ const Database = require("./db.js");
 global.db = new Database();
 
 // require("./tests.js");
-require("./trees.js");
+// require("./trees.js");
 require("./webpack.config.js");
 
 db.get("users").then(obj => {

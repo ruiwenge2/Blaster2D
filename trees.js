@@ -1,6 +1,9 @@
 const fs = require("fs");
 const { random } = require("./functions.js");
 
+const size = 5000;
+const treesize = 300;
+
 var trees = [];
 
 for(let i = 0; i < random(50, 75); i++){
