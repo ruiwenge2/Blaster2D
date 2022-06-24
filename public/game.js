@@ -55,15 +55,16 @@ class gamescene extends Phaser.Scene {
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
     this.enemies = {};
-    this.socket.emit("join", localStorage.getItem("name"));
+    this.name = name || localStorage.getItem("name");
+    this.socket.emit("join", this.name);
     
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2);
-      this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.body.position.x, this.player.body.position.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 2);
-      console.log(this.bar.inside);
-      console.log(this.bar.bar);
+      this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 2);
+      this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50, this.name, { fontSize: 25, fontFamily: "Georgia" }, 2, true);
+      
       this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "FPS:", { fontSize: 25 });
       this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 155, "TPS:", { fontSize: 25 });
 
@@ -115,6 +116,7 @@ class gamescene extends Phaser.Scene {
       this.enemies[id].player.destroy();
       this.enemies[id].gun.destroy();
       this.enemies[id].healthbar.destroy();
+      this.enemies[id].nametext.destroy();
     });
   
     this.socket.on("leave", () => {
@@ -254,11 +256,12 @@ class gamescene extends Phaser.Scene {
       id: player.id,
       x: player.x,
       y: player.y,
+      name: player.name,
       player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1),
       gun: this.add.image(player.x + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2, player.y, "pistol").setDepth(1),
       angle: null,
       healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 1),
-      nametext: undefined,
+      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50, player.name, { fontSize: 25, fontFamily: "Georgia" }, 1, true),
       health: 100
     }
     this.enemies[player.id] = playerObj;
@@ -311,8 +314,10 @@ class gamescene extends Phaser.Scene {
   update() {
     if(!this.loaded) return;
     this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100);
+    this.nametext.setPosition(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50);
     for(let enemy of Object.keys(this.enemies)){
       this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, this.enemies[enemy].health);
+      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50);
     }
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
@@ -380,6 +385,10 @@ class gamescene extends Phaser.Scene {
       this.data.angle2 = this.gun.angle2;
       this.socket.emit("player angle", this.data);
     }
+    
+    if(this.socket.disconnected){
+      this.scene.start("disconnect_scene");
+    }
   }
 }
 
@@ -440,27 +449,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 class Text extends Phaser.GameObjects.Text {
-  constructor(scene, x, y, text, style, scroll = false){
+  constructor(scene, x, y, text, style, depth = 100, scroll = false){
     // default values
+    
     if(!style){
       style = {};
       style.fontFamily = "Arial";
       style.fontSize = 30;
       style.background = 0x0000ff;
     }
-    if(!("fontFamily" in style)){
-      style.fontFamily = "Arial";
-    }
     if(!("fontSize" in style)){
       style.fontSize = 30;
     }
+    
     super(scene, x, y, text, style);
     if(!scroll){
       this.scrollFactorX = 0;
       this.scrollFactorY = 0;
     }
     this.setDepth(100);
+    this.setOrigin(0.5);
+    this.setDepth(depth);
     scene.add.existing(this);
+  }
+
+  setPosition(x, y){
+    this.x = x;
+    this.y = y;
   }
 }
 
