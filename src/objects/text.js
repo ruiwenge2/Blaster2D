@@ -1,5 +1,5 @@
 class Text extends Phaser.GameObjects.Text {
-  constructor(scene, x, y, text, style){
+  constructor(scene, x, y, text, style, scroll = false){
     // default values
     if(!style){
       style = {};
@@ -14,8 +14,10 @@ class Text extends Phaser.GameObjects.Text {
       style.fontSize = 30;
     }
     super(scene, x, y, text, style);
-    this.scrollFactorX = 0;
-    this.scrollFactorY = 0;
+    if(!scroll){
+      this.scrollFactorX = 0;
+      this.scrollFactorY = 0;
+    }
     this.setDepth(100);
     scene.add.existing(this);
   }

@@ -17,11 +17,8 @@ const socketfunc = socket => {
     socket.broadcast.emit("new player", rooms.main.players[socket.id]);
   });
 
-  socket.on("player move", data => {
+  socket.on("player angle", data => {
     if(!checkUser(socket.id)) return socket.emit("leave");
-    socket.broadcast.emit("other player move", socket.id, data);
-    rooms.main.players[socket.id].x = data.x;
-    rooms.main.players[socket.id].y = data.y;
     rooms.main.players[socket.id].angle = data.angle;
     rooms.main.players[socket.id].angle2 = data.angle2;
   });
