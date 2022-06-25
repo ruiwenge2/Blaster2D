@@ -11,8 +11,8 @@ class disconnect_scene extends Phaser.Scene {
   }
   
   create(){
-    this.disconnecttext = new Text(this, window.innerWidth / 2, 100, "You got disconnected", {fontSize: 50}).setOrigin(0.5);
-    this.button = new Button(this, window.innerWidth / 2, window.innerHeight / 2, 'OK', () => {
+    this.disconnecttext = new Text(this, window.innerWidth / 2, 100, "You got disconnected", { fontSize: 50, fontFamily: "Arial" }).setOrigin(0.5);
+    this.button = new Button(this, window.innerWidth / 2, window.innerHeight / 2, "Reload", () => {
       location.reload();
     });
   }

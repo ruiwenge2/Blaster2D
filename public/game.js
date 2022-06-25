@@ -46,7 +46,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
-    this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100 }).setOrigin(0.5);
+    this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
   }
 
   create() {
@@ -63,10 +63,10 @@ class gamescene extends Phaser.Scene {
       this.loadingtext.destroy();
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2);
       this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 2);
-      this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50, this.name, { fontSize: 25, fontFamily: "Georgia" }, 2, true);
+      this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
       
-      this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "FPS:", { fontSize: 25 });
-      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 155, "TPS:", { fontSize: 25 });
+      this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
+      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 155, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
 
       this.playerInfo = {
         x: this.player.x,
@@ -128,6 +128,9 @@ class gamescene extends Phaser.Scene {
     setInterval(() => {
       this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
+      if(this.socket.disconnected){
+        this.scene.start("disconnect_scene");
+      }
     }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
@@ -153,22 +156,13 @@ class gamescene extends Phaser.Scene {
     this.bullets = this.physics.add.group();
 
     this.health = 100;
-    // this.healthtext = new Text(this, 100, 50, "Health");
-
-    // this.healthbar = this.add.rectangle(200, 100, 200, 20, 0x0ffffff).setDepth(10);
-    // this.healthbar.scrollFactorX = 0;
-    // this.healthbar.scrollFactorY = 0;
-
-    // this.healthbarinside = this.add.rectangle(200, 100, 200, 20, 0x060f20c).setDepth(10);
-    // this.healthbarinside.scrollFactorX = 0;
-    // this.healthbarinside.scrollFactorY = 0;
 
     this.score = 0;
 
-    this.scoretext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Score: " + this.score, { fontSize: 25 });
+    this.scoretext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Score: " + this.score, { fontSize: 30, fontFamily: "copperplate" });
 
     this.gold = 0;
-    this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "Gold: " + this.gold, { fontSize: 25 });
+    this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
 
     this.addWeaponActions();
 
@@ -258,10 +252,10 @@ class gamescene extends Phaser.Scene {
       y: player.y,
       name: player.name,
       player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1),
+      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
+      healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 1),
       gun: this.add.image(player.x + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2, player.y, "pistol").setDepth(1),
       angle: null,
-      healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100, 1),
-      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50, player.name, { fontSize: 25, fontFamily: "Georgia" }, 1, true),
       health: 100
     }
     this.enemies[player.id] = playerObj;
@@ -314,10 +308,10 @@ class gamescene extends Phaser.Scene {
   update() {
     if(!this.loaded) return;
     this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, 100);
-    this.nametext.setPosition(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50);
+    this.nametext.setPosition(this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 + 20);
     for(let enemy of Object.keys(this.enemies)){
       this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 20, this.enemies[enemy].health);
-      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 - 50);
+      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 + 20);
     }
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
@@ -371,8 +365,6 @@ class gamescene extends Phaser.Scene {
         this.socket.emit("movement_end", "down");
         this.down = false;
       }
-
-      
     }
     
     this.gun.x = this.player.x + Math.cos(this.gun.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 2 + 29);
@@ -794,8 +786,8 @@ class disconnect_scene extends Phaser.Scene {
   }
   
   create(){
-    this.disconnecttext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_0__["default"](this, window.innerWidth / 2, 100, "You got disconnected", {fontSize: 50}).setOrigin(0.5);
-    this.button = new _objects_button_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, 'OK', () => {
+    this.disconnecttext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_0__["default"](this, window.innerWidth / 2, 100, "You got disconnected", { fontSize: 50, fontFamily: "Arial" }).setOrigin(0.5);
+    this.button = new _objects_button_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Reload", () => {
       location.reload();
     });
   }
