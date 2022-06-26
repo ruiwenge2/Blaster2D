@@ -229,7 +229,7 @@ class gamescene extends Phaser.Scene {
              player.gun.y = player.player.y + Math.sin(data.players[enemy].angle2) * (playersize / 2 + 29);
               player.gun.angle = data.players[enemy].angle;
             } catch(e){
-              console.log(e);
+              console.error(e);
             }
           } 
         });
