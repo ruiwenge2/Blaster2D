@@ -205,6 +205,10 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("gamestate", data => {
+      if(this.socket.disconnected){
+        this.scene.start("disconnect_scene");
+        return;
+      }
       this.frames += 1;
       let self = data.players[this.socket.id];
       this.playerInfo.x = self.x;
