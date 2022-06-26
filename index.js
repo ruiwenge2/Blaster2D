@@ -20,6 +20,7 @@ global.rooms = {
   }
 };
 global.playersize = 65;
+global.radius = playersize / 2;
 global.size = 5000;
 global.treesize = 300;
 global.coinsize = 37.5;

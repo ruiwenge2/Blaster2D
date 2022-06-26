@@ -13,17 +13,23 @@ class Player {
     this.right = false;
     this.up = false;
     this.down = false;
+    this.speed = speed;
   }
   
   update(){
-    if(this.left) this.x -= speed;
-    if(this.right) this.x += speed;
-    if(this.up) this.y -= speed;
-    if(this.down) this.y += speed;
+    this.checkMovement();
+    if(this.left) this.x -= this.speed;
+    if(this.right) this.x += this.speed;
+    if(this.up) this.y -= this.speed;
+    if(this.down) this.y += this.speed;
+    this.speed = speed;
   }
 
   checkMovement(){
-    
+    if(this.left && this.x - radius - speed < 0) this.speed = this.x - radius;
+    if(this.right && this.x + radius + speed > size) this.speed = size - this.x - radius;
+    if(this.up && this.y - radius - speed < 0) this.speed = this.y - radius;
+    if(this.down && this.y + radius + speed > size) this.speed = size - this.y - radius;
   }
 }
 
