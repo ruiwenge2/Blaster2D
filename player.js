@@ -14,11 +14,16 @@ class Player {
     this.up = false;
     this.down = false;
   }
+  
   update(){
     if(this.left) this.x -= speed;
     if(this.right) this.x += speed;
     if(this.up) this.y -= speed;
     if(this.down) this.y += speed;
+  }
+
+  checkMovement(){
+    
   }
 }
 

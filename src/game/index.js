@@ -40,6 +40,11 @@ class gamescene extends Phaser.Scene {
     this.name = name || localStorage.getItem("name");
     this.socket.emit("join", this.name);
     
+    window.addEventListener("resize", () => {
+      this.scale.resize(window.innerWidth, window.innerHeight);
+      // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
+    });
+    
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
@@ -110,9 +115,6 @@ class gamescene extends Phaser.Scene {
     setInterval(() => {
       this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
-      if(this.socket.disconnected){
-        this.scene.start("disconnect_scene");
-      }
     }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
@@ -262,9 +264,9 @@ class gamescene extends Phaser.Scene {
 
   addWeaponActions(){
     this.useweapon = true;
-    window.addEventListener("mousedown", e => {
+    this.input.on("pointerdown", e => {
       if(!this.useweapon) return;
-      var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+      var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
       let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (playersize / 2 + 23), this.player.y + Math.sin(angle) * (playersize / 2 + 23), "bullet").setScale(0.5, 2).setDepth(13);
       bullet.angle = ((angle * 180 / Math.PI) + 360) % 360;
       bullet.setVelocityX(Math.cos(angle) * 1500);
@@ -289,6 +291,10 @@ class gamescene extends Phaser.Scene {
 
   update() {
     if(!this.loaded) return;
+    if(this.socket.disconnected){
+      this.scene.start("disconnect_scene");
+      return;
+    }
     this.bar.setData(this.player.x, this.player.y - playersize / 2 - 20, 100);
     this.nametext.setPosition(this.player.x, this.player.y + playersize / 2 + 20);
     for(let enemy of Object.keys(this.enemies)){
@@ -358,10 +364,6 @@ class gamescene extends Phaser.Scene {
       this.data.angle = this.gun.angle;
       this.data.angle2 = this.gun.angle2;
       this.socket.emit("player angle", this.data);
-    }
-    
-    if(this.socket.disconnected){
-      this.scene.start("disconnect_scene");
     }
   }
 }
