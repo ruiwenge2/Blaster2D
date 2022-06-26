@@ -47,6 +47,10 @@ const socketfunc = socket => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     rooms.main.players[socket.id][direction] = false;
   });
+
+  socket.on("leaveGame", () => {
+    socket.disconnect();
+  });
 };
 
 module.exports = socketfunc;

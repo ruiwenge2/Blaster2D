@@ -116,10 +116,19 @@ class gamescene extends Phaser.Scene {
       this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
     }, 1000);
-    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
-    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
-    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    var game = this;
+    this.l.on("down", function(){
+      confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
+        game.sys.game.destroy(true, false);
+        document.querySelector("main").style.display = "block";
+        game.socket.emit("leaveGame");
+      });
+    });
 
     for(let i = size / (ratio * 2); i < size; i += size / ratio){
       for(let j = size / (ratio * 2); j < size; j += size / ratio){
@@ -244,7 +253,8 @@ class gamescene extends Phaser.Scene {
       healthbar: new Bar(this, player.x, player.y - playersize / 2 - 20, 100, 1),
       gun: this.add.image(player.x + playersize / 2, player.y, "pistol").setDepth(1),
       angle: null,
-      health: 100
+      health: 100,
+      score: 0
     }
     this.enemies[player.id] = playerObj;
   }

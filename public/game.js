@@ -134,10 +134,19 @@ class gamescene extends Phaser.Scene {
       this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
     }, 1000);
-    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
-    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
-    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    var game = this;
+    this.l.on("down", function(){
+      confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
+        game.sys.game.destroy(true, false);
+        document.querySelector("main").style.display = "block";
+        game.socket.emit("leaveGame");
+      });
+    });
 
     for(let i = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / (_functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio * 2); i < _functions_js__WEBPACK_IMPORTED_MODULE_0__.size; i += _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio){
       for(let j = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / (_functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio * 2); j < _functions_js__WEBPACK_IMPORTED_MODULE_0__.size; j += _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio){

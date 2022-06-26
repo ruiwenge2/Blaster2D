@@ -26,7 +26,7 @@ input {
   font-size:20px;
 }
 
-button {
+.button {
   min-width:150px;
   height:60px;
   margin:10px;
@@ -39,7 +39,7 @@ button {
   transition:all 0.3s ease-in-out;
   font-size:20px;
 }
-button:hover {
+.button:hover {
   background:blue;
   color:white;
 }

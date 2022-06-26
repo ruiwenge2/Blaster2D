@@ -13,23 +13,29 @@ class Player {
     this.right = false;
     this.up = false;
     this.down = false;
-    this.speed = speed;
+    this.leftspeed = speed;
+    this.rightspeed = speed;
+    this.upspeed = speed;
+    this.downspeed = speed;
   }
   
   update(){
     this.checkMovement();
-    if(this.left) this.x -= this.speed;
-    if(this.right) this.x += this.speed;
-    if(this.up) this.y -= this.speed;
-    if(this.down) this.y += this.speed;
-    this.speed = speed;
+    if(this.left) this.x -= this.leftspeed;
+    if(this.right) this.x += this.rightspeed;
+    if(this.up) this.y -= this.upspeed;
+    if(this.down) this.y += this.downspeed;
+    this.leftspeed = speed;
+    this.rightspeed = speed;
+    this.upspeed = speed;
+    this.downspeed = speed;
   }
 
   checkMovement(){
-    if(this.left && this.x - radius - speed < 0) this.speed = this.x - radius;
-    if(this.right && this.x + radius + speed > size) this.speed = size - this.x - radius;
-    if(this.up && this.y - radius - speed < 0) this.speed = this.y - radius;
-    if(this.down && this.y + radius + speed > size) this.speed = size - this.y - radius;
+    if(this.left && this.x - radius - speed < 0) this.leftspeed = this.x - radius;
+    if(this.right && this.x + radius + speed > size) this.rightspeed = size - this.x - radius;
+    if(this.up && this.y - radius - speed < 0) this.upspeed = this.y - radius;
+    if(this.down && this.y + radius + speed > size) this.downspeed = size - this.y - radius;
   }
 }
 

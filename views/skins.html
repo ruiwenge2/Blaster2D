@@ -12,34 +12,34 @@
       </div>
       <h1>Skins</h1>
       <% if(!loggedIn){ %>
-      <p>Please login or sign up to access skins.</p>
+      <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to access skins.</p>
         <% } %>
       <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
-          <button>Buy</button>
+          <button class="button">Buy</button>
         </div>
       <% } %>
         <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
-          <button>Buy</button>
+          <button class="button">Buy</button>
         </div>
       <% } %>
         <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
-          <button>Buy</button>
+          <button class="button">Buy</button>
         </div>
       <% } %>
         <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
-          <button>Buy</button>
+          <button class="button">Buy</button>
         </div>
       <% } %>
     </main>
