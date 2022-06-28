@@ -8,7 +8,12 @@ const session = require("express-session");
 
 global.io = socketio(server, {
   cors: {
-    origin: ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com", "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co"],
+    origin: [
+      "https://blaster2d.ruiwenge2.repl.co",
+      "https://blaster2d.herokuapp.com",
+      "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co",
+      "https://blaster2d--ruiwenge2.repl.co"
+    ],
     methods: ["GET", "POST"]
   }
 });
@@ -171,14 +176,3 @@ server.listen(process.env.PORT || 3000, () => {
   console.log("server started");
   console.log(`${db.db_url}/users`);
 });
-
-// https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-2/
-
-// https://www.creativebloq.com/how-to/build-a-progressive-web-app
-
-// https://javascript.plainenglish.io/develop-your-first-multiplayer-browser-game-io-99931c7d3a5b
-
-// https://code.tutsplus.com/tutorials/create-a-multiplayer-pirate-shooter-game-in-your-browser--cms-23311
-
-
-// good font: copperplate?

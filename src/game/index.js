@@ -51,7 +51,8 @@ class gamescene extends Phaser.Scene {
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2);
       this.bar = new Bar(this, this.player.x, this.player.y - playersize / 2 - 20, 100, 2);
       this.nametext = new Text(this, this.player.x, this.player.y + playersize / 2 + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
-      this.playerstext = new Text(this, 20, 20, "", { fontSize: 24, fontFamily: "Arial" }).setOrigin(0);
+      this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+      this.scorestext = new Text(this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
       
       this.fpstext = new Text(this, window.innerWidth - 150, 120, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
       this.tps = new Text(this, window.innerWidth - 150, 155, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
@@ -265,10 +266,6 @@ class gamescene extends Phaser.Scene {
     this.enemies[player.id] = playerObj;
   }
 
-  updatePlayers(data){
-    
-  }
-
   collect(player, coin){
     this.socket.emit("collect gold", coin.id);
     this.gold += 1;
@@ -321,8 +318,8 @@ class gamescene extends Phaser.Scene {
       this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - playersize / 2 - 20, this.enemies[enemy].health);
       this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y + playersize / 2 + 20);
     }
-    Array.prototype.insert = function ( index, item ) {
-      this.splice( index, 0, item );
+    Array.prototype.insert = function (index, item) {
+      this.splice(index, 0, item);
     };
 
     let playerslist = [...Object.values(this.enemies)];
@@ -334,10 +331,13 @@ class gamescene extends Phaser.Scene {
     
     let sorted_players = playerslist.sort(function(a, b){return a.score - b.score});
     let text = "";
+    let text2 = "";
     for(let i of sorted_players){
-      text += `${i.name} - ${i.score}\n`;
+      text += i.name + "\n";
+      text2 += i.score + "\n";
     }
     this.playerstext.setText(text);
+    this.scorestext.setText(text2);
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
