@@ -1,4 +1,4 @@
-import { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate } from "../functions.js";
+import { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate, radius } from "../functions.js";
 import Text from "../objects/text.js";
 import Button from "../objects/button.js";
 import Bar from "../objects/bar.js";
@@ -37,6 +37,7 @@ class gamescene extends Phaser.Scene {
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
     this.enemies = {};
+    this.bullets = {};
     this.name = name || localStorage.getItem("name");
     this.socket.emit("join", this.name);
     
@@ -49,8 +50,8 @@ class gamescene extends Phaser.Scene {
       this.loaded = true;
       this.loadingtext.destroy();
       this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2);
-      this.bar = new Bar(this, this.player.x, this.player.y - playersize / 2 - 20, 100, 2);
-      this.nametext = new Text(this, this.player.x, this.player.y + playersize / 2 + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
+      this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
+      this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
       this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
       this.scorestext = new Text(this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
       
@@ -149,8 +150,6 @@ class gamescene extends Phaser.Scene {
 
     this.gun.angle2 = 0;
 
-    this.bullets = this.physics.add.group();
-
     this.health = 100;
 
     this.score = 0;
@@ -164,38 +163,6 @@ class gamescene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, this.coins, (player, coin) => { // player collects coin
       this.collect(player, coin);
-    });
-
-    this.physics.add.collider(this.bullets, this.obstacle1, (obstacle, bullet) => {
-      bullet.destroy();
-    });
-    this.physics.add.collider(this.player, this.obstacle1, () => {
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
-    });
-
-    this.physics.add.collider(this.bullets, this.obstacle2, (obstacle, bullet) => {
-      bullet.destroy();
-    });
-    this.physics.add.collider(this.player, this.obstacle2, () => {
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
-    });
-
-    this.physics.add.collider(this.bullets, this.obstacle3, (obstacle, bullet) => {
-      bullet.destroy();
-    });
-    this.physics.add.collider(this.player, this.obstacle3, () => {
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
-    });
-
-    this.physics.add.collider(this.bullets, this.obstacle4, (obstacle, bullet) => {
-      bullet.destroy();
-    });
-    this.physics.add.collider(this.player, this.obstacle4, () => {
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
     });
 
     this.socket.on("gamestate", data => {
@@ -226,8 +193,8 @@ class gamescene extends Phaser.Scene {
           onUpdate: function(){
             try {
               let player = game.enemies[enemy];
-              player.gun.x = player.player.x + Math.cos(data.players[enemy].angle2) * (playersize / 2 + 29);
-             player.gun.y = player.player.y + Math.sin(data.players[enemy].angle2) * (playersize / 2 + 29);
+              player.gun.x = player.player.x + Math.cos(data.players[enemy].angle2) * (radius + 29);
+             player.gun.y = player.player.y + Math.sin(data.players[enemy].angle2) * (radius + 29);
               player.gun.angle = data.players[enemy].angle;
             } catch(e){
               console.error(e);
@@ -235,18 +202,27 @@ class gamescene extends Phaser.Scene {
           } 
         });
       }
+
+      for(let bullet of Object.keys(data.bullets)){
+        this.tweens.add({
+          targets: [this.bullets[bullet]],
+          x: data.bullets[bullet].x,
+          y: data.bullets[bullet].y,
+          duration: 1000 / 30
+        });
+      }
     });
-    
-    // this.physics.add.collider(this.bullets, this.demons, (bullet, demon) => {
-    //   bullet.destroy();
-    //   demon.destroy();
-    //   this.score += 1;
-    //   this.scoretext.setText("Score: " + this.score);
-    //   this.demontext.setText("Demons: " + this.demons.children.entries.length);
-    //   if(this.score > localStorage.getItem("bestscore")){
-    //     localStorage.setItem("bestscore", this.score);
-    //   }
-    // });
+
+    this.socket.on("new bullet", (id, data) => {
+      let bullet_image = this.add.image(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
+      bullet_image.angle = data.angle;
+      this.bullets[id] = bullet_image;
+    });
+
+    this.socket.on("removed bullet", id => {
+      this.bullets[id].destroy();
+      delete this.bullets[id];
+    });
   }
 
   addPlayer(player){
@@ -256,9 +232,9 @@ class gamescene extends Phaser.Scene {
       y: player.y,
       name: player.name,
       player: this.add.image(player.x, player.y, "player").setScale(playersize / 100, playersize / 100).setDepth(1),
-      nametext: new Text(this, player.x, player.y + playersize / 2 + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
-      healthbar: new Bar(this, player.x, player.y - playersize / 2 - 20, 100, 1),
-      gun: this.add.image(player.x + playersize / 2, player.y, "pistol").setDepth(1),
+      nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
+      healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
+      gun: this.add.image(player.x + radius, player.y, "pistol").setDepth(1),
       angle: null,
       health: 100,
       score: 0
@@ -284,10 +260,11 @@ class gamescene extends Phaser.Scene {
     this.input.on("pointerdown", e => {
       if(!this.useweapon) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-      let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (playersize / 2 + 23), this.player.y + Math.sin(angle) * (playersize / 2 + 23), "bullet").setScale(0.5, 2).setDepth(13);
-      bullet.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      bullet.setVelocityX(Math.cos(angle) * 1500);
-      bullet.setVelocityY(Math.sin(angle) * 1500);
+      this.socket.emit("shoot", this.player.x, this.player.y, angle);
+      // let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (radius + 23), this.player.y + Math.sin(angle) * (radius + 23), "bullet").setScale(0.5, 2).setDepth(13);
+      // bullet.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      // bullet.setVelocityX(Math.cos(angle) * 1500);
+      // bullet.setVelocityY(Math.sin(angle) * 1500);
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
       this.useweapon = false;
@@ -312,11 +289,11 @@ class gamescene extends Phaser.Scene {
       this.scene.start("disconnect_scene");
       return;
     }
-    this.bar.setData(this.player.x, this.player.y - playersize / 2 - 20, 100);
-    this.nametext.setPosition(this.player.x, this.player.y + playersize / 2 + 20);
+    this.bar.setData(this.player.x, this.player.y - radius - 20, 100);
+    this.nametext.setPosition(this.player.x, this.player.y + radius + 20);
     for(let enemy of Object.keys(this.enemies)){
-      this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - playersize / 2 - 20, this.enemies[enemy].health);
-      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y + playersize / 2 + 20);
+      this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - radius - 20, this.enemies[enemy].health);
+      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y + radius + 20);
     }
     Array.prototype.insert = function (index, item) {
       this.splice(index, 0, item);
@@ -393,8 +370,8 @@ class gamescene extends Phaser.Scene {
       }
     }
     
-    this.gun.x = this.player.x + Math.cos(this.gun.angle2) * (playersize / 2 + 29);
-    this.gun.y = this.player.y + Math.sin(this.gun.angle2) * (playersize / 2 + 29);
+    this.gun.x = this.player.x + Math.cos(this.gun.angle2) * (radius + 29);
+    this.gun.y = this.player.y + Math.sin(this.gun.angle2) * (radius + 29);
 
     this.player.angle = this.gun.angle;
 

@@ -1,5 +1,6 @@
 const size = 5000;
 const playersize = 65;
+const radius = playersize / 2;
 const coinsize = 37.5;
 const ratio = size / 500;
 const treesize = 300;
@@ -24,4 +25,4 @@ function checkMovement(direction, x, y){
   return true;
 }
 
-export { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate };
+export { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate, radius };

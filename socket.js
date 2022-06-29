@@ -48,6 +48,20 @@ const socketfunc = socket => {
     rooms.main.players[socket.id][direction] = false;
   });
 
+  socket.on("shoot", (x, y, angle) => {
+    rooms.main.bullets[rooms.main.new_bullet_id] = {
+      shooter: socket.id,
+      x: x + Math.cos(angle) * (radius + 40), 
+      y: y + Math.sin(angle) * (radius + 40),
+      angle: ((angle * 180 / Math.PI) + 360) % 360,
+      angle2: angle
+    }
+    
+    io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);
+    rooms.main.new_bullet_id++;
+    console.log(rooms.main.bullets);
+  });
+
   socket.on("leaveGame", () => {
     socket.disconnect();
   });

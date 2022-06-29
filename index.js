@@ -21,7 +21,8 @@ global.rooms = {
   main: {
     players: {},
     bullets: {},
-    coins: []
+    coins: [],
+    new_bullet_id: 0
   }
 };
 global.playersize = 65;
@@ -30,6 +31,7 @@ global.size = 5000;
 global.treesize = 300;
 global.coinsize = 37.5;
 global.speed = 8;
+global.bullet_speed = 30;
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
