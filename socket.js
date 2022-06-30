@@ -59,7 +59,6 @@ const socketfunc = socket => {
     
     io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);
     rooms.main.new_bullet_id++;
-    console.log(rooms.main.bullets);
   });
 
   socket.on("leaveGame", () => {
