@@ -54,6 +54,7 @@ class gamescene extends Phaser.Scene {
     this.socket = io("https://blaster2d.ruiwenge2.repl.co");
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
+    this.bulletsGroup = this.physics.add.group();
     this.enemies = {};
     this.bullets = {};
     this.name = name || localStorage.getItem("name");
@@ -183,6 +184,10 @@ class gamescene extends Phaser.Scene {
       this.collect(player, coin);
     });
 
+    this.physics.add.collider(this.player, this.bulletsGroup, (player, coin) => { // player collects coin
+      let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "You died", {fontSize: 50});
+    });
+
     this.socket.on("gamestate", data => {
       if(this.socket.disconnected){
         this.scene.start("disconnect_scene");
@@ -232,7 +237,7 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("new bullet", (id, data) => {
-      let bullet_image = this.add.image(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
+      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
       bullet_image.angle = data.angle;
       this.bullets[id] = bullet_image;
     });

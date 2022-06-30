@@ -16,10 +16,7 @@ module.exports.generateCode = function(){
 };
 
 module.exports.checkUser = function(id){
-  for(let info of Object.keys(rooms.main.players)){
-    if(info == id) return true;
-  }
-  return false;
+  return Object.keys(rooms.main.players).includes(id);
 };
 
 module.exports.setUpRoom = function(){

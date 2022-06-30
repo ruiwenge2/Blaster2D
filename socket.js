@@ -18,19 +18,19 @@ const socketfunc = socket => {
   });
 
   socket.on("player angle", data => {
-    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(!checkUser(socket.id)) return;
     rooms.main.players[socket.id].angle = data.angle;
     rooms.main.players[socket.id].angle2 = data.angle2;
   });
 
   socket.on("collect gold", id => {
-    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(!checkUser(socket.id)) return;
     rooms.main.coins.splice(id, 1);
     socket.broadcast.emit("collected gold", id);
   });
 
   socket.on("disconnect", () => {
-    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(!checkUser(socket.id)) return;
     let name = rooms.main.players[socket.id].name;
     delete rooms.main.players[socket.id];
     io.emit("left", socket.id);
@@ -38,17 +38,18 @@ const socketfunc = socket => {
   });
 
   socket.on("movement", direction => {
-    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(!checkUser(socket.id)) return;
     rooms.main.players[socket.id][direction] = true;
     rooms.main.players[socket.id][opposites[direction]] = false;
   });
   
   socket.on("movement_end", direction => {
-    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(!checkUser(socket.id)) return;
     rooms.main.players[socket.id][direction] = false;
   });
 
   socket.on("shoot", (x, y, angle) => {
+    if(!checkUser(socket.id)) return;
     rooms.main.bullets[rooms.main.new_bullet_id] = {
       shooter: socket.id,
       x: x + Math.cos(angle) * (radius + 40), 
@@ -63,6 +64,10 @@ const socketfunc = socket => {
 
   socket.on("leaveGame", () => {
     socket.disconnect();
+  });
+
+  socket.on("died", () => {
+    
   });
 };
 
