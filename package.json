@@ -19,6 +19,7 @@
     "intersects": "^2.7.2",
     "node-fetch": "^2.6.7",
     "socket.io": "^4.4.1",
+    "socket.io-client": "^4.5.1",
     "webpack": "^5.73.0"
   }
 }
