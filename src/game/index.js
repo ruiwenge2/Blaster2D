@@ -5,6 +5,7 @@ import Bar from "../objects/bar.js";
 import Chatbox from "./chat.js";
 import trees from "../trees.json";
 import skins from "../skins.json";
+import { io } from "socket.io-client";
 
 class gamescene extends Phaser.Scene {
   constructor(){
@@ -89,7 +90,6 @@ class gamescene extends Phaser.Scene {
       this.main();
         
     });
-    
 
     this.socket.on("new player", (data, id) => { // when new player joins
       this.addPlayer(data);
@@ -166,8 +166,9 @@ class gamescene extends Phaser.Scene {
       this.collect(player, coin);
     });
 
-    this.physics.add.collider(this.player, this.bulletsGroup, (player, coin) => { // player collects coin
-      let deathtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "You died", {fontSize: 50});
+    this.physics.add.collider(this.player, this.bulletsGroup, (player, bullet) => { // player hit by bullet
+      if(bullet.shooter == this.socket.id) return;
+      let deathtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "You died", { fontSize: 50 });
     });
 
     this.socket.on("gamestate", data => {
@@ -221,6 +222,7 @@ class gamescene extends Phaser.Scene {
     this.socket.on("new bullet", (id, data) => {
       let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
       bullet_image.angle = data.angle;
+      bullet_image.shooter = id;
       this.bullets[id] = bullet_image;
     });
 
@@ -266,10 +268,6 @@ class gamescene extends Phaser.Scene {
       if(!this.useweapon) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
       this.socket.emit("shoot", this.player.x, this.player.y, angle);
-      // let bullet = this.bullets.create(this.player.x + Math.cos(angle) * (radius + 23), this.player.y + Math.sin(angle) * (radius + 23), "bullet").setScale(0.5, 2).setDepth(13);
-      // bullet.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      // bullet.setVelocityX(Math.cos(angle) * 1500);
-      // bullet.setVelocityY(Math.sin(angle) * 1500);
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
       this.useweapon = false;

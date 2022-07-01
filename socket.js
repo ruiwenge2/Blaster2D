@@ -55,7 +55,8 @@ const socketfunc = socket => {
       x: x + Math.cos(angle) * (radius + 40), 
       y: y + Math.sin(angle) * (radius + 40),
       angle: ((angle * 180 / Math.PI) + 360) % 360,
-      angle2: angle
+      angle2: angle,
+      id: rooms.main.new_bullet_id
     }
     
     io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);
