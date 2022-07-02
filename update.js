@@ -1,6 +1,10 @@
 const update = () => {
   setInterval(function(){
      Object.values(rooms.main.players).forEach(player => {
+       if(player.died){
+         delete rooms.main.players[player.id];
+         return;
+       }
        player.update();
      });
     
