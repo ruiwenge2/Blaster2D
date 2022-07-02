@@ -16,3 +16,4 @@
   - every 33 milleseconds or so, server sends to client the game data
   - client recieves data, and passes the data into the phaser object
   - in the update function, the game will be updated
+- use line-circle-collision library in server

@@ -1,5 +1,3 @@
-const intersects = require("intersects");
-
 const update = () => {
   setInterval(function(){
      Object.values(rooms.main.players).forEach(player => {

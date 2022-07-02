@@ -115,11 +115,11 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("collected gold", id => {
-      for(let coin of this.coins.children.entries){
+      this.coins.children.entries.forEach(coin => {
         if(coin.id == id){
           coin.destroy();
         }
-      }
+      });
     });
   
     this.socket.on("left", id => {
@@ -186,8 +186,9 @@ class gamescene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.player, this.bulletsGroup, (player, bullet) => { // player hit by bullet
+      if(this.died) return;
       if(bullet.shooter == this.socket.id) return;
-      let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "You died", { fontSize: 50 });
+      this.socket.emit("died", bullet.id);
     });
 
     this.socket.on("gamestate", data => {
@@ -196,25 +197,27 @@ class gamescene extends Phaser.Scene {
         return;
       }
       this.frames += 1;
-      let self = data.players[this.socket.id];
-      this.playerInfo.x = self.x;
-      this.playerInfo.y = self.y;
-      let game = this;
+      if(!this.died){
+        let self = data.players[this.socket.id];
+        this.playerInfo.x = self.x;
+        this.playerInfo.y = self.y;
+        let game = this;
+  
+        this.tweens.add({
+          targets: this.player,
+          x: this.playerInfo.x,
+          y: this.playerInfo.y,
+          duration: 100
+        });
+      }
 
-      this.tweens.add({
-        targets: this.player,
-        x: this.playerInfo.x,
-        y: this.playerInfo.y,
-        duration: _functions_js__WEBPACK_IMPORTED_MODULE_0__.gamestate_rate
-      });
-
-      for(let enemy of Object.keys(data.players)){
-        if(enemy == this.socket.id) continue;
+      Object.keys(data.players).forEach(enemy => {
+        if(enemy == this.socket.id) return;
         this.tweens.add({
           targets: [this.enemies[enemy].player],
           x: data.players[enemy].x,
           y: data.players[enemy].y,
-          duration: _functions_js__WEBPACK_IMPORTED_MODULE_0__.gamestate_rate,
+          duration: 100,
           onUpdate: function(){
             try {
               let player = game.enemies[enemy];
@@ -226,28 +229,67 @@ class gamescene extends Phaser.Scene {
             }
           } 
         });
-      }
+      });
 
-      for(let bullet of Object.keys(data.bullets)){
+      Object.keys(data.bullets).forEach(bullet => {
         this.tweens.add({
           targets: [this.bullets[bullet]],
           x: data.bullets[bullet].x,
           y: data.bullets[bullet].y,
           duration: 1000 / 30
         });
-      }
+      });
     });
 
     this.socket.on("new bullet", (id, data) => {
       let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
       bullet_image.angle = data.angle;
-      bullet_image.shooter = id;
+      bullet_image.shooter = data.shooter;
+      bullet_image.id = id;
       this.bullets[id] = bullet_image;
     });
 
     this.socket.on("removed bullet", id => {
       this.bullets[id].destroy();
       delete this.bullets[id];
+    });
+
+    this.socket.on("player died", id => {
+      let game = this;
+      if(id == this.socket.id){
+        let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "You died", { fontSize: 50 });
+        this.died = true;
+        this.tweens.add({
+          targets: [this.player, this.gun, this.bar, this.nametext],
+          duration: 2000,
+          alpha: 0,
+          onComplete: function(){
+            game.player.destroy();
+            game.gun.destroy();
+            game.bar.destroy();
+            game.nametext.destroy();
+            game.playerstext.destroy();
+            game.scorestext.destroy();
+            game.goldtext.destroy();
+            game.scoretext.destroy();
+            game.fpstext.destroy();
+            game.tps.destroy();
+          }
+        });
+      } else {
+        this.tweens.add({
+          targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
+          duration: 2000,
+          alpha: 0,
+          onComplete: function(){
+            game.enemies[id].player.destroy();
+            game.enemies[id].gun.destroy();
+            game.enemies[id].healthbar.destroy();
+            game.enemies[id].nametext.destroy();
+            delete game.enemies[id];
+          }
+        });
+      }
     });
   }
 
@@ -311,13 +353,18 @@ class gamescene extends Phaser.Scene {
       this.scene.start("disconnect_scene");
       return;
     }
+    
+    Object.values(this.enemies).forEach(enemy => {
+      enemy.healthbar.setData(enemy.player.x, enemy.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, enemy.health);
+      enemy.nametext.setPosition(enemy.player.x, enemy.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
+    });
+
+    if(this.died) return;
+
     this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100);
     this.nametext.setPosition(this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
-    for(let enemy of Object.keys(this.enemies)){
-      this.enemies[enemy].healthbar.setData(this.enemies[enemy].player.x, this.enemies[enemy].player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, this.enemies[enemy].health);
-      this.enemies[enemy].nametext.setPosition(this.enemies[enemy].player.x, this.enemies[enemy].player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
-    }
-    Array.prototype.insert = function (index, item) {
+    
+    Array.prototype.insert = function(index, item) {
       this.splice(index, 0, item);
     };
 

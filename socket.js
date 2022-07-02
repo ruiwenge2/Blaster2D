@@ -67,8 +67,12 @@ const socketfunc = socket => {
     socket.disconnect();
   });
 
-  socket.on("died", () => {
-    
+  socket.on("died", id => {
+    if(!checkUser(socket.id)) return;
+    delete rooms.main.bullets[id];
+    delete rooms.main.players[socket.id];
+    io.emit("removed bullet", id);
+    io.emit("player died", socket.id);
   });
 };
 

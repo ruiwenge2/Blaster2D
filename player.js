@@ -1,4 +1,5 @@
 const { random } = require("./functions.js");
+const collide = require("line-circle-collision");
 
 class Player {
   constructor(id, name){
