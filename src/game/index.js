@@ -316,6 +316,7 @@ class gamescene extends Phaser.Scene {
     });
     
     window.addEventListener("mousemove", e => {
+      if(this.died || this.socket.disconnected) return;
       var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
