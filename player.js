@@ -43,6 +43,7 @@ class Player {
 
   checkCollision(){
     Object.values(rooms.main.bullets).forEach(bullet => {
+      if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
         this.died = true;
         io.emit("removed bullet", bullet.id);
