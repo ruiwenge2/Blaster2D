@@ -48,3 +48,15 @@ module.exports.deleteUser = function(user){
     console.log("error occured while deleting user");
   });
 };
+
+module.exports.verify = async function(token, secret){
+  let result = await require('axios')({
+    method:"POST",
+    url: "https://www.google.com/recaptcha/api/siteverify",
+    params: {
+      response: token,
+      secret: secret
+    }
+  });
+  return result.data.success;
+}

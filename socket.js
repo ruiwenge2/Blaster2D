@@ -1,4 +1,4 @@
-const { random, generateCode, checkUser, setUpRoom } = require("./functions.js");
+const { random, generateCode, checkUser, setUpRoom, verify } = require("./functions.js");
 const Player = require("./player.js");
 
 const opposites = {
@@ -9,12 +9,19 @@ const opposites = {
 }
 
 const socketfunc = socket => {
-  socket.on("join", name => {
-    setUpRoom();
-    console.log(name + " joined");
-    rooms.main.players[socket.id] = new Player(socket.id, name);
-    socket.emit("gamedata", rooms.main);
-    socket.broadcast.emit("new player", rooms.main.players[socket.id]);
+  socket.on("join", (name, token) => {
+    verify(token, process.env.recaptcha_secret).then(verified => {
+      if(!verified){
+        console.log(name + " is a bot")
+        socket.disconnect();
+        return;
+      }
+      setUpRoom();
+      console.log(name + " joined");
+      rooms.main.players[socket.id] = new Player(socket.id, name);
+      socket.emit("gamedata", rooms.main);
+      socket.broadcast.emit("new player", rooms.main.players[socket.id]);
+    });
   });
 
   socket.on("player angle", data => {
@@ -48,12 +55,12 @@ const socketfunc = socket => {
     rooms.main.players[socket.id][direction] = false;
   });
 
-  socket.on("shoot", (x, y, angle) => {
+  socket.on("shoot", angle => {
     if(!checkUser(socket.id)) return;
     rooms.main.bullets[rooms.main.new_bullet_id] = {
       shooter: socket.id,
-      x: x + Math.cos(angle) * (radius + 40), 
-      y: y + Math.sin(angle) * (radius + 40),
+      x: rooms.main.players[socket.id].x + Math.cos(angle) * (radius + 40), 
+      y: rooms.main.players[socket.id].y + Math.sin(angle) * (radius + 40),
       angle: ((angle * 180 / Math.PI) + 360) % 360,
       angle2: angle,
       id: rooms.main.new_bullet_id

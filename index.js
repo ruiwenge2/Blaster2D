@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
 
+global.fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args));
+
 global.io = socketio(server, {
   cors: {
     origins: [
@@ -32,6 +34,13 @@ global.treesize = 300;
 global.coinsize = 37.5;
 global.speed = 8;
 global.bullet_speed = 40;
+
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+});
+app.use(limiter);
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);

@@ -31,6 +31,10 @@
       <input id="input" maxlength="15">
       <% } %>
       <p style="color:red; display:none">Please enter a name.</p><br><br>
+      <div id='recaptcha' class="g-recaptcha"
+        data-sitekey="6Lcv-r4gAAAAAI1Ak_qlSlpZvTC5xzasno8nIuSJ"
+        data-callback="onSubmit"
+        data-size="invisible"></div>
       <button id="playbtn" class="button">Play</button><br><br>
       <button id="createbtn" class="button">Create Private Game</button>
       <button id="joinbtn" class="button">Join Private Game</button>
@@ -39,10 +43,15 @@
     <script>
       const homepage = true;
       const loggedIn = <%- loggedIn %>;
+
+      function onSubmit(){
+        
+      }
     </script>
     <script src="/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 <!--     <script src="/socket.io/socket.io.min.js"></script> -->
     <script src="/game.js" type="module"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </body>
 </html>

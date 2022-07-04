@@ -19,6 +19,8 @@ class Player {
     this.upspeed = speed;
     this.downspeed = speed;
     this.died = false;
+    this.angle2 = 0;
+    this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
   }
   
   update(){
@@ -46,8 +48,9 @@ class Player {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
         this.died = true;
+        delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
-        io.emit("player died", this.id);
+        io.emit("player died", this.id, bullet.shooter);
       }
     });
   }

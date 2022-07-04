@@ -41,7 +41,13 @@ class gamescene extends Phaser.Scene {
     this.enemies = {};
     this.bullets = {};
     this.name = name || localStorage.getItem("name");
-    this.socket.emit("join", this.name);
+    grecaptcha.execute().then(() => {
+      var s = setInterval(() => {
+        if(!document.getElementsByName("g-recaptcha-response")[0].value) return;
+        this.socket.emit("join", this.name, document.getElementsByName("g-recaptcha-response")[0].value);
+        clearInterval(s);
+        }, 100);
+      });
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
@@ -235,14 +241,14 @@ class gamescene extends Phaser.Scene {
       delete this.bullets[id];
     });
 
-    this.socket.on("player died", id => {
+    this.socket.on("player died", (id, shooter) => {
       let game = this;
       if(id == this.socket.id){
         let deathtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "You died", { fontSize: 50 });
         this.died = true;
         this.tweens.add({
           targets: [this.player, this.gun, this.bar, this.nametext],
-          duration: 2000,
+          duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.player.destroy();
@@ -260,7 +266,7 @@ class gamescene extends Phaser.Scene {
       } else {
         this.tweens.add({
           targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
-          duration: 2000,
+          duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.enemies[id].player.destroy();
@@ -283,7 +289,7 @@ class gamescene extends Phaser.Scene {
       player: this.add.image(player.x, player.y, "player").setScale(playersize / 100, playersize / 100).setDepth(1),
       nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
       healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
-      gun: this.add.image(player.x + radius, player.y, "pistol").setDepth(1),
+      gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1),
       angle: null,
       health: 100,
       score: 0
@@ -307,9 +313,9 @@ class gamescene extends Phaser.Scene {
   addWeaponActions(){
     this.useweapon = true;
     this.input.on("pointerdown", e => {
-      if(!this.useweapon) return;
+      if(!this.useweapon || this.died) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-      this.socket.emit("shoot", this.player.x, this.player.y, angle);
+      this.socket.emit("shoot", angle);
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
       this.useweapon = false;

@@ -1,5 +1,6 @@
 class Chatbox {
   constructor(game){
+    this.socket = game.socket;
   }
   
   create(){
