@@ -6,8 +6,6 @@ const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
 
-global.fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args));
-
 global.io = socketio(server, {
   cors: {
     origins: [

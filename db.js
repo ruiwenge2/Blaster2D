@@ -1,3 +1,5 @@
+const fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args));
+
 class db {
   constructor(){
     this.db_url = process.env["db_url"];
