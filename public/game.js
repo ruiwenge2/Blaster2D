@@ -196,7 +196,6 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("gamestate", data => {
-      console.log(data);
       if(this.socket.disconnected){
         this.scene.start("disconnect_scene");
         return;
