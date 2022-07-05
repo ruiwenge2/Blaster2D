@@ -12,7 +12,8 @@ const socketfunc = socket => {
   socket.on("join", (name, token) => {
     verify(token, process.env.recaptcha_secret).then(verified => {
       if(!verified){
-        console.log(name + " is a bot")
+        console.log(name + " is a bot");
+        socket.emit("leave");
         socket.disconnect();
         return;
       }
@@ -55,12 +56,12 @@ const socketfunc = socket => {
     rooms.main.players[socket.id][direction] = false;
   });
 
-  socket.on("shoot", angle => {
+  socket.on("shoot", (x, y, angle) => {
     if(!checkUser(socket.id)) return;
     rooms.main.bullets[rooms.main.new_bullet_id] = {
       shooter: socket.id,
-      x: rooms.main.players[socket.id].x + Math.cos(angle) * (radius + 40), 
-      y: rooms.main.players[socket.id].y + Math.sin(angle) * (radius + 40),
+      x: x + Math.cos(angle) * (radius + 40), 
+      y: y + Math.sin(angle) * (radius + 40),
       angle: ((angle * 180 / Math.PI) + 360) % 360,
       angle2: angle,
       id: rooms.main.new_bullet_id
@@ -72,14 +73,6 @@ const socketfunc = socket => {
 
   socket.on("leaveGame", () => {
     socket.disconnect();
-  });
-
-  socket.on("died", id => {
-    if(!checkUser(socket.id)) return;
-    delete rooms.main.bullets[id];
-    delete rooms.main.players[socket.id];
-    io.emit("removed bullet", id);
-    io.emit("player died", socket.id);
   });
 };
 

@@ -1,1 +1,1017 @@
-(()=>{"use strict";var t={d:(e,s)=>{for(var i in s)t.o(s,i)&&!t.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:s[i]})},o:(t,e)=>Object.prototype.hasOwnProperty.call(t,e),r:t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})}},e={};t.r(e),t.d(e,{Decoder:()=>gt,Encoder:()=>yt,PacketType:()=>ft,protocol:()=>ut});const s=32.5;function i(t,e){return Math.round(Math.random()*(e-t))+t}class n extends Phaser.GameObjects.Text{constructor(t,e,s,i,n,o=100,r=!1){n||((n={}).fontFamily="Arial",n.fontSize=30,n.background=255),"fontSize"in n||(n.fontSize=30),super(t,e,s,i,n),r||(this.scrollFactorX=0,this.scrollFactorY=0),this.setDepth(100),this.setOrigin(.5),this.setDepth(o),t.add.existing(this)}setPosition(t,e){this.x=t,this.y=e}}const o=n;class r extends Phaser.GameObjects.Container{constructor(t,e,s,i,n,r){super(t),r||((r={}).fontSize=50,r.fontFamily="Arial",r.background=255),"fontSize"in r||(r.fontSize=50),"fontFamily"in r||(r.fontFamily="Arial"),"background"in r||(r.background=255),this.text=new o(t,e,s,i,{fontSize:r.fontSize,fontFamily:r.fontFamily}).setOrigin(.5),this.button=t.add.rectangle(0,0,0,0,r.background).setDepth(99),this.button.scrollFactorX=0,this.button.scrollFactorY=0,this.button.width=this.text.width+15,this.button.height=this.text.height+15,this.button.x=this.text.x-this.text.width/2-5,this.button.y=this.text.y-this.text.height/2-5,this.button.setInteractive().on("pointerdown",n),t.add.existing(this)}}const h=r,a=class{constructor(t,e,s,i,n){this.bar=t.add.rectangle(e,s,100,20,16777215).setDepth(n),this.inside=t.add.rectangle(e,s,i/100*100,20,34047).setDepth(n),t.add.existing(this.bar),t.add.existing(this.inside)}setData(t,e,s){this.bar.x=t,this.bar.y=e,this.inside.x=t,this.inside.y=e,this.inside.width=this.inside.width=s/100*100}destroy(){this.bar.destroy(),this.inside.destroy()}},c=JSON.parse('{"T":[{"id":0,"size":513,"x":2999.5,"y":3200.5},{"id":1,"size":333,"x":3520.5,"y":3089.5},{"id":2,"size":543,"x":2272.5,"y":2900.5},{"id":3,"size":525,"x":4204.5,"y":4578.5},{"id":4,"size":426,"x":800,"y":1638},{"id":5,"size":459,"x":3770.5,"y":3611.5},{"id":6,"size":306,"x":4820,"y":593},{"id":7,"size":516,"x":1905,"y":556},{"id":8,"size":258,"x":1699,"y":2130},{"id":9,"size":567,"x":2982.5,"y":3324.5},{"id":10,"size":384,"x":1235,"y":4383},{"id":11,"size":501,"x":1503.5,"y":845.5},{"id":12,"size":234,"x":2507,"y":2225},{"id":13,"size":573,"x":3603.5,"y":2764.5},{"id":14,"size":546,"x":932,"y":4000},{"id":15,"size":423,"x":1428.5,"y":1833.5},{"id":16,"size":312,"x":2421,"y":3723},{"id":17,"size":405,"x":3900.5,"y":845.5},{"id":18,"size":201,"x":2719.5,"y":391.5},{"id":19,"size":468,"x":4440,"y":1709},{"id":20,"size":177,"x":4050.5,"y":4853.5},{"id":21,"size":369,"x":390.5,"y":2925.5},{"id":22,"size":309,"x":4214.5,"y":2536.5},{"id":23,"size":300,"x":2497,"y":1842},{"id":24,"size":237,"x":3216.5,"y":2604.5},{"id":25,"size":504,"x":3299,"y":1806},{"id":26,"size":588,"x":298,"y":2039},{"id":27,"size":291,"x":2076.5,"y":1116.5},{"id":28,"size":438,"x":4619,"y":963},{"id":29,"size":216,"x":4264,"y":3225},{"id":30,"size":522,"x":3902,"y":4640},{"id":31,"size":291,"x":255.5,"y":1430.5},{"id":32,"size":342,"x":2779,"y":2066},{"id":33,"size":243,"x":4620.5,"y":703.5},{"id":34,"size":399,"x":296.5,"y":850.5},{"id":35,"size":465,"x":1834.5,"y":2910.5},{"id":36,"size":573,"x":3575.5,"y":2183.5},{"id":37,"size":174,"x":3732,"y":3574},{"id":38,"size":354,"x":1705,"y":4184},{"id":39,"size":231,"x":906.5,"y":2564.5},{"id":40,"size":213,"x":710.5,"y":4321.5},{"id":41,"size":366,"x":2553,"y":3555},{"id":42,"size":222,"x":4869,"y":2990},{"id":43,"size":471,"x":2366.5,"y":3879.5},{"id":44,"size":474,"x":1817,"y":2878},{"id":45,"size":249,"x":2129.5,"y":4789.5},{"id":46,"size":216,"x":1314,"y":4521},{"id":47,"size":207,"x":660.5,"y":2221.5},{"id":48,"size":219,"x":2154.5,"y":4158.5},{"id":49,"size":285,"x":3276.5,"y":3238.5},{"id":50,"size":300,"x":1452,"y":4306},{"id":51,"size":516,"x":3748,"y":733},{"id":52,"size":183,"x":1578.5,"y":3997.5},{"id":53,"size":537,"x":1250.5,"y":933.5},{"id":54,"size":504,"x":480,"y":1358},{"id":55,"size":390,"x":496,"y":2019}]}'),d=JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":200},{"id":2,"url":"smileyface","cost":100},{"id":3,"url":"target","cost":100}]'),l=Object.create(null);l.open="0",l.close="1",l.ping="2",l.pong="3",l.message="4",l.upgrade="5",l.noop="6";const p=Object.create(null);Object.keys(l).forEach((t=>{p[l[t]]=t}));const u={type:"error",data:"parser error"},f="function"==typeof Blob||"undefined"!=typeof Blob&&"[object BlobConstructor]"===Object.prototype.toString.call(Blob),y="function"==typeof ArrayBuffer,g=(t,e)=>{const s=new FileReader;return s.onload=function(){const t=s.result.split(",")[1];e("b"+t)},s.readAsDataURL(t)},m=({type:t,data:e},s,i)=>{return f&&e instanceof Blob?s?i(e):g(e,i):y&&(e instanceof ArrayBuffer||(n=e,"function"==typeof ArrayBuffer.isView?ArrayBuffer.isView(n):n&&n.buffer instanceof ArrayBuffer))?s?i(e):g(new Blob([e]),i):i(l[t]+(e||""));var n};for(var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",w="undefined"==typeof Uint8Array?[]:new Uint8Array(256),x=0;x<b.length;x++)w[b.charCodeAt(x)]=x;const v="function"==typeof ArrayBuffer,k=(t,e)=>{if(v){const s=function(t){var e,s,i,n,o,r=.75*t.length,h=t.length,a=0;"="===t[t.length-1]&&(r--,"="===t[t.length-2]&&r--);var c=new ArrayBuffer(r),d=new Uint8Array(c);for(e=0;e<h;e+=4)s=w[t.charCodeAt(e)],i=w[t.charCodeAt(e+1)],n=w[t.charCodeAt(e+2)],o=w[t.charCodeAt(e+3)],d[a++]=s<<2|i>>4,d[a++]=(15&i)<<4|n>>2,d[a++]=(3&n)<<6|63&o;return c}(t);return S(s,e)}return{base64:!0,data:t}},S=(t,e)=>"blob"===e&&t instanceof ArrayBuffer?new Blob([t]):t,O=(t,e)=>{if("string"!=typeof t)return{type:"message",data:S(t,e)};const s=t.charAt(0);return"b"===s?{type:"message",data:k(t.substring(1),e)}:p[s]?t.length>1?{type:p[s],data:t.substring(1)}:{type:p[s]}:u},A=String.fromCharCode(30);function E(t){if(t)return function(t){for(var e in E.prototype)t[e]=E.prototype[e];return t}(t)}E.prototype.on=E.prototype.addEventListener=function(t,e){return this._callbacks=this._callbacks||{},(this._callbacks["$"+t]=this._callbacks["$"+t]||[]).push(e),this},E.prototype.once=function(t,e){function s(){this.off(t,s),e.apply(this,arguments)}return s.fn=e,this.on(t,s),this},E.prototype.off=E.prototype.removeListener=E.prototype.removeAllListeners=E.prototype.removeEventListener=function(t,e){if(this._callbacks=this._callbacks||{},0==arguments.length)return this._callbacks={},this;var s,i=this._callbacks["$"+t];if(!i)return this;if(1==arguments.length)return delete this._callbacks["$"+t],this;for(var n=0;n<i.length;n++)if((s=i[n])===e||s.fn===e){i.splice(n,1);break}return 0===i.length&&delete this._callbacks["$"+t],this},E.prototype.emit=function(t){this._callbacks=this._callbacks||{};for(var e=new Array(arguments.length-1),s=this._callbacks["$"+t],i=1;i<arguments.length;i++)e[i-1]=arguments[i];if(s){i=0;for(var n=(s=s.slice(0)).length;i<n;++i)s[i].apply(this,e)}return this},E.prototype.emitReserved=E.prototype.emit,E.prototype.listeners=function(t){return this._callbacks=this._callbacks||{},this._callbacks["$"+t]||[]},E.prototype.hasListeners=function(t){return!!this.listeners(t).length};const _="undefined"!=typeof self?self:"undefined"!=typeof window?window:Function("return this")();function T(t,...e){return e.reduce(((e,s)=>(t.hasOwnProperty(s)&&(e[s]=t[s]),e)),{})}const z=setTimeout,R=clearTimeout;function C(t,e){e.useNativeTimers?(t.setTimeoutFn=z.bind(_),t.clearTimeoutFn=R.bind(_)):(t.setTimeoutFn=setTimeout.bind(_),t.clearTimeoutFn=clearTimeout.bind(_))}class B extends Error{constructor(t,e,s){super(t),this.description=e,this.context=s,this.type="TransportError"}}class N extends E{constructor(t){super(),this.writable=!1,C(this,t),this.opts=t,this.query=t.query,this.readyState="",this.socket=t.socket}onError(t,e,s){return super.emitReserved("error",new B(t,e,s)),this}open(){return"closed"!==this.readyState&&""!==this.readyState||(this.readyState="opening",this.doOpen()),this}close(){return"opening"!==this.readyState&&"open"!==this.readyState||(this.doClose(),this.onClose()),this}send(t){"open"===this.readyState&&this.write(t)}onOpen(){this.readyState="open",this.writable=!0,super.emitReserved("open")}onData(t){const e=O(t,this.socket.binaryType);this.onPacket(e)}onPacket(t){super.emitReserved("packet",t)}onClose(t){this.readyState="closed",super.emitReserved("close",t)}}const P="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split(""),L={};let I,F=0,j=0;function D(t){let e="";do{e=P[t%64]+e,t=Math.floor(t/64)}while(t>0);return e}function q(){const t=D(+new Date);return t!==I?(F=0,I=t):t+"."+D(F++)}for(;j<64;j++)L[P[j]]=j;function M(t){let e="";for(let s in t)t.hasOwnProperty(s)&&(e.length&&(e+="&"),e+=encodeURIComponent(s)+"="+encodeURIComponent(t[s]));return e}let W=!1;try{W="undefined"!=typeof XMLHttpRequest&&"withCredentials"in new XMLHttpRequest}catch(t){}const H=W;function K(t){const e=t.xdomain;try{if("undefined"!=typeof XMLHttpRequest&&(!e||H))return new XMLHttpRequest}catch(t){}if(!e)try{return new(_[["Active"].concat("Object").join("X")])("Microsoft.XMLHTTP")}catch(t){}}function U(){}const Y=null!=new K({xdomain:!1}).responseType;class V extends E{constructor(t,e){super(),C(this,e),this.opts=e,this.method=e.method||"GET",this.uri=t,this.async=!1!==e.async,this.data=void 0!==e.data?e.data:null,this.create()}create(){const t=T(this.opts,"agent","pfx","key","passphrase","cert","ca","ciphers","rejectUnauthorized","autoUnref");t.xdomain=!!this.opts.xd,t.xscheme=!!this.opts.xs;const e=this.xhr=new K(t);try{e.open(this.method,this.uri,this.async);try{if(this.opts.extraHeaders){e.setDisableHeaderCheck&&e.setDisableHeaderCheck(!0);for(let t in this.opts.extraHeaders)this.opts.extraHeaders.hasOwnProperty(t)&&e.setRequestHeader(t,this.opts.extraHeaders[t])}}catch(t){}if("POST"===this.method)try{e.setRequestHeader("Content-type","text/plain;charset=UTF-8")}catch(t){}try{e.setRequestHeader("Accept","*/*")}catch(t){}"withCredentials"in e&&(e.withCredentials=this.opts.withCredentials),this.opts.requestTimeout&&(e.timeout=this.opts.requestTimeout),e.onreadystatechange=()=>{4===e.readyState&&(200===e.status||1223===e.status?this.onLoad():this.setTimeoutFn((()=>{this.onError("number"==typeof e.status?e.status:0)}),0))},e.send(this.data)}catch(t){return void this.setTimeoutFn((()=>{this.onError(t)}),0)}"undefined"!=typeof document&&(this.index=V.requestsCount++,V.requests[this.index]=this)}onError(t){this.emitReserved("error",t,this.xhr),this.cleanup(!0)}cleanup(t){if(void 0!==this.xhr&&null!==this.xhr){if(this.xhr.onreadystatechange=U,t)try{this.xhr.abort()}catch(t){}"undefined"!=typeof document&&delete V.requests[this.index],this.xhr=null}}onLoad(){const t=this.xhr.responseText;null!==t&&(this.emitReserved("data",t),this.emitReserved("success"),this.cleanup())}abort(){this.cleanup()}}function G(){for(let t in V.requests)V.requests.hasOwnProperty(t)&&V.requests[t].abort()}V.requestsCount=0,V.requests={},"undefined"!=typeof document&&("function"==typeof attachEvent?attachEvent("onunload",G):"function"==typeof addEventListener&&addEventListener("onpagehide"in _?"pagehide":"unload",G,!1));const $="function"==typeof Promise&&"function"==typeof Promise.resolve?t=>Promise.resolve().then(t):(t,e)=>e(t,0),J=_.WebSocket||_.MozWebSocket,X="undefined"!=typeof navigator&&"string"==typeof navigator.product&&"reactnative"===navigator.product.toLowerCase(),Q={websocket:class extends N{constructor(t){super(t),this.supportsBinary=!t.forceBase64}get name(){return"websocket"}doOpen(){if(!this.check())return;const t=this.uri(),e=this.opts.protocols,s=X?{}:T(this.opts,"agent","perMessageDeflate","pfx","key","passphrase","cert","ca","ciphers","rejectUnauthorized","localAddress","protocolVersion","origin","maxPayload","family","checkServerIdentity");this.opts.extraHeaders&&(s.headers=this.opts.extraHeaders);try{this.ws=X?new J(t,e,s):e?new J(t,e):new J(t)}catch(t){return this.emitReserved("error",t)}this.ws.binaryType=this.socket.binaryType||"arraybuffer",this.addEventListeners()}addEventListeners(){this.ws.onopen=()=>{this.opts.autoUnref&&this.ws._socket.unref(),this.onOpen()},this.ws.onclose=t=>this.onClose({description:"websocket connection closed",context:t}),this.ws.onmessage=t=>this.onData(t.data),this.ws.onerror=t=>this.onError("websocket error",t)}write(t){this.writable=!1;for(let e=0;e<t.length;e++){const s=t[e],i=e===t.length-1;m(s,this.supportsBinary,(t=>{try{this.ws.send(t)}catch(t){}i&&$((()=>{this.writable=!0,this.emitReserved("drain")}),this.setTimeoutFn)}))}}doClose(){void 0!==this.ws&&(this.ws.close(),this.ws=null)}uri(){let t=this.query||{};const e=this.opts.secure?"wss":"ws";let s="";this.opts.port&&("wss"===e&&443!==Number(this.opts.port)||"ws"===e&&80!==Number(this.opts.port))&&(s=":"+this.opts.port),this.opts.timestampRequests&&(t[this.opts.timestampParam]=q()),this.supportsBinary||(t.b64=1);const i=M(t);return e+"://"+(-1!==this.opts.hostname.indexOf(":")?"["+this.opts.hostname+"]":this.opts.hostname)+s+this.opts.path+(i.length?"?"+i:"")}check(){return!!J}},polling:class extends N{constructor(t){if(super(t),this.polling=!1,"undefined"!=typeof location){const e="https:"===location.protocol;let s=location.port;s||(s=e?"443":"80"),this.xd="undefined"!=typeof location&&t.hostname!==location.hostname||s!==t.port,this.xs=t.secure!==e}const e=t&&t.forceBase64;this.supportsBinary=Y&&!e}get name(){return"polling"}doOpen(){this.poll()}pause(t){this.readyState="pausing";const e=()=>{this.readyState="paused",t()};if(this.polling||!this.writable){let t=0;this.polling&&(t++,this.once("pollComplete",(function(){--t||e()}))),this.writable||(t++,this.once("drain",(function(){--t||e()})))}else e()}poll(){this.polling=!0,this.doPoll(),this.emitReserved("poll")}onData(t){((t,e)=>{const s=t.split(A),i=[];for(let t=0;t<s.length;t++){const n=O(s[t],e);if(i.push(n),"error"===n.type)break}return i})(t,this.socket.binaryType).forEach((t=>{if("opening"===this.readyState&&"open"===t.type&&this.onOpen(),"close"===t.type)return this.onClose({description:"transport closed by the server"}),!1;this.onPacket(t)})),"closed"!==this.readyState&&(this.polling=!1,this.emitReserved("pollComplete"),"open"===this.readyState&&this.poll())}doClose(){const t=()=>{this.write([{type:"close"}])};"open"===this.readyState?t():this.once("open",t)}write(t){this.writable=!1,((t,e)=>{const s=t.length,i=new Array(s);let n=0;t.forEach(((t,o)=>{m(t,!1,(t=>{i[o]=t,++n===s&&e(i.join(A))}))}))})(t,(t=>{this.doWrite(t,(()=>{this.writable=!0,this.emitReserved("drain")}))}))}uri(){let t=this.query||{};const e=this.opts.secure?"https":"http";let s="";!1!==this.opts.timestampRequests&&(t[this.opts.timestampParam]=q()),this.supportsBinary||t.sid||(t.b64=1),this.opts.port&&("https"===e&&443!==Number(this.opts.port)||"http"===e&&80!==Number(this.opts.port))&&(s=":"+this.opts.port);const i=M(t);return e+"://"+(-1!==this.opts.hostname.indexOf(":")?"["+this.opts.hostname+"]":this.opts.hostname)+s+this.opts.path+(i.length?"?"+i:"")}request(t={}){return Object.assign(t,{xd:this.xd,xs:this.xs},this.opts),new V(this.uri(),t)}doWrite(t,e){const s=this.request({method:"POST",data:t});s.on("success",e),s.on("error",((t,e)=>{this.onError("xhr post error",t,e)}))}doPoll(){const t=this.request();t.on("data",this.onData.bind(this)),t.on("error",((t,e)=>{this.onError("xhr poll error",t,e)})),this.pollXhr=t}}},Z=/^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,tt=["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"];function et(t){const e=t,s=t.indexOf("["),i=t.indexOf("]");-1!=s&&-1!=i&&(t=t.substring(0,s)+t.substring(s,i).replace(/:/g,";")+t.substring(i,t.length));let n=Z.exec(t||""),o={},r=14;for(;r--;)o[tt[r]]=n[r]||"";return-1!=s&&-1!=i&&(o.source=e,o.host=o.host.substring(1,o.host.length-1).replace(/;/g,":"),o.authority=o.authority.replace("[","").replace("]","").replace(/;/g,":"),o.ipv6uri=!0),o.pathNames=function(t,e){const s=e.replace(/\/{2,9}/g,"/").split("/");return"/"!=e.substr(0,1)&&0!==e.length||s.splice(0,1),"/"==e.substr(e.length-1,1)&&s.splice(s.length-1,1),s}(0,o.path),o.queryKey=function(t,e){const s={};return e.replace(/(?:^|&)([^&=]*)=?([^&]*)/g,(function(t,e,i){e&&(s[e]=i)})),s}(0,o.query),o}class st extends E{constructor(t,e={}){super(),t&&"object"==typeof t&&(e=t,t=null),t?(t=et(t),e.hostname=t.host,e.secure="https"===t.protocol||"wss"===t.protocol,e.port=t.port,t.query&&(e.query=t.query)):e.host&&(e.hostname=et(e.host).host),C(this,e),this.secure=null!=e.secure?e.secure:"undefined"!=typeof location&&"https:"===location.protocol,e.hostname&&!e.port&&(e.port=this.secure?"443":"80"),this.hostname=e.hostname||("undefined"!=typeof location?location.hostname:"localhost"),this.port=e.port||("undefined"!=typeof location&&location.port?location.port:this.secure?"443":"80"),this.transports=e.transports||["polling","websocket"],this.readyState="",this.writeBuffer=[],this.prevBufferLen=0,this.opts=Object.assign({path:"/engine.io",agent:!1,withCredentials:!1,upgrade:!0,timestampParam:"t",rememberUpgrade:!1,rejectUnauthorized:!0,perMessageDeflate:{threshold:1024},transportOptions:{},closeOnBeforeunload:!0},e),this.opts.path=this.opts.path.replace(/\/$/,"")+"/","string"==typeof this.opts.query&&(this.opts.query=function(t){let e={},s=t.split("&");for(let t=0,i=s.length;t<i;t++){let i=s[t].split("=");e[decodeURIComponent(i[0])]=decodeURIComponent(i[1])}return e}(this.opts.query)),this.id=null,this.upgrades=null,this.pingInterval=null,this.pingTimeout=null,this.pingTimeoutTimer=null,"function"==typeof addEventListener&&(this.opts.closeOnBeforeunload&&addEventListener("beforeunload",(()=>{this.transport&&(this.transport.removeAllListeners(),this.transport.close())}),!1),"localhost"!==this.hostname&&(this.offlineEventListener=()=>{this.onClose("transport close",{description:"network connection lost"})},addEventListener("offline",this.offlineEventListener,!1))),this.open()}createTransport(t){const e=Object.assign({},this.opts.query);e.EIO=4,e.transport=t,this.id&&(e.sid=this.id);const s=Object.assign({},this.opts.transportOptions[t],this.opts,{query:e,socket:this,hostname:this.hostname,secure:this.secure,port:this.port});return new Q[t](s)}open(){let t;if(this.opts.rememberUpgrade&&st.priorWebsocketSuccess&&-1!==this.transports.indexOf("websocket"))t="websocket";else{if(0===this.transports.length)return void this.setTimeoutFn((()=>{this.emitReserved("error","No transports available")}),0);t=this.transports[0]}this.readyState="opening";try{t=this.createTransport(t)}catch(t){return this.transports.shift(),void this.open()}t.open(),this.setTransport(t)}setTransport(t){this.transport&&this.transport.removeAllListeners(),this.transport=t,t.on("drain",this.onDrain.bind(this)).on("packet",this.onPacket.bind(this)).on("error",this.onError.bind(this)).on("close",(t=>this.onClose("transport close",t)))}probe(t){let e=this.createTransport(t),s=!1;st.priorWebsocketSuccess=!1;const i=()=>{s||(e.send([{type:"ping",data:"probe"}]),e.once("packet",(t=>{if(!s)if("pong"===t.type&&"probe"===t.data){if(this.upgrading=!0,this.emitReserved("upgrading",e),!e)return;st.priorWebsocketSuccess="websocket"===e.name,this.transport.pause((()=>{s||"closed"!==this.readyState&&(c(),this.setTransport(e),e.send([{type:"upgrade"}]),this.emitReserved("upgrade",e),e=null,this.upgrading=!1,this.flush())}))}else{const t=new Error("probe error");t.transport=e.name,this.emitReserved("upgradeError",t)}})))};function n(){s||(s=!0,c(),e.close(),e=null)}const o=t=>{const s=new Error("probe error: "+t);s.transport=e.name,n(),this.emitReserved("upgradeError",s)};function r(){o("transport closed")}function h(){o("socket closed")}function a(t){e&&t.name!==e.name&&n()}const c=()=>{e.removeListener("open",i),e.removeListener("error",o),e.removeListener("close",r),this.off("close",h),this.off("upgrading",a)};e.once("open",i),e.once("error",o),e.once("close",r),this.once("close",h),this.once("upgrading",a),e.open()}onOpen(){if(this.readyState="open",st.priorWebsocketSuccess="websocket"===this.transport.name,this.emitReserved("open"),this.flush(),"open"===this.readyState&&this.opts.upgrade&&this.transport.pause){let t=0;const e=this.upgrades.length;for(;t<e;t++)this.probe(this.upgrades[t])}}onPacket(t){if("opening"===this.readyState||"open"===this.readyState||"closing"===this.readyState)switch(this.emitReserved("packet",t),this.emitReserved("heartbeat"),t.type){case"open":this.onHandshake(JSON.parse(t.data));break;case"ping":this.resetPingTimeout(),this.sendPacket("pong"),this.emitReserved("ping"),this.emitReserved("pong");break;case"error":const e=new Error("server error");e.code=t.data,this.onError(e);break;case"message":this.emitReserved("data",t.data),this.emitReserved("message",t.data)}}onHandshake(t){this.emitReserved("handshake",t),this.id=t.sid,this.transport.query.sid=t.sid,this.upgrades=this.filterUpgrades(t.upgrades),this.pingInterval=t.pingInterval,this.pingTimeout=t.pingTimeout,this.maxPayload=t.maxPayload,this.onOpen(),"closed"!==this.readyState&&this.resetPingTimeout()}resetPingTimeout(){this.clearTimeoutFn(this.pingTimeoutTimer),this.pingTimeoutTimer=this.setTimeoutFn((()=>{this.onClose("ping timeout")}),this.pingInterval+this.pingTimeout),this.opts.autoUnref&&this.pingTimeoutTimer.unref()}onDrain(){this.writeBuffer.splice(0,this.prevBufferLen),this.prevBufferLen=0,0===this.writeBuffer.length?this.emitReserved("drain"):this.flush()}flush(){if("closed"!==this.readyState&&this.transport.writable&&!this.upgrading&&this.writeBuffer.length){const t=this.getWritablePackets();this.transport.send(t),this.prevBufferLen=t.length,this.emitReserved("flush")}}getWritablePackets(){if(!(this.maxPayload&&"polling"===this.transport.name&&this.writeBuffer.length>1))return this.writeBuffer;let t=1;for(let s=0;s<this.writeBuffer.length;s++){const i=this.writeBuffer[s].data;if(i&&(t+="string"==typeof(e=i)?function(t){let e=0,s=0;for(let i=0,n=t.length;i<n;i++)e=t.charCodeAt(i),e<128?s+=1:e<2048?s+=2:e<55296||e>=57344?s+=3:(i++,s+=4);return s}(e):Math.ceil(1.33*(e.byteLength||e.size))),s>0&&t>this.maxPayload)return this.writeBuffer.slice(0,s);t+=2}var e;return this.writeBuffer}write(t,e,s){return this.sendPacket("message",t,e,s),this}send(t,e,s){return this.sendPacket("message",t,e,s),this}sendPacket(t,e,s,i){if("function"==typeof e&&(i=e,e=void 0),"function"==typeof s&&(i=s,s=null),"closing"===this.readyState||"closed"===this.readyState)return;(s=s||{}).compress=!1!==s.compress;const n={type:t,data:e,options:s};this.emitReserved("packetCreate",n),this.writeBuffer.push(n),i&&this.once("flush",i),this.flush()}close(){const t=()=>{this.onClose("forced close"),this.transport.close()},e=()=>{this.off("upgrade",e),this.off("upgradeError",e),t()},s=()=>{this.once("upgrade",e),this.once("upgradeError",e)};return"opening"!==this.readyState&&"open"!==this.readyState||(this.readyState="closing",this.writeBuffer.length?this.once("drain",(()=>{this.upgrading?s():t()})):this.upgrading?s():t()),this}onError(t){st.priorWebsocketSuccess=!1,this.emitReserved("error",t),this.onClose("transport error",t)}onClose(t,e){"opening"!==this.readyState&&"open"!==this.readyState&&"closing"!==this.readyState||(this.clearTimeoutFn(this.pingTimeoutTimer),this.transport.removeAllListeners("close"),this.transport.close(),this.transport.removeAllListeners(),"function"==typeof removeEventListener&&removeEventListener("offline",this.offlineEventListener,!1),this.readyState="closed",this.id=null,this.emitReserved("close",t,e),this.writeBuffer=[],this.prevBufferLen=0)}filterUpgrades(t){const e=[];let s=0;const i=t.length;for(;s<i;s++)~this.transports.indexOf(t[s])&&e.push(t[s]);return e}}st.protocol=4,st.protocol;const it="function"==typeof ArrayBuffer,nt=Object.prototype.toString,ot="function"==typeof Blob||"undefined"!=typeof Blob&&"[object BlobConstructor]"===nt.call(Blob),rt="function"==typeof File||"undefined"!=typeof File&&"[object FileConstructor]"===nt.call(File);function ht(t){return it&&(t instanceof ArrayBuffer||(t=>"function"==typeof ArrayBuffer.isView?ArrayBuffer.isView(t):t.buffer instanceof ArrayBuffer)(t))||ot&&t instanceof Blob||rt&&t instanceof File}function at(t,e){if(!t||"object"!=typeof t)return!1;if(Array.isArray(t)){for(let e=0,s=t.length;e<s;e++)if(at(t[e]))return!0;return!1}if(ht(t))return!0;if(t.toJSON&&"function"==typeof t.toJSON&&1===arguments.length)return at(t.toJSON(),!0);for(const e in t)if(Object.prototype.hasOwnProperty.call(t,e)&&at(t[e]))return!0;return!1}function ct(t){const e=[],s=t.data,i=t;return i.data=dt(s,e),i.attachments=e.length,{packet:i,buffers:e}}function dt(t,e){if(!t)return t;if(ht(t)){const s={_placeholder:!0,num:e.length};return e.push(t),s}if(Array.isArray(t)){const s=new Array(t.length);for(let i=0;i<t.length;i++)s[i]=dt(t[i],e);return s}if("object"==typeof t&&!(t instanceof Date)){const s={};for(const i in t)Object.prototype.hasOwnProperty.call(t,i)&&(s[i]=dt(t[i],e));return s}return t}function lt(t,e){return t.data=pt(t.data,e),t.attachments=void 0,t}function pt(t,e){if(!t)return t;if(t&&!0===t._placeholder){if("number"==typeof t.num&&t.num>=0&&t.num<e.length)return e[t.num];throw new Error("illegal attachments")}if(Array.isArray(t))for(let s=0;s<t.length;s++)t[s]=pt(t[s],e);else if("object"==typeof t)for(const s in t)Object.prototype.hasOwnProperty.call(t,s)&&(t[s]=pt(t[s],e));return t}const ut=5;var ft;!function(t){t[t.CONNECT=0]="CONNECT",t[t.DISCONNECT=1]="DISCONNECT",t[t.EVENT=2]="EVENT",t[t.ACK=3]="ACK",t[t.CONNECT_ERROR=4]="CONNECT_ERROR",t[t.BINARY_EVENT=5]="BINARY_EVENT",t[t.BINARY_ACK=6]="BINARY_ACK"}(ft||(ft={}));class yt{constructor(t){this.replacer=t}encode(t){return t.type!==ft.EVENT&&t.type!==ft.ACK||!at(t)?[this.encodeAsString(t)]:(t.type=t.type===ft.EVENT?ft.BINARY_EVENT:ft.BINARY_ACK,this.encodeAsBinary(t))}encodeAsString(t){let e=""+t.type;return t.type!==ft.BINARY_EVENT&&t.type!==ft.BINARY_ACK||(e+=t.attachments+"-"),t.nsp&&"/"!==t.nsp&&(e+=t.nsp+","),null!=t.id&&(e+=t.id),null!=t.data&&(e+=JSON.stringify(t.data,this.replacer)),e}encodeAsBinary(t){const e=ct(t),s=this.encodeAsString(e.packet),i=e.buffers;return i.unshift(s),i}}class gt extends E{constructor(t){super(),this.reviver=t}add(t){let e;if("string"==typeof t){if(this.reconstructor)throw new Error("got plaintext data when reconstructing a packet");e=this.decodeString(t),e.type===ft.BINARY_EVENT||e.type===ft.BINARY_ACK?(this.reconstructor=new mt(e),0===e.attachments&&super.emitReserved("decoded",e)):super.emitReserved("decoded",e)}else{if(!ht(t)&&!t.base64)throw new Error("Unknown type: "+t);if(!this.reconstructor)throw new Error("got binary data when not reconstructing a packet");e=this.reconstructor.takeBinaryData(t),e&&(this.reconstructor=null,super.emitReserved("decoded",e))}}decodeString(t){let e=0;const s={type:Number(t.charAt(0))};if(void 0===ft[s.type])throw new Error("unknown packet type "+s.type);if(s.type===ft.BINARY_EVENT||s.type===ft.BINARY_ACK){const i=e+1;for(;"-"!==t.charAt(++e)&&e!=t.length;);const n=t.substring(i,e);if(n!=Number(n)||"-"!==t.charAt(e))throw new Error("Illegal attachments");s.attachments=Number(n)}if("/"===t.charAt(e+1)){const i=e+1;for(;++e&&","!==t.charAt(e)&&e!==t.length;);s.nsp=t.substring(i,e)}else s.nsp="/";const i=t.charAt(e+1);if(""!==i&&Number(i)==i){const i=e+1;for(;++e;){const s=t.charAt(e);if(null==s||Number(s)!=s){--e;break}if(e===t.length)break}s.id=Number(t.substring(i,e+1))}if(t.charAt(++e)){const i=this.tryParse(t.substr(e));if(!gt.isPayloadValid(s.type,i))throw new Error("invalid payload");s.data=i}return s}tryParse(t){try{return JSON.parse(t,this.reviver)}catch(t){return!1}}static isPayloadValid(t,e){switch(t){case ft.CONNECT:return"object"==typeof e;case ft.DISCONNECT:return void 0===e;case ft.CONNECT_ERROR:return"string"==typeof e||"object"==typeof e;case ft.EVENT:case ft.BINARY_EVENT:return Array.isArray(e)&&e.length>0;case ft.ACK:case ft.BINARY_ACK:return Array.isArray(e)}}destroy(){this.reconstructor&&this.reconstructor.finishedReconstruction()}}class mt{constructor(t){this.packet=t,this.buffers=[],this.reconPack=t}takeBinaryData(t){if(this.buffers.push(t),this.buffers.length===this.reconPack.attachments){const t=lt(this.reconPack,this.buffers);return this.finishedReconstruction(),t}return null}finishedReconstruction(){this.reconPack=null,this.buffers=[]}}function bt(t,e,s){return t.on(e,s),function(){t.off(e,s)}}const wt=Object.freeze({connect:1,connect_error:1,disconnect:1,disconnecting:1,newListener:1,removeListener:1});class xt extends E{constructor(t,e,s){super(),this.connected=!1,this.receiveBuffer=[],this.sendBuffer=[],this.ids=0,this.acks={},this.flags={},this.io=t,this.nsp=e,s&&s.auth&&(this.auth=s.auth),this.io._autoConnect&&this.open()}get disconnected(){return!this.connected}subEvents(){if(this.subs)return;const t=this.io;this.subs=[bt(t,"open",this.onopen.bind(this)),bt(t,"packet",this.onpacket.bind(this)),bt(t,"error",this.onerror.bind(this)),bt(t,"close",this.onclose.bind(this))]}get active(){return!!this.subs}connect(){return this.connected||(this.subEvents(),this.io._reconnecting||this.io.open(),"open"===this.io._readyState&&this.onopen()),this}open(){return this.connect()}send(...t){return t.unshift("message"),this.emit.apply(this,t),this}emit(t,...e){if(wt.hasOwnProperty(t))throw new Error('"'+t+'" is a reserved event name');e.unshift(t);const s={type:ft.EVENT,data:e,options:{}};if(s.options.compress=!1!==this.flags.compress,"function"==typeof e[e.length-1]){const t=this.ids++,i=e.pop();this._registerAckCallback(t,i),s.id=t}const i=this.io.engine&&this.io.engine.transport&&this.io.engine.transport.writable;return this.flags.volatile&&(!i||!this.connected)||(this.connected?(this.notifyOutgoingListeners(s),this.packet(s)):this.sendBuffer.push(s)),this.flags={},this}_registerAckCallback(t,e){const s=this.flags.timeout;if(void 0===s)return void(this.acks[t]=e);const i=this.io.setTimeoutFn((()=>{delete this.acks[t];for(let e=0;e<this.sendBuffer.length;e++)this.sendBuffer[e].id===t&&this.sendBuffer.splice(e,1);e.call(this,new Error("operation has timed out"))}),s);this.acks[t]=(...t)=>{this.io.clearTimeoutFn(i),e.apply(this,[null,...t])}}packet(t){t.nsp=this.nsp,this.io._packet(t)}onopen(){"function"==typeof this.auth?this.auth((t=>{this.packet({type:ft.CONNECT,data:t})})):this.packet({type:ft.CONNECT,data:this.auth})}onerror(t){this.connected||this.emitReserved("connect_error",t)}onclose(t,e){this.connected=!1,delete this.id,this.emitReserved("disconnect",t,e)}onpacket(t){if(t.nsp===this.nsp)switch(t.type){case ft.CONNECT:if(t.data&&t.data.sid){const e=t.data.sid;this.onconnect(e)}else this.emitReserved("connect_error",new Error("It seems you are trying to reach a Socket.IO server in v2.x with a v3.x client, but they are not compatible (more information here: https://socket.io/docs/v3/migrating-from-2-x-to-3-0/)"));break;case ft.EVENT:case ft.BINARY_EVENT:this.onevent(t);break;case ft.ACK:case ft.BINARY_ACK:this.onack(t);break;case ft.DISCONNECT:this.ondisconnect();break;case ft.CONNECT_ERROR:this.destroy();const e=new Error(t.data.message);e.data=t.data.data,this.emitReserved("connect_error",e)}}onevent(t){const e=t.data||[];null!=t.id&&e.push(this.ack(t.id)),this.connected?this.emitEvent(e):this.receiveBuffer.push(Object.freeze(e))}emitEvent(t){if(this._anyListeners&&this._anyListeners.length){const e=this._anyListeners.slice();for(const s of e)s.apply(this,t)}super.emit.apply(this,t)}ack(t){const e=this;let s=!1;return function(...i){s||(s=!0,e.packet({type:ft.ACK,id:t,data:i}))}}onack(t){const e=this.acks[t.id];"function"==typeof e&&(e.apply(this,t.data),delete this.acks[t.id])}onconnect(t){this.id=t,this.connected=!0,this.emitBuffered(),this.emitReserved("connect")}emitBuffered(){this.receiveBuffer.forEach((t=>this.emitEvent(t))),this.receiveBuffer=[],this.sendBuffer.forEach((t=>{this.notifyOutgoingListeners(t),this.packet(t)})),this.sendBuffer=[]}ondisconnect(){this.destroy(),this.onclose("io server disconnect")}destroy(){this.subs&&(this.subs.forEach((t=>t())),this.subs=void 0),this.io._destroy(this)}disconnect(){return this.connected&&this.packet({type:ft.DISCONNECT}),this.destroy(),this.connected&&this.onclose("io client disconnect"),this}close(){return this.disconnect()}compress(t){return this.flags.compress=t,this}get volatile(){return this.flags.volatile=!0,this}timeout(t){return this.flags.timeout=t,this}onAny(t){return this._anyListeners=this._anyListeners||[],this._anyListeners.push(t),this}prependAny(t){return this._anyListeners=this._anyListeners||[],this._anyListeners.unshift(t),this}offAny(t){if(!this._anyListeners)return this;if(t){const e=this._anyListeners;for(let s=0;s<e.length;s++)if(t===e[s])return e.splice(s,1),this}else this._anyListeners=[];return this}listenersAny(){return this._anyListeners||[]}onAnyOutgoing(t){return this._anyOutgoingListeners=this._anyOutgoingListeners||[],this._anyOutgoingListeners.push(t),this}prependAnyOutgoing(t){return this._anyOutgoingListeners=this._anyOutgoingListeners||[],this._anyOutgoingListeners.unshift(t),this}offAnyOutgoing(t){if(!this._anyOutgoingListeners)return this;if(t){const e=this._anyOutgoingListeners;for(let s=0;s<e.length;s++)if(t===e[s])return e.splice(s,1),this}else this._anyOutgoingListeners=[];return this}listenersAnyOutgoing(){return this._anyOutgoingListeners||[]}notifyOutgoingListeners(t){if(this._anyOutgoingListeners&&this._anyOutgoingListeners.length){const e=this._anyOutgoingListeners.slice();for(const s of e)s.apply(this,t.data)}}}function vt(t){t=t||{},this.ms=t.min||100,this.max=t.max||1e4,this.factor=t.factor||2,this.jitter=t.jitter>0&&t.jitter<=1?t.jitter:0,this.attempts=0}vt.prototype.duration=function(){var t=this.ms*Math.pow(this.factor,this.attempts++);if(this.jitter){var e=Math.random(),s=Math.floor(e*this.jitter*t);t=0==(1&Math.floor(10*e))?t-s:t+s}return 0|Math.min(t,this.max)},vt.prototype.reset=function(){this.attempts=0},vt.prototype.setMin=function(t){this.ms=t},vt.prototype.setMax=function(t){this.max=t},vt.prototype.setJitter=function(t){this.jitter=t};class kt extends E{constructor(t,s){var i;super(),this.nsps={},this.subs=[],t&&"object"==typeof t&&(s=t,t=void 0),(s=s||{}).path=s.path||"/socket.io",this.opts=s,C(this,s),this.reconnection(!1!==s.reconnection),this.reconnectionAttempts(s.reconnectionAttempts||1/0),this.reconnectionDelay(s.reconnectionDelay||1e3),this.reconnectionDelayMax(s.reconnectionDelayMax||5e3),this.randomizationFactor(null!==(i=s.randomizationFactor)&&void 0!==i?i:.5),this.backoff=new vt({min:this.reconnectionDelay(),max:this.reconnectionDelayMax(),jitter:this.randomizationFactor()}),this.timeout(null==s.timeout?2e4:s.timeout),this._readyState="closed",this.uri=t;const n=s.parser||e;this.encoder=new n.Encoder,this.decoder=new n.Decoder,this._autoConnect=!1!==s.autoConnect,this._autoConnect&&this.open()}reconnection(t){return arguments.length?(this._reconnection=!!t,this):this._reconnection}reconnectionAttempts(t){return void 0===t?this._reconnectionAttempts:(this._reconnectionAttempts=t,this)}reconnectionDelay(t){var e;return void 0===t?this._reconnectionDelay:(this._reconnectionDelay=t,null===(e=this.backoff)||void 0===e||e.setMin(t),this)}randomizationFactor(t){var e;return void 0===t?this._randomizationFactor:(this._randomizationFactor=t,null===(e=this.backoff)||void 0===e||e.setJitter(t),this)}reconnectionDelayMax(t){var e;return void 0===t?this._reconnectionDelayMax:(this._reconnectionDelayMax=t,null===(e=this.backoff)||void 0===e||e.setMax(t),this)}timeout(t){return arguments.length?(this._timeout=t,this):this._timeout}maybeReconnectOnOpen(){!this._reconnecting&&this._reconnection&&0===this.backoff.attempts&&this.reconnect()}open(t){if(~this._readyState.indexOf("open"))return this;this.engine=new st(this.uri,this.opts);const e=this.engine,s=this;this._readyState="opening",this.skipReconnect=!1;const i=bt(e,"open",(function(){s.onopen(),t&&t()})),n=bt(e,"error",(e=>{s.cleanup(),s._readyState="closed",this.emitReserved("error",e),t?t(e):s.maybeReconnectOnOpen()}));if(!1!==this._timeout){const t=this._timeout;0===t&&i();const s=this.setTimeoutFn((()=>{i(),e.close(),e.emit("error",new Error("timeout"))}),t);this.opts.autoUnref&&s.unref(),this.subs.push((function(){clearTimeout(s)}))}return this.subs.push(i),this.subs.push(n),this}connect(t){return this.open(t)}onopen(){this.cleanup(),this._readyState="open",this.emitReserved("open");const t=this.engine;this.subs.push(bt(t,"ping",this.onping.bind(this)),bt(t,"data",this.ondata.bind(this)),bt(t,"error",this.onerror.bind(this)),bt(t,"close",this.onclose.bind(this)),bt(this.decoder,"decoded",this.ondecoded.bind(this)))}onping(){this.emitReserved("ping")}ondata(t){this.decoder.add(t)}ondecoded(t){this.emitReserved("packet",t)}onerror(t){this.emitReserved("error",t)}socket(t,e){let s=this.nsps[t];return s||(s=new xt(this,t,e),this.nsps[t]=s),s}_destroy(t){const e=Object.keys(this.nsps);for(const t of e)if(this.nsps[t].active)return;this._close()}_packet(t){const e=this.encoder.encode(t);for(let s=0;s<e.length;s++)this.engine.write(e[s],t.options)}cleanup(){this.subs.forEach((t=>t())),this.subs.length=0,this.decoder.destroy()}_close(){this.skipReconnect=!0,this._reconnecting=!1,this.onclose("forced close"),this.engine&&this.engine.close()}disconnect(){return this._close()}onclose(t,e){this.cleanup(),this.backoff.reset(),this._readyState="closed",this.emitReserved("close",t,e),this._reconnection&&!this.skipReconnect&&this.reconnect()}reconnect(){if(this._reconnecting||this.skipReconnect)return this;const t=this;if(this.backoff.attempts>=this._reconnectionAttempts)this.backoff.reset(),this.emitReserved("reconnect_failed"),this._reconnecting=!1;else{const e=this.backoff.duration();this._reconnecting=!0;const s=this.setTimeoutFn((()=>{t.skipReconnect||(this.emitReserved("reconnect_attempt",t.backoff.attempts),t.skipReconnect||t.open((e=>{e?(t._reconnecting=!1,t.reconnect(),this.emitReserved("reconnect_error",e)):t.onreconnect()})))}),e);this.opts.autoUnref&&s.unref(),this.subs.push((function(){clearTimeout(s)}))}}onreconnect(){const t=this.backoff.attempts;this._reconnecting=!1,this.backoff.reset(),this.emitReserved("reconnect",t)}}const St={};function Ot(t,e){"object"==typeof t&&(e=t,t=void 0);const s=function(t,e="",s){let i=t;s=s||"undefined"!=typeof location&&location,null==t&&(t=s.protocol+"//"+s.host),"string"==typeof t&&("/"===t.charAt(0)&&(t="/"===t.charAt(1)?s.protocol+t:s.host+t),/^(https?|wss?):\/\//.test(t)||(t=void 0!==s?s.protocol+"//"+t:"https://"+t),i=et(t)),i.port||(/^(http|ws)$/.test(i.protocol)?i.port="80":/^(http|ws)s$/.test(i.protocol)&&(i.port="443")),i.path=i.path||"/";const n=-1!==i.host.indexOf(":")?"["+i.host+"]":i.host;return i.id=i.protocol+"://"+n+":"+i.port+e,i.href=i.protocol+"://"+n+(s&&s.port===i.port?"":":"+i.port),i}(t,(e=e||{}).path||"/socket.io"),i=s.source,n=s.id,o=s.path,r=St[n]&&o in St[n].nsps;let h;return e.forceNew||e["force new connection"]||!1===e.multiplex||r?h=new kt(i,e):(St[n]||(St[n]=new kt(i,e)),h=St[n]),s.query&&!e.query&&(e.query=s.queryKey),h.socket(s.path,e)}Object.assign(Ot,{Manager:kt,Socket:xt,io:Ot,connect:Ot});class At extends Phaser.Scene{constructor(){super(),this.left=!1,this.right=!1,this.up=!1,this.down=!1,this.frames=0}preload(){for(let t of Object.keys(d))this.load.image(`skin_${d[t].id}`,`/img/skins/${d[t].url}.png`);this.load.image("player","/img/skins/player.png"),this.load.image("coin","/img/gameObjects/coin.png"),this.load.image("grass","/img/gameObjects/tile.png"),this.load.image("bullet","/img/gameObjects/bullet.png"),this.load.image("pistol","/img/guns/pistol.png"),this.load.image("obstacle","/img/gameObjects/obstacle.png"),this.load.image("obstacle2","/img/gameObjects/obstacle2.png"),this.load.image("tree","/img/gameObjects/tree.png"),this.loadingtext=new o(this,window.innerWidth/2,window.innerHeight/2,"Loading...",{fontSize:100,fontFamily:"Arial"}).setOrigin(.5)}create(){this.loaded=!1,this.socket=Ot("https://blaster2d.ruiwenge2.repl.co"),this.coins=this.physics.add.group(),this.trees=this.physics.add.group(),this.bulletsGroup=this.physics.add.group(),this.enemies={},this.bullets={},this.name=name||localStorage.getItem("name"),grecaptcha.execute().then((()=>{var t=setInterval((()=>{document.getElementsByName("g-recaptcha-response")[0].value&&(this.socket.emit("join",this.name,document.getElementsByName("g-recaptcha-response")[0].value),clearInterval(t))}),100)})),window.addEventListener("resize",(()=>{this.scale.resize(window.innerWidth,window.innerHeight)})),this.socket.on("gamedata",(t=>{this.loaded=!0,this.loadingtext.destroy(),this.player=this.physics.add.sprite(t.players[this.socket.id].x,t.players[this.socket.id].y,"player").setScale(.65,.65).setDepth(2),this.bar=new a(this,this.player.x,this.player.y-s-20,100,2),this.nametext=new o(this,this.player.x,this.player.y+s+20,this.name,{fontSize:20,fontFamily:"sans-serif"},2,!0),this.playerstext=new o(this,20,20,"",{fontSize:20,fontFamily:"Arial"}).setOrigin(0),this.scorestext=new o(this,200,20,"",{fontSize:20,fontFamily:"Arial"}).setOrigin(0),this.fpstext=new o(this,window.innerWidth-150,120,"FPS: 60",{fontSize:30,fontFamily:"copperplate"}),this.tps=new o(this,window.innerWidth-150,155,"TPS: 30",{fontSize:30,fontFamily:"copperplate"}),this.playerInfo={x:this.player.x,y:this.player.y},this.cameras.main.startFollow(this.player),this.data={x:t.players[this.socket.id].x,y:t.players[this.socket.id].y,angle:0,angle2:0};for(let e of t.coins)this.coins.create(e.x,e.y,"coin").setScale(.75,.75).setDepth(1).id=e.id;for(let t of c.T)this.trees.create(t.x,t.y,"tree").setScale(t.size/300).setDepth(10).setAlpha(.7).id=t.id;for(let e of Object.keys(t.players))e!=this.socket.id&&this.addPlayer(t.players[e]);this.main()})),this.socket.on("new player",((t,e)=>{this.addPlayer(t)})),this.socket.on("collected gold",(t=>{this.coins.children.entries.forEach((e=>{e.id==t&&e.destroy()}))})),this.socket.on("left",(t=>{this.enemies[t].player.destroy(),this.enemies[t].gun.destroy(),this.enemies[t].healthbar.destroy(),this.enemies[t].nametext.destroy(),delete this.enemies[t]})),this.socket.on("leave",(()=>{this.scene.start("disconnect_scene")}))}main(){setInterval((()=>{this.tps.setText("TPS: "+this.frames),this.frames=0}),1e3),this.w=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),this.a=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),this.s=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),this.d=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),this.l=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);var t=this;this.l.on("down",(function(){confirmmodal("","Are you sure you want to exit the game?","Exit").then((()=>{t.sys.game.destroy(!0,!1),document.querySelector("main").style.display="block",t.socket.emit("leaveGame")}))}));for(let t=250;t<5e3;t+=500)for(let e=250;e<5e3;e+=500)this.physics.add.image(t,e,"grass").setDepth(0);this.obstacle1=this.physics.add.staticSprite(2500,1750,"obstacle").setDepth(0),this.obstacle2=this.physics.add.staticSprite(2500,3250,"obstacle").setDepth(0),this.obstacle3=this.physics.add.staticSprite(1750,2500,"obstacle2").setDepth(0),this.obstacle4=this.physics.add.staticSprite(3250,2500,"obstacle2").setDepth(0),this.gun=this.physics.add.sprite(this.player.x,this.player.y,"pistol").setDepth(2),this.gun.angle2=0,this.health=100,this.score=0,this.scoretext=new o(this,window.innerWidth-150,50,"Score: "+this.score,{fontSize:30,fontFamily:"copperplate"}),this.gold=0,this.goldtext=new o(this,window.innerWidth-150,85,"Gold: "+this.gold,{fontSize:30,fontFamily:"copperplate"}),this.addWeaponActions(),this.physics.add.collider(this.player,this.coins,((t,e)=>{this.collect(t,e)})),this.physics.add.collider(this.player,this.bulletsGroup,((t,e)=>{this.died||e.shooter!=this.socket.id&&this.socket.emit("died",e.id)})),this.socket.on("gamestate",(e=>{if(this.socket.disconnected)this.scene.start("disconnect_scene");else{if(this.frames+=1,!this.died){let t=e.players[this.socket.id];this.playerInfo.x=t.x,this.playerInfo.y=t.y,this.tweens.add({targets:this.player,x:this.playerInfo.x,y:this.playerInfo.y,duration:100})}Object.keys(e.players).forEach((s=>{s!=this.socket.id&&this.tweens.add({targets:[this.enemies[s].player],x:e.players[s].x,y:e.players[s].y,duration:100,onUpdate:function(){try{let i=t.enemies[s];i.gun.x=i.player.x+61.5*Math.cos(e.players[s].angle2),i.gun.y=i.player.y+61.5*Math.sin(e.players[s].angle2),i.gun.angle=e.players[s].angle}catch(t){console.error(t)}}})})),Object.keys(e.bullets).forEach((t=>{this.tweens.add({targets:[this.bullets[t]],x:e.bullets[t].x,y:e.bullets[t].y,duration:1e3/30})}))}})),this.socket.on("new bullet",((t,e)=>{let s=this.bulletsGroup.create(e.x,e.y,"bullet").setScale(.5,2).setDepth(13);s.angle=e.angle,s.shooter=e.shooter,s.id=t,this.bullets[t]=s})),this.socket.on("removed bullet",(t=>{this.bullets[t].destroy(),delete this.bullets[t]})),this.socket.on("player died",((t,e)=>{let s=this;t==this.socket.id?(new o(this,window.innerWidth/2,window.innerHeight/2,"You died",{fontSize:50}),this.died=!0,this.tweens.add({targets:[this.player,this.gun,this.bar,this.nametext],duration:1e3,alpha:0,onComplete:function(){s.player.destroy(),s.gun.destroy(),s.bar.destroy(),s.nametext.destroy(),s.playerstext.destroy(),s.scorestext.destroy(),s.goldtext.destroy(),s.scoretext.destroy(),s.fpstext.destroy(),s.tps.destroy()}})):this.tweens.add({targets:[this.enemies[t].player,this.enemies[t].gun,this.enemies[t].healthbar,this.enemies[t].nametext],duration:1e3,alpha:0,onComplete:function(){s.enemies[t].player.destroy(),s.enemies[t].gun.destroy(),s.enemies[t].healthbar.destroy(),s.enemies[t].nametext.destroy(),delete s.enemies[t]}})}))}addPlayer(t){var e={id:t.id,x:t.x,y:t.y,name:t.name,player:this.add.image(t.x,t.y,"player").setScale(.65,.65).setDepth(1),nametext:new o(this,t.x,t.y+s+20,t.name,{fontSize:20,fontFamily:"sans-serif"},1,!0),healthbar:new a(this,t.x,t.y-s-20,100,1),gun:this.add.image(t.x+61.5*Math.cos(t.angle2),t.y+61.5*Math.sin(t.angle2),"pistol").setDepth(1),angle:null,health:100,score:0};this.enemies[t.id]=e}collect(t,e){this.socket.emit("collect gold",e.id),this.gold+=1,this.goldtext.setText("Gold: "+this.gold),e.destroy(),this.gold>localStorage.getItem("bestgold")&&localStorage.setItem("bestgold",this.gold);for(let t=0;t<i(0,2);t++)this.coins.create(i(18.75,4981.25),i(18.75,4981.25),"coin").setScale(.75,.75)}addWeaponActions(){this.useweapon=!0,this.input.on("pointerdown",(t=>{if(this.useweapon&&!this.died){var e=Math.atan2(t.y-window.innerHeight/2,t.x-window.innerWidth/2);this.socket.emit("shoot",e),this.gun.angle=(180*e/Math.PI+360)%360,this.gun.angle2=e,this.useweapon=!1}})),window.addEventListener("mousemove",(t=>{if(!this.died&&!this.socket.disconnected){var e=Math.atan2(t.clientY-window.innerHeight/2,t.clientX-window.innerWidth/2);this.gun.angle=(180*e/Math.PI+360)%360,this.gun.angle2=e}})),setInterval((()=>{this.useweapon||(this.useweapon=!0)}),500)}update(){if(!this.loaded)return;if(this.socket.disconnected)return void this.scene.start("disconnect_scene");if(Object.values(this.enemies).forEach((t=>{t.healthbar.setData(t.player.x,t.player.y-s-20,t.health),t.nametext.setPosition(t.player.x,t.player.y+s+20)})),this.died)return;this.bar.setData(this.player.x,this.player.y-s-20,100),this.nametext.setPosition(this.player.x,this.player.y+s+20),Array.prototype.insert=function(t,e){this.splice(t,0,e)};let t=[...Object.values(this.enemies)];t.insert(0,{score:this.score,name:this.name});let e=t.sort((function(t,e){return t.score-e.score})),i="",n="";for(let t of e)i+=t.name+"\n",n+=t.score+"\n";this.playerstext.setText(i),this.scorestext.setText(n),this.fpstext.setText("FPS: "+Math.round(this.sys.game.loop.actualFps));let o=this.input.keyboard.createCursorKeys();o.left.isDown||this.a.isDown?this.left||(this.socket.emit("movement","left"),this.left=!0,this.right=!1):this.left&&(this.socket.emit("movement_end","left"),this.left=!1),o.right.isDown||this.d.isDown?this.right||(this.socket.emit("movement","right"),this.right=!0,this.left=!1):this.right&&(this.socket.emit("movement_end","right"),this.right=!1),o.up.isDown||this.w.isDown?this.up||(this.socket.emit("movement","up"),this.up=!0,this.down=!1):this.up&&(this.socket.emit("movement_end","up"),this.up=!1),o.down.isDown||this.s.isDown?this.down||(this.socket.emit("movement","down"),this.down=!0,this.up=!1):this.down&&(this.socket.emit("movement_end","down"),this.down=!1),this.gun.x=this.player.x+61.5*Math.cos(this.gun.angle2),this.gun.y=this.player.y+61.5*Math.sin(this.gun.angle2),this.player.angle=this.gun.angle,this.player.angle!=this.data.angle&&(this.data.angle=this.gun.angle,this.data.angle2=this.gun.angle2,this.socket.emit("player angle",this.data))}}const Et=At;class _t extends Phaser.Scene{constructor(){super()}preload(){}create(){localStorage.getItem("bestscore")||localStorage.setItem("bestscore",0),localStorage.getItem("bestgold")||localStorage.setItem("bestgold",0),this.add.text(window.innerWidth/2,100,"Game",{fontFamily:"Arial",fontSize:100}).setOrigin(.5),this.button=this.add.rectangle(0,0,0,0,240),this.text=this.add.text(window.innerWidth/2,window.innerHeight/2.5,"Play",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button.width=this.text.width+15,this.button.height=this.text.height+15,this.button.x=this.text.x-this.text.width/2-5,this.button.y=this.text.y-this.text.height/2-5,this.button.setInteractive().on("pointerdown",(()=>{this.scene.start("gamescene")})),this.button2=this.add.rectangle(0,0,0,0,240),this.text2=this.add.text(window.innerWidth/2,window.innerHeight/1.8,"How To Play",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button2.width=this.text2.width+15,this.button2.height=this.text2.height+15,this.button2.x=this.text2.x-this.text2.width/2-5,this.button2.y=this.text2.y-this.text2.height/2-5,this.button2.setInteractive().on("pointerdown",(()=>{this.scene.start("howtoplay")})),this.button3=this.add.rectangle(0,0,0,0,240),this.text3=this.add.text(window.innerWidth/2,window.innerHeight/1.4,"Your Best Scores",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button3.width=this.text3.width+15,this.button3.height=this.text3.height+15,this.button3.x=this.text3.x-this.text3.width/2-5,this.button3.y=this.text3.y-this.text3.height/2-5,this.button3.setInteractive().on("pointerdown",(()=>{this.scene.start("bestscores")}))}update(){}}const Tt=_t;class zt extends Phaser.Scene{constructor(){super()}preload(){}create(){this.add.text(window.innerWidth/2,100,"How To Play",{fontFamily:"Arial",fontSize:75}).setOrigin(.5),this.button=this.add.rectangle(0,0,0,0,240),this.text=this.add.text(window.innerWidth/2,window.innerHeight/1.5,"Back",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button.width=this.text.width+10,this.button.height=this.text.height+10,this.button.x=this.text.x-this.text.width/2-5,this.button.y=this.text.y-this.text.height/2-5,this.button.setInteractive().on("pointerdown",(()=>{this.scene.start("joinscene")}))}update(){}}const Rt=zt;class Ct extends Phaser.Scene{constructor(){super()}preload(){}create(){this.add.text(window.innerWidth/2,100,"You Died",{fontFamily:"Arial",fontSize:100}).setOrigin(.5),this.button=this.add.rectangle(0,0,0,0,240),this.text=this.add.text(window.innerWidth/2,window.innerHeight/2,"OK",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button.width=this.text.width+15,this.button.height=this.text.height+15,this.button.x=this.text.x-this.text.width/2-5,this.button.y=this.text.y-this.text.height/2-5,this.button.setInteractive().on("pointerdown",(()=>{this.scene.start("joinscene")}))}update(){}}const Bt=Ct;class Nt extends Phaser.Scene{constructor(){super()}preload(){}create(){this.add.text(window.innerWidth/2,100,"Your Best",{fontFamily:"Arial",fontSize:100}).setOrigin(.5),this.add.text(window.innerWidth/2,300,"Score: "+localStorage.getItem("bestscore"),{fontFamily:"Arial",fontSize:75}).setOrigin(.5),this.add.text(window.innerWidth/2,400,"Gold: "+localStorage.getItem("bestgold"),{fontFamily:"Arial",fontSize:75}).setOrigin(.5),this.button=this.add.rectangle(0,0,0,0,240),this.text=this.add.text(window.innerWidth/2,window.innerHeight/1.25,"Back",{fill:"#ffffff",fontFamily:"Arial",fontSize:50}).setOrigin(.5),this.button.width=this.text.width+15,this.button.height=this.text.height+15,this.button.x=this.text.x-this.text.width/2-5,this.button.y=this.text.y-this.text.height/2-5,this.button.setInteractive().on("pointerdown",(()=>{this.scene.start("joinscene")}))}update(){}}const Pt=Nt;class Lt extends Phaser.Scene{constructor(){super()}preload(){}create(){this.disconnecttext=new o(this,window.innerWidth/2,100,"You got disconnected",{fontSize:50,fontFamily:"Arial"}).setOrigin(.5),this.button=new h(this,window.innerWidth/2,window.innerHeight/2,"Reload",(()=>{location.reload()}))}update(){}}const It=Lt,Ft={type:Phaser.AUTO,width:window.innerWidth,height:window.innerHeight,backgroundColor:"#000000",physics:{default:"arcade",arcade:{gravity:{y:0},debug:!1}}};localStorage.getItem("name")&&!loggedIn&&(document.getElementById("input").value=localStorage.getItem("name")),document.getElementById("playbtn").addEventListener("click",(function(){let t=document.getElementById("input").value;if(!t.replace(/\s/g,""))return void(document.querySelector("p").style.display="block");localStorage.setItem("name",t);const e=new Phaser.Game(Ft);e.scene.add("gamescene",Et),e.scene.add("joinscene",Tt),e.scene.add("howtoplay",Rt),e.scene.add("diedscene",Bt),e.scene.add("bestscores",Pt),e.scene.add("disconnect_scene",It),e.scene.start("gamescene"),document.querySelector("canvas").style.cursor="crosshair",window.addEventListener("resize",(()=>{e.scale.resize(window.innerWidth,window.innerHeight)})),document.querySelector("main").style.display="none"}))})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
+/* 0 */,
+/* 1 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _objects_text_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _objects_button_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _chat_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _trees_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7);
+/* harmony import */ var _skins_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+
+
+
+
+
+
+
+
+class gamescene extends Phaser.Scene {
+  constructor(){
+    super();
+    this.left = false;
+    this.right = false;
+    this.up = false;
+    this.down = false;
+    this.frames = 0;
+  }
+  
+  preload() {
+    for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_6__)){
+      this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].url}.png`);
+    }
+    this.load.image("player", "/img/skins/skull.png");
+    this.load.image("coin", "/img/gameObjects/coin.png");
+    this.load.image("grass", "/img/gameObjects/tile.png");
+    this.load.image("bullet", "/img/gameObjects/bullet.png");
+    this.load.image("pistol", "/img/guns/pistol.png");
+    this.load.image("obstacle", "/img/gameObjects/obstacle.png");
+    this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
+    this.load.image("tree", "/img/gameObjects/tree.png");
+    this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
+  }
+
+  create() {
+    this.loaded = false;
+    this.socket = io("https://blaster2d.ruiwenge2.repl.co");
+    this.coins = this.physics.add.group();
+    this.trees = this.physics.add.group();
+    this.bulletsGroup = this.physics.add.group();
+    this.enemies = {};
+    this.bullets = {};
+    this.verified = false;
+    this.name = name || localStorage.getItem("name");
+    grecaptcha.execute().then(() => {
+      var s = setInterval(() => {
+        if(!grecaptcha.getResponse()) return;
+        this.socket.emit("join", this.name, grecaptcha.getResponse());
+        this.verified = true;
+        clearInterval(s);
+        }, 100);
+      });
+    
+    window.addEventListener("resize", () => {
+      this.scale.resize(window.innerWidth, window.innerHeight);
+      // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
+    });
+    
+    this.socket.on("gamedata", data => { // when game data arrives
+      this.loaded = true;
+      this.loadingtext.destroy();
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2);
+      this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
+      this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
+      this.playerstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+      this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+      
+      this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
+      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 155, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+
+      this.playerInfo = {
+        x: this.player.x,
+        y: this.player.y
+      };
+      
+      this.cameras.main.startFollow(this.player);
+      this.data = {
+        x: data.players[this.socket.id].x,
+        y: data.players[this.socket.id].y,
+        angle: 0,
+        angle2:0
+      };
+  
+      for(let i of data.coins){
+        let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
+        coin.id = i.id;
+      }
+      for(let i of _trees_json__WEBPACK_IMPORTED_MODULE_5__.trees){
+        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.treesize).setDepth(10).setAlpha(0.7);
+        tree.id = i.id;
+      }
+      
+      for(let oplayer of Object.keys(data.players)){
+        if(oplayer != this.socket.id){
+          this.addPlayer(data.players[oplayer]);
+        }
+      }
+      this.main();
+        
+    });
+
+    this.socket.on("new player", (data, id) => { // when new player joins
+      if(!this.verified) return;
+      this.addPlayer(data);
+    });
+
+    this.socket.on("collected gold", id => {
+      if(!this.verified) return;
+      this.coins.children.entries.forEach(coin => {
+        if(coin.id == id){
+          coin.destroy();
+        }
+      });
+    });
+  
+    this.socket.on("left", id => {
+      if(!this.verified) return;
+      this.enemies[id].player.destroy();
+      this.enemies[id].gun.destroy();
+      this.enemies[id].healthbar.destroy();
+      this.enemies[id].nametext.destroy();
+      delete this.enemies[id];
+    });
+  
+    this.socket.on("leave", () => {
+      this.scene.start("disconnect_scene");
+    });
+  }
+
+  main(){
+    setInterval(() => {
+      this.tps.setText("TPS: " + this.frames);
+      this.frames = 0;
+    }, 1000);
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    var game = this;
+    this.l.on("down", function(){
+      confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
+        game.sys.game.destroy(true, false);
+        document.querySelector("main").style.display = "block";
+        game.socket.emit("leaveGame");
+        grecaptcha.reset();
+      });
+    });
+
+    for(let i = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / (_functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio * 2); i < _functions_js__WEBPACK_IMPORTED_MODULE_0__.size; i += _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio){
+      for(let j = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / (_functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio * 2); j < _functions_js__WEBPACK_IMPORTED_MODULE_0__.size; j += _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.ratio){
+        let grass = this.physics.add.image(i, j, "grass").setDepth(0);
+      }
+    }
+    
+    this.obstacle1 = this.physics.add.staticSprite(_functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2 - 750, "obstacle").setDepth(0);
+    this.obstacle2 = this.physics.add.staticSprite(_functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2 + 750, "obstacle").setDepth(0);
+    this.obstacle3 = this.physics.add.staticSprite(_functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2 - 750, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2, "obstacle2").setDepth(0);
+    this.obstacle4 = this.physics.add.staticSprite(_functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2 + 750, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / 2, "obstacle2").setDepth(0);
+
+  
+    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(2);
+
+    this.gun.angle2 = 0;
+
+    this.health = 100;
+
+    this.score = 0;
+
+    this.scoretext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Score: " + this.score, { fontSize: 30, fontFamily: "copperplate" });
+
+    this.gold = 0;
+    this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
+
+    this.addWeaponActions();
+
+    this.physics.add.collider(this.player, this.coins, (player, coin) => { // player collects coin
+      this.collect(player, coin);
+    });
+
+    this.socket.on("gamestate", data => {
+      console.log(data);
+      if(this.socket.disconnected){
+        this.scene.start("disconnect_scene");
+        return;
+      }
+      this.frames += 1;
+      if(!this.died){
+        let self = data.players[this.socket.id];
+        this.playerInfo.x = self.x;
+        this.playerInfo.y = self.y;
+        let game = this;
+  
+        this.tweens.add({
+          targets: this.player,
+          x: this.playerInfo.x,
+          y: this.playerInfo.y,
+          duration: 100
+        });
+      }
+
+      Object.keys(data.players).forEach(enemy => {
+        if(enemy == this.socket.id) return;
+        this.tweens.add({
+          targets: [this.enemies[enemy].player],
+          x: data.players[enemy].x,
+          y: data.players[enemy].y,
+          duration: 100,
+          onUpdate: function(){
+            try {
+              let player = game.enemies[enemy];
+              player.gun.x = player.player.x + Math.cos(data.players[enemy].angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
+             player.gun.y = player.player.y + Math.sin(data.players[enemy].angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
+              player.gun.angle = data.players[enemy].angle;
+              player.player.angle = data.players[enemy].angle;
+            } catch(e){
+              console.log(e);
+            }
+          } 
+        });
+      });
+
+      Object.keys(data.bullets).forEach(bullet => {
+        this.tweens.add({
+          targets: [this.bullets[bullet]],
+          x: data.bullets[bullet].x,
+          y: data.bullets[bullet].y,
+          duration: 1000 / 30
+        });
+      });
+    });
+
+    this.socket.on("new bullet", (id, data) => {
+      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
+      bullet_image.angle = data.angle;
+      bullet_image.shooter = data.shooter;
+      bullet_image.id = id;
+      this.bullets[id] = bullet_image;
+    });
+
+    this.socket.on("removed bullet", id => {
+      this.bullets[id].destroy();
+      delete this.bullets[id];
+    });
+
+    this.socket.on("player died", (id, shooter) => {
+      let game = this;
+      if(id == this.socket.id){
+        let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2 - 100, "You died", { fontSize: 50 }).setDepth(101);
+        let deathRect = this.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0.7).setDepth(100);
+        
+        deathRect.scrollFactorX = 0;
+        deathRect.scrollFactorY = 0;
+        this.died = true;
+        let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](this, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
+          game.sys.game.destroy(true, false);
+          document.querySelector("main").style.display = "block";
+          grecaptcha.reset();
+        }, { background: 0x032a852 });
+        playAgain.text.setDepth(102);
+        playAgain.button.setDepth(101).setAlpha(0.7);
+        
+        this.tweens.add({
+          targets: [this.player, this.gun, this.bar, this.nametext],
+          duration: 1000,
+          alpha: 0,
+          onComplete: function(){
+            game.player.destroy();
+            game.gun.destroy();
+            game.bar.destroy();
+            game.nametext.destroy();
+            game.playerstext.destroy();
+            game.scorestext.destroy();
+            game.goldtext.destroy();
+            game.scoretext.destroy();
+            game.fpstext.destroy();
+            game.tps.destroy();
+          }
+        });
+      } else {
+        this.tweens.add({
+          targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
+          duration: 1000,
+          alpha: 0,
+          onComplete: function(){
+            game.enemies[id].player.destroy();
+            game.enemies[id].gun.destroy();
+            game.enemies[id].healthbar.destroy();
+            game.enemies[id].nametext.destroy();
+            delete game.enemies[id];
+          }
+        });
+      }
+    });
+  }
+
+  addPlayer(player){
+    var playerObj = {
+      id: player.id,
+      x: player.x,
+      y: player.y,
+      name: player.name,
+      player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1),
+      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
+      healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 1),
+      gun: this.add.image(player.x + Math.cos(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), player.y + Math.sin(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), "pistol").setDepth(1),
+      angle: null,
+      health: 100,
+      score: 0
+    }
+    this.enemies[player.id] = playerObj;
+  }
+
+  collect(player, coin){
+    this.socket.emit("collect gold", coin.id);
+    this.gold += 1;
+    this.goldtext.setText("Gold: " + this.gold);
+    coin.destroy();
+    if(this.gold > localStorage.getItem("bestgold")){
+      localStorage.setItem("bestgold", this.gold);
+    }
+    for(let i = 0; i < (0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(0, 2); i++){
+      this.coins.create((0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(_functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size - _functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2), (0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(_functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size - _functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2), "coin").setScale(0.75, 0.75);
+    }
+  }
+
+  addWeaponActions(){
+    this.useweapon = true;
+    this.input.on("pointerdown", e => {
+      if(!this.useweapon || this.died) return;
+      var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
+      this.socket.emit("shoot", this.player.x, this.player.y, angle);
+      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      this.gun.angle2 = angle;
+      this.useweapon = false;
+    });
+    
+    window.addEventListener("mousemove", e => {
+      if(this.died || this.socket.disconnected) return;
+      var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      this.gun.angle2 = angle;
+    });
+
+    setInterval(() => {
+      if(!this.useweapon){
+        this.useweapon = true;
+      }
+    }, 500);
+  }
+
+  update() {
+    if(!this.loaded) return;
+    if(this.socket.disconnected){
+      this.scene.start("disconnect_scene");
+      return;
+    }
+    
+    Object.values(this.enemies).forEach(enemy => {
+      enemy.healthbar.setData(enemy.player.x, enemy.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, enemy.health);
+      enemy.nametext.setPosition(enemy.player.x, enemy.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
+    });
+
+    if(this.died) return;
+
+    this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100);
+    this.nametext.setPosition(this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
+    
+    Array.prototype.insert = function(index, item) {
+      this.splice(index, 0, item);
+    };
+
+    let playerslist = [...Object.values(this.enemies)];
+
+    playerslist.insert(0, {
+      score: this.score,
+      name: this.name
+    });
+    
+    let sorted_players = playerslist.sort(function(a, b){return a.score - b.score});
+    let text = "";
+    let text2 = "";
+    for(let i of sorted_players){
+      text += i.name + "\n";
+      text2 += i.score + "\n";
+    }
+    this.playerstext.setText(text);
+    this.scorestext.setText(text2);
+    
+    this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
+    let cursors = this.input.keyboard.createCursorKeys();
+    if(cursors.left.isDown || this.a.isDown){
+      if(!this.left){
+        this.socket.emit("movement", "left");
+        this.left = true;
+        this.right = false;
+      }
+    } else {
+      if(this.left){
+        this.socket.emit("movement_end", "left");
+        this.left = false;
+      }
+    }
+    
+    if(cursors.right.isDown || this.d.isDown){
+      if(!this.right){
+        this.socket.emit("movement", "right");
+        this.right = true;
+        this.left = false;
+      }
+    } else {
+      if(this.right){
+        this.socket.emit("movement_end", "right");
+        this.right = false;
+      }
+    }
+    
+    if(cursors.up.isDown || this.w.isDown){
+      if(!this.up){
+        this.socket.emit("movement", "up");
+        this.up = true;
+        this.down = false;
+      }
+    } else {
+      if(this.up){
+        this.socket.emit("movement_end", "up");
+        this.up = false;
+      }
+    }
+    
+    if(cursors.down.isDown || this.s.isDown){
+      if(!this.down){
+        this.socket.emit("movement", "down");
+        this.down = true;
+        this.up = false;
+      }
+    } else {
+      if(this.down){
+        this.socket.emit("movement_end", "down");
+        this.down = false;
+      }
+    }
+    
+    this.gun.x = this.player.x + Math.cos(this.gun.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
+    this.gun.y = this.player.y + Math.sin(this.gun.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
+
+    this.player.angle = this.gun.angle;
+
+    if(this.player.angle != this.data.angle){
+      this.data.angle = this.gun.angle;
+      this.data.angle2 = this.gun.angle2;
+      this.socket.emit("player angle", this.data);
+    }
+  }
+}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (gamescene);
+
+// https://www.html5gamedevs.com/topic/7273-best-way-to-fix-weapon-to-player/
+
+/***/ }),
+/* 2 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkMovement": () => (/* binding */ checkMovement),
+/* harmony export */   "coinsize": () => (/* binding */ coinsize),
+/* harmony export */   "gamestate_rate": () => (/* binding */ gamestate_rate),
+/* harmony export */   "playersize": () => (/* binding */ playersize),
+/* harmony export */   "radius": () => (/* binding */ radius),
+/* harmony export */   "random": () => (/* binding */ random),
+/* harmony export */   "ratio": () => (/* binding */ ratio),
+/* harmony export */   "size": () => (/* binding */ size),
+/* harmony export */   "treesize": () => (/* binding */ treesize)
+/* harmony export */ });
+const size = 5000;
+const playersize = 65;
+const radius = playersize / 2;
+const coinsize = 37.5;
+const ratio = size / 500;
+const treesize = 300;
+const gamestate_rate = 100;
+
+function random(number1, number2){
+  return Math.round(Math.random() * (number2 - number1)) + number1;
+}
+
+function checkMovement(direction, x, y){
+  if(direction == "left"){
+    if(x <= 0) return false;
+  } if(direction == "right"){
+    if(x + playersize >= size) return false;
+  } if(direction == "up"){
+    if(y <= 0) return false;
+  } if(direction == "down"){
+    if(y + playersize >= size) return false;
+  } if(direction == "none"){
+    return false;
+  }
+  return true;
+}
+
+
+
+/***/ }),
+/* 3 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class Text extends Phaser.GameObjects.Text {
+  constructor(scene, x, y, text, style, depth = 100, scroll = false){
+    // default values
+    
+    if(!style){
+      style = {};
+      style.fontFamily = "Arial";
+      style.fontSize = 30;
+      style.background = 0x0000ff;
+    }
+    if(!("fontSize" in style)){
+      style.fontSize = 30;
+    }
+    
+    super(scene, x, y, text, style);
+    if(!scroll){
+      this.scrollFactorX = 0;
+      this.scrollFactorY = 0;
+    }
+    this.setDepth(100);
+    this.setOrigin(0.5);
+    this.setDepth(depth);
+    scene.add.existing(this);
+  }
+
+  setPosition(x, y){
+    this.x = x;
+    this.y = y;
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Text);
+
+/***/ }),
+/* 4 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _text_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+
+
+class Button extends Phaser.GameObjects.Container {
+  constructor(scene, x, y, text, onclick, style){
+    super(scene);
+    // default values
+    if(!style){
+      style = {};
+      style.fontSize = 50;
+      style.fontFamily = "Arial";
+      style.background = 0x0000ff;
+    }
+    if(!("fontSize" in style)){
+      style.fontSize = 50;
+    }
+    if(!("fontFamily" in style)){
+      style.fontFamily = "Arial";
+    }
+    if(!("background" in style)){
+      style.background = 0x0000ff;
+    }
+    this.text = new _text_js__WEBPACK_IMPORTED_MODULE_0__["default"](scene, x, y, text, {fontSize: style.fontSize, fontFamily: style.fontFamily}).setOrigin(0.5);
+    this.button = scene.add.rectangle(0, 0, 0, 0, style.background).setDepth(99);
+    this.button.scrollFactorX = 0;
+    this.button.scrollFactorY = 0;
+    this.button.width = this.text.width + 15;
+    this.button.height = this.text.height + 15;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
+    this.button.setInteractive().on('pointerdown', onclick);
+    scene.add.existing(this);
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Button);
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class Bar {
+  constructor(scene, x, y, health, depth){
+    this.bar = scene.add.rectangle(x, y, 100, 20, 0x0ffffff).setDepth(depth);
+    this.inside = scene.add.rectangle(x, y, health / 100 * 100, 20, 0x00084ff).setDepth(depth);
+    scene.add.existing(this.bar);
+    scene.add.existing(this.inside);
+  }
+  
+  setData(x, y, health){
+    this.bar.x = x;
+    this.bar.y = y;
+    this.inside.x = x;
+    this.inside.y = y;
+    this.inside.width = this.inside.width = health / 100 * 100;
+  }
+
+  destroy(){
+    this.bar.destroy();
+    this.inside.destroy();
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Bar);
+
+/***/ }),
+/* 6 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class Chatbox {
+  constructor(game){
+    this.socket = game.socket;
+  }
+  
+  create(){
+    
+  }
+  
+  remove(){
+    
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Chatbox);
+
+/***/ }),
+/* 7 */
+/***/ ((module) => {
+
+module.exports = JSON.parse('{"trees":[{"id":0,"size":513,"x":2999.5,"y":3200.5},{"id":1,"size":333,"x":3520.5,"y":3089.5},{"id":2,"size":543,"x":2272.5,"y":2900.5},{"id":3,"size":525,"x":4204.5,"y":4578.5},{"id":4,"size":426,"x":800,"y":1638},{"id":5,"size":459,"x":3770.5,"y":3611.5},{"id":6,"size":306,"x":4820,"y":593},{"id":7,"size":516,"x":1905,"y":556},{"id":8,"size":258,"x":1699,"y":2130},{"id":9,"size":567,"x":2982.5,"y":3324.5},{"id":10,"size":384,"x":1235,"y":4383},{"id":11,"size":501,"x":1503.5,"y":845.5},{"id":12,"size":234,"x":2507,"y":2225},{"id":13,"size":573,"x":3603.5,"y":2764.5},{"id":14,"size":546,"x":932,"y":4000},{"id":15,"size":423,"x":1428.5,"y":1833.5},{"id":16,"size":312,"x":2421,"y":3723},{"id":17,"size":405,"x":3900.5,"y":845.5},{"id":18,"size":201,"x":2719.5,"y":391.5},{"id":19,"size":468,"x":4440,"y":1709},{"id":20,"size":177,"x":4050.5,"y":4853.5},{"id":21,"size":369,"x":390.5,"y":2925.5},{"id":22,"size":309,"x":4214.5,"y":2536.5},{"id":23,"size":300,"x":2497,"y":1842},{"id":24,"size":237,"x":3216.5,"y":2604.5},{"id":25,"size":504,"x":3299,"y":1806},{"id":26,"size":588,"x":298,"y":2039},{"id":27,"size":291,"x":2076.5,"y":1116.5},{"id":28,"size":438,"x":4619,"y":963},{"id":29,"size":216,"x":4264,"y":3225},{"id":30,"size":522,"x":3902,"y":4640},{"id":31,"size":291,"x":255.5,"y":1430.5},{"id":32,"size":342,"x":2779,"y":2066},{"id":33,"size":243,"x":4620.5,"y":703.5},{"id":34,"size":399,"x":296.5,"y":850.5},{"id":35,"size":465,"x":1834.5,"y":2910.5},{"id":36,"size":573,"x":3575.5,"y":2183.5},{"id":37,"size":174,"x":3732,"y":3574},{"id":38,"size":354,"x":1705,"y":4184},{"id":39,"size":231,"x":906.5,"y":2564.5},{"id":40,"size":213,"x":710.5,"y":4321.5},{"id":41,"size":366,"x":2553,"y":3555},{"id":42,"size":222,"x":4869,"y":2990},{"id":43,"size":471,"x":2366.5,"y":3879.5},{"id":44,"size":474,"x":1817,"y":2878},{"id":45,"size":249,"x":2129.5,"y":4789.5},{"id":46,"size":216,"x":1314,"y":4521},{"id":47,"size":207,"x":660.5,"y":2221.5},{"id":48,"size":219,"x":2154.5,"y":4158.5},{"id":49,"size":285,"x":3276.5,"y":3238.5},{"id":50,"size":300,"x":1452,"y":4306},{"id":51,"size":516,"x":3748,"y":733},{"id":52,"size":183,"x":1578.5,"y":3997.5},{"id":53,"size":537,"x":1250.5,"y":933.5},{"id":54,"size":504,"x":480,"y":1358},{"id":55,"size":390,"x":496,"y":2019}]}');
+
+/***/ }),
+/* 8 */
+/***/ ((module) => {
+
+module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":200},{"id":2,"url":"smileyface","cost":100},{"id":3,"url":"target","cost":100},{"id":4,"url":"basketball","cost":250}]');
+
+/***/ }),
+/* 9 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class joinscene extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
+  preload(){
+    
+  }
+  
+  create(){
+    if(!localStorage.getItem("bestscore")){
+      localStorage.setItem("bestscore", 0);
+    }
+    if(!localStorage.getItem("bestgold")){
+      localStorage.setItem("bestgold", 0);
+    }
+    this.add.text(window.innerWidth / 2, 100, "Game", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
+
+    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 2.5, 'Play', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button.width = this.text.width + 15;
+    this.button.height = this.text.height + 15;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
+    this.button.setInteractive().on('pointerdown', () => {
+      this.scene.start("gamescene");
+    });
+
+    this.button2 = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text2 = this.add.text(window.innerWidth / 2, window.innerHeight / 1.8, 'How To Play', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button2.width = this.text2.width + 15;
+    this.button2.height = this.text2.height + 15;
+    this.button2.x = this.text2.x - (this.text2.width / 2) - 5;
+    this.button2.y = this.text2.y - (this.text2.height / 2) - 5;
+    this.button2.setInteractive().on('pointerdown', () => {
+      this.scene.start("howtoplay");
+    });
+
+    this.button3 = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text3 = this.add.text(window.innerWidth / 2, window.innerHeight / 1.4, 'Your Best Scores', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button3.width = this.text3.width + 15;
+    this.button3.height = this.text3.height + 15;
+    this.button3.x = this.text3.x - (this.text3.width / 2) - 5;
+    this.button3.y = this.text3.y - (this.text3.height / 2) - 5;
+    this.button3.setInteractive().on('pointerdown', () => {
+      this.scene.start("bestscores");
+    });
+  }
+  
+  update(){
+
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (joinscene);
+
+/***/ }),
+/* 10 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class howtoplay extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+
+  preload(){
+    
+  }
+  
+  create(){
+    this.add.text(window.innerWidth / 2, 100, "How To Play", { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5 );
+    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 1.5, 'Back', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button.width = this.text.width + 10;
+    this.button.height = this.text.height + 10;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
+    this.button.setInteractive().on('pointerdown', () => {
+      this.scene.start("joinscene");
+    });
+  }
+  
+  update(){
+
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (howtoplay);
+
+/***/ }),
+/* 11 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class diedscene extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
+  preload(){
+     
+  }
+  
+  create(){
+    this.add.text(window.innerWidth / 2, 100, "You Died", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
+
+    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 2, 'OK', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button.width = this.text.width + 15;
+    this.button.height = this.text.height + 15;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
+    this.button.setInteractive().on('pointerdown', () => {
+      this.scene.start("joinscene");
+    });
+  }
+  
+  update(){
+
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (diedscene);
+
+/***/ }),
+/* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class bestscores extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+
+  preload(){
+    
+  }
+  
+  create(){
+    this.add.text(window.innerWidth / 2, 100, "Your Best", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
+    this.add.text(window.innerWidth / 2, 300, "Score: " + localStorage.getItem("bestscore"), { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5);
+    this.add.text(window.innerWidth / 2, 400, "Gold: " + localStorage.getItem("bestgold"), { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5);
+
+    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
+    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 1.25, 'Back', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
+    this.button.width = this.text.width + 15;
+    this.button.height = this.text.height + 15;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
+    this.button.setInteractive().on('pointerdown', () => {
+      this.scene.start("joinscene");
+    });
+  }
+  update(){
+
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (bestscores);
+
+/***/ }),
+/* 13 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _objects_text_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _objects_button_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+
+
+
+class disconnect_scene extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
+  preload(){
+    
+  }
+  
+  create(){
+    this.disconnecttext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_0__["default"](this, window.innerWidth / 2, 100, "You got disconnected", { fontSize: 50, fontFamily: "Arial" }).setOrigin(0.5);
+    this.button = new _objects_button_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Reload", () => {
+      location.reload();
+    });
+  }
+  
+  update(){
+
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (disconnect_scene);
+
+/***/ })
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+/* harmony import */ var _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
+/* harmony import */ var _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
+/* harmony import */ var _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
+
+
+
+
+
+
+
+const config = {
+  type: Phaser.AUTO,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: "#000000",
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: {
+        y: 0
+      },
+      debug: false
+    }
+  }
+};
+
+function startGame(){
+  let name = document.getElementById("input").value;
+  if(!name.replace(/\s/g, "")){
+    document.querySelector("p").style.display = "block";
+    return;
+  }
+  localStorage.setItem("name", name);
+  
+  const game = new Phaser.Game(config);
+  
+  game.scene.add("gamescene", _game__WEBPACK_IMPORTED_MODULE_0__["default"]);
+  game.scene.add("joinscene", _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  game.scene.add("howtoplay", _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__["default"]);
+  game.scene.add("diedscene", _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__["default"]);
+  game.scene.add("bestscores", _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__["default"]);
+  game.scene.add("disconnect_scene", _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__["default"]);
+  game.scene.start("gamescene");
+  document.querySelector("canvas").style.cursor = "crosshair";
+  
+  window.addEventListener("resize", () => {
+    game.scale.resize(window.innerWidth, window.innerHeight);
+  });
+  
+  document.querySelector("main").style.display = "none";
+}
+
+if(localStorage.getItem("name") && !loggedIn){
+  document.getElementById("input").value = localStorage.getItem("name");
+}
+
+
+document.getElementById("playbtn").addEventListener("click", startGame);
+})();
+
+/******/ })()
+;

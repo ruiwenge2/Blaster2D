@@ -33,20 +33,13 @@ global.coinsize = 37.5;
 global.speed = 8;
 global.bullet_speed = 40;
 
-const rateLimit = require("express-rate-limit");
-const limiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 100,
-});
-app.use(limiter);
-
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-const { random, generateCode, loggedIn, getUser, deleteUser } = require("./functions.js");
+const { random, generateCode, loggedIn, getUser, deleteUser, verify } = require("./functions.js");
 
 const api = require("./api.js");
 const socketfunc = require("./socket.js");
@@ -126,16 +119,16 @@ app.post("/login", (req, res) => {
 app.post("/signup", (req, res) => {
   var newusername = req.body.newusername;
   var newpassword = req.body.newpassword;
-  let secret = process.env["captcha_secret"];
-  let token = req.body["h-captcha-response"];
+  let secret = process.env["recaptcha_signup_secret"];
+  let token = req.body["g-recaptcha-response"];
   for(let i of newusername){
     if(!allchars.includes(i)){
       res.render("signup.html", {error: "Username can only contain alphanumeric characters and underscores"});
       return;
     }
   }
-  hcaptcha.verify(secret, token).then(data => {
-    if(data.success){
+  verify(token, secret).then(success => {
+    if(success){
       db.get("users").then(users => {
         if(Object.keys(users).includes(newusername)){
           res.render("signup.html", {error: "Username taken."});

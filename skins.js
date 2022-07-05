@@ -20,6 +20,11 @@ const skins = [
     id: 3,
     url: "target",
     cost: 100
+  },
+  {
+    id: 4,
+    url: "basketball",
+    cost: 250
   }
 ];
 
