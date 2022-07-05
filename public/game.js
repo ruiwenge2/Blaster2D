@@ -262,20 +262,7 @@ class gamescene extends Phaser.Scene {
     this.socket.on("player died", (id, shooter) => {
       let game = this;
       if(id == this.socket.id){
-        let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2 - 100, "You died", { fontSize: 50 }).setDepth(101);
-        let deathRect = this.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0.7).setDepth(100);
-        
-        deathRect.scrollFactorX = 0;
-        deathRect.scrollFactorY = 0;
         this.died = true;
-        let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](this, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-          game.sys.game.destroy(true, false);
-          document.querySelector("main").style.display = "block";
-          grecaptcha.reset();
-        }, { background: 0x032a852 });
-        playAgain.text.setDepth(102);
-        playAgain.button.setDepth(101).setAlpha(0.7);
-        
         this.tweens.add({
           targets: [this.player, this.gun, this.bar, this.nametext],
           duration: 1000,
@@ -291,6 +278,28 @@ class gamescene extends Phaser.Scene {
             game.scoretext.destroy();
             game.fpstext.destroy();
             game.tps.destroy();
+            let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
+            let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
+            
+            deathRect.scrollFactorX = 0;
+            deathRect.scrollFactorY = 0;
+            let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
+              game.sys.game.destroy(true, false);
+              document.querySelector("main").style.display = "block";
+              grecaptcha.reset();
+            }, { background: 0x00374ff });
+            playAgain.text.setDepth(102).setAlpha(0);
+            playAgain.button.setDepth(101).setAlpha(0);
+            game.tweens.add({
+              targets: deathRect,
+              duration: 300,
+              alpha:0.7
+            });
+            game.tweens.add({
+              targets: [deathtext, playAgain.text, playAgain.button],
+              duration: 300,
+              alpha:1
+            });
           }
         });
       } else {
