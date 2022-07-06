@@ -259,7 +259,7 @@ class gamescene extends Phaser.Scene {
       delete this.bullets[id];
     });
 
-    this.socket.on("player died", (id, shooter) => {
+    this.socket.on("player died", (id, shooter, shooterName) => {
       let game = this;
       if(id == this.socket.id){
         this.died = true;
@@ -280,7 +280,7 @@ class gamescene extends Phaser.Scene {
             game.fpstext.destroy();
             game.tps.destroy();
             let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${game.enemies[shooter].name}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+            let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;

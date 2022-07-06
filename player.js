@@ -51,7 +51,7 @@ class Player {
         this.died = true;
         delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
-        io.emit("player died", this.id, bullet.shooter);
+        io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
         rooms.main.players[bullet.shooter].score++;
       }
     });
