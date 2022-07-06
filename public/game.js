@@ -972,23 +972,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const config = {
-  type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
-  backgroundColor: "#000000",
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: {
-        y: 0
-      },
-      debug: false
-    }
-  }
-};
-
 function startGame(){
+  const config = {
+    type: Phaser.AUTO,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: "#000000",
+    physics: {
+      default: "arcade",
+      arcade: {
+        gravity: {
+          y: 0
+        },
+        debug: false
+      }
+    }
+  };
   let name = document.getElementById("input").value;
   if(!name.replace(/\s/g, "")){
     document.querySelector("p").style.display = "block";

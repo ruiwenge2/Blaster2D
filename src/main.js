@@ -5,23 +5,22 @@ import diedscene from "./scenes/died.js";
 import bestscores from "./scenes/best.js";
 import disconnect_scene from "./scenes/disconnect.js";
 
-const config = {
-  type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
-  backgroundColor: "#000000",
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: {
-        y: 0
-      },
-      debug: false
-    }
-  }
-};
-
 function startGame(){
+  const config = {
+    type: Phaser.AUTO,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: "#000000",
+    physics: {
+      default: "arcade",
+      arcade: {
+        gravity: {
+          y: 0
+        },
+        debug: false
+      }
+    }
+  };
   let name = document.getElementById("input").value;
   if(!name.replace(/\s/g, "")){
     document.querySelector("p").style.display = "block";
