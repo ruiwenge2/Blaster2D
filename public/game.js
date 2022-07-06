@@ -38,7 +38,7 @@ class gamescene extends Phaser.Scene {
     for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_6__)){
       this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].url}.png`);
     }
-    this.load.image("player", "/img/skins/skull.png");
+    this.load.image("player", "/img/skins/player.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");
@@ -263,6 +263,7 @@ class gamescene extends Phaser.Scene {
       let game = this;
       if(id == this.socket.id){
         this.died = true;
+        this.gun.destroy();
         this.tweens.add({
           targets: [this.player, this.gun, this.bar, this.nametext],
           duration: 1000,
