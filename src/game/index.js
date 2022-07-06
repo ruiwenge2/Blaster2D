@@ -41,14 +41,21 @@ class gamescene extends Phaser.Scene {
     this.bullets = {};
     this.verified = false;
     this.name = name || localStorage.getItem("name");
-    grecaptcha.execute().then(() => {
+    let game = this;
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
+          // Add your logic to submit to your backend server here.
+        game.socket.emit("join", game.name, token);
+      });
+    });
+    /*grecaptcha.execute().then(() => {
       var s = setInterval(() => {
         if(!grecaptcha.getResponse()) return;
         this.socket.emit("join", this.name, grecaptcha.getResponse());
         this.verified = true;
         clearInterval(s);
         }, 100);
-      });
+      });*/
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
