@@ -21,6 +21,7 @@ class Player {
     this.died = false;
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
+    this.score = 0;
   }
   
   update(){
@@ -51,6 +52,7 @@ class Player {
         delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
         io.emit("player died", this.id, bullet.shooter);
+        rooms.main.players[bullet.shooter].score++;
       }
     });
   }

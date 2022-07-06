@@ -261,7 +261,8 @@ class gamescene extends Phaser.Scene {
             game.scoretext.destroy();
             game.fpstext.destroy();
             game.tps.destroy();
-            let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
+            let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
+            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${game.enemies[shooter].name}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;
@@ -279,7 +280,7 @@ class gamescene extends Phaser.Scene {
               alpha:0.7
             });
             game.tweens.add({
-              targets: [deathtext, playAgain.text, playAgain.button],
+              targets: [deathtext, infotext, playAgain.text, playAgain.button],
               duration: 300,
               alpha:1
             });
@@ -299,6 +300,11 @@ class gamescene extends Phaser.Scene {
           }
         });
       }
+      if(shooter == this.socket.id){
+        this.score++;
+      } else {
+        this.enemies[shooter].score++;
+      }
     });
   }
 
@@ -314,7 +320,7 @@ class gamescene extends Phaser.Scene {
       gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1),
       angle: null,
       health: 100,
-      score: 0
+      score: player.score
     }
     this.enemies[player.id] = playerObj;
   }
@@ -385,7 +391,7 @@ class gamescene extends Phaser.Scene {
       name: this.name
     });
     
-    let sorted_players = playerslist.sort(function(a, b){return a.score - b.score});
+    let sorted_players = playerslist.sort(function(a, b){return b.score - a.score});
     let text = "";
     let text2 = "";
     for(let i of sorted_players){
