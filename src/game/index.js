@@ -126,6 +126,7 @@ class gamescene extends Phaser.Scene {
       this.enemies[id].healthbar.destroy();
       this.enemies[id].nametext.destroy();
       delete this.enemies[id];
+      this.minimap.removePlayer(id);
     });
   
     this.socket.on("leave", () => {
@@ -253,6 +254,7 @@ class gamescene extends Phaser.Scene {
 
     this.socket.on("player died", (id, shooter, shooterName) => {
       let game = this;
+      if(id != this.socket.id) var playerName = this.enemies[id].name;
       if(id == this.socket.id){
         this.died = true;
         this.gun.destroy();
@@ -270,8 +272,9 @@ class gamescene extends Phaser.Scene {
             game.scoretext.destroy();
             game.fpstext.destroy();
             game.tps.destroy();
+            game.minimap.destroy();
             let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;
@@ -306,11 +309,21 @@ class gamescene extends Phaser.Scene {
             game.enemies[id].healthbar.destroy();
             game.enemies[id].nametext.destroy();
             delete game.enemies[id];
+            game.minimap.removePlayer(id);
           }
         });
       }
       if(shooter == this.socket.id){
         this.score++;
+        if(this.killText){
+          this.killText.setText(`You killed ${playerName}\n\nKill Streak: ${this.score}`);
+        } else {
+          this.killText = new Text(this, window.innerWidth / 2, window.innerHeight - 100, `You killed ${playerName}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
+        }
+        setTimeout(() => {
+          this.killText.destroy();
+          this.killText = undefined;
+        }, 4000);
       } else {
         this.enemies[shooter].score++;
       }

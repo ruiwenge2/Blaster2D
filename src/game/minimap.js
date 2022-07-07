@@ -2,7 +2,7 @@ import { size, playersize, coinsize, ratio, random, checkMovement, treesize, gam
 
 class Minimap {
   constructor(scene){
-    this.map = scene.add.rectangle(window.innerWidth - 220, window.innerHeight - 220, 200, 200, 0x0000000).setDepth(150).setAlpha(0.7).setOrigin(0);
+    this.map = scene.add.rectangle(window.innerWidth - 220, window.innerHeight - 220, 200, 200, 0x0000000).setDepth(150).setAlpha(0.7).setOrigin(0).setStrokeStyle(3, 0x0000ff);
     this.map.scrollFactorX = 0;
     this.map.scrollFactorY = 0;
     scene.add.existing(this.map);
@@ -30,6 +30,13 @@ class Minimap {
     Object.values(players).forEach(player => {
       this.players[player.id].x = this.map.x + player.x / this.scale;
       this.players[player.id].y = this.map.y + player.y / this.scale;
+    });
+  }
+
+  destroy(){
+    this.map.destroy();
+    Object.values(this.players).forEach(player => {
+      player.destroy();
     });
   }
 }

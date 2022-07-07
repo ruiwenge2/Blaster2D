@@ -1,12 +1,13 @@
 const { random } = require("./functions.js");
 const collide = require("line-circle-collision");
+const humanNames = require("human-names");
 
 class BotPlayer {
-  constructor(id, name){
+  constructor(id){
     this.id = id;
-    this.name = name;
-    this.x = random(playersize, 400 - playersize);
-    this.y = random(playersize, 400 - playersize);
+    this.name = humanNames.allRandom();
+    this.x = random(playersize, size - playersize);
+    this.y = random(playersize, size - playersize);
     this.gun = "pistol";
     this.health = 100;
     this.ammo = 10;
@@ -22,6 +23,7 @@ class BotPlayer {
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
+    this.bot = true;
   }
   
   update(){

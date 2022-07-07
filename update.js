@@ -1,6 +1,14 @@
+const { random, generateCode } = require("./functions");
+const BotPlayer = require("./botplayer");
+
 const update = () => {
   setInterval(function(){
     try {
+      if(!random(0, 100) && Object.keys(rooms.main.players).length < 5){
+        var id = generateCode();
+        rooms.main.players[id] = new BotPlayer(id);
+        io.emit("new player", rooms.main.players[id]);
+      }
       Object.values(rooms.main.players).forEach(player => {
         if(player.died){
           delete rooms.main.players[player.id];
@@ -21,6 +29,7 @@ const update = () => {
       });
       
       io.emit("gamestate", rooms.main);
+      
     } catch(e){
       console.log(e);
     }
