@@ -14,8 +14,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _objects_button_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
 /* harmony import */ var _chat_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
-/* harmony import */ var _trees_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7);
-/* harmony import */ var _skins_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _minimap_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7);
+/* harmony import */ var _trees_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var _skins_json__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9);
+
 
 
 
@@ -35,8 +37,8 @@ class gamescene extends Phaser.Scene {
   }
   
   preload() {
-    for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_6__)){
-      this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_6__[i].url}.png`);
+    for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_7__)){
+      this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].url}.png`);
     }
     this.load.image("player", "/img/skins/player.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
@@ -64,16 +66,10 @@ class gamescene extends Phaser.Scene {
       grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
           // Add your logic to submit to your backend server here.
         game.socket.emit("join", game.name, token);
+        game.verified = true;
+        document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
     });
-    /*grecaptcha.execute().then(() => {
-      var s = setInterval(() => {
-        if(!grecaptcha.getResponse()) return;
-        this.socket.emit("join", this.name, grecaptcha.getResponse());
-        this.verified = true;
-        clearInterval(s);
-        }, 100);
-      });*/
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
@@ -98,6 +94,9 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
+      this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
+      this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
+      
       this.data = {
         x: data.players[this.socket.id].x,
         y: data.players[this.socket.id].y,
@@ -109,7 +108,7 @@ class gamescene extends Phaser.Scene {
         let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
         coin.id = i.id;
       }
-      for(let i of _trees_json__WEBPACK_IMPORTED_MODULE_5__.trees){
+      for(let i of _trees_json__WEBPACK_IMPORTED_MODULE_6__.trees){
         let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.treesize).setDepth(10).setAlpha(0.7);
         tree.id = i.id;
       }
@@ -117,6 +116,7 @@ class gamescene extends Phaser.Scene {
       for(let oplayer of Object.keys(data.players)){
         if(oplayer != this.socket.id){
           this.addPlayer(data.players[oplayer]);
+          this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
         }
       }
       this.main();
@@ -126,6 +126,7 @@ class gamescene extends Phaser.Scene {
     this.socket.on("new player", (data, id) => { // when new player joins
       if(!this.verified) return;
       this.addPlayer(data);
+      this.minimap.addPlayer(this, data.id, data.x, data.y);
     });
 
     this.socket.on("collected gold", id => {
@@ -251,10 +252,13 @@ class gamescene extends Phaser.Scene {
           duration: 1000 / 30
         });
       });
+
+      if(this.died) return;
+      this.minimap.update(data.players);
     });
 
     this.socket.on("new bullet", (id, data) => {
-      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
+      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
       bullet_image.angle = data.angle;
       bullet_image.shooter = data.shooter;
       bullet_image.id = id;
@@ -277,7 +281,6 @@ class gamescene extends Phaser.Scene {
           alpha: 0,
           onComplete: function(){
             game.player.destroy();
-            game.gun.destroy();
             game.bar.destroy();
             game.nametext.destroy();
             game.playerstext.destroy();
@@ -287,7 +290,7 @@ class gamescene extends Phaser.Scene {
             game.fpstext.destroy();
             game.tps.destroy();
             let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+            let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;
@@ -312,13 +315,13 @@ class gamescene extends Phaser.Scene {
           }
         });
       } else {
+        game.enemies[id].gun.destroy();
         this.tweens.add({
           targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.enemies[id].player.destroy();
-            game.enemies[id].gun.destroy();
             game.enemies[id].healthbar.destroy();
             game.enemies[id].nametext.destroy();
             delete game.enemies[id];
@@ -687,18 +690,65 @@ class Chatbox {
 
 /***/ }),
 /* 7 */
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-module.exports = JSON.parse('{"trees":[{"id":0,"size":513,"x":2999.5,"y":3200.5},{"id":1,"size":333,"x":3520.5,"y":3089.5},{"id":2,"size":543,"x":2272.5,"y":2900.5},{"id":3,"size":525,"x":4204.5,"y":4578.5},{"id":4,"size":426,"x":800,"y":1638},{"id":5,"size":459,"x":3770.5,"y":3611.5},{"id":6,"size":306,"x":4820,"y":593},{"id":7,"size":516,"x":1905,"y":556},{"id":8,"size":258,"x":1699,"y":2130},{"id":9,"size":567,"x":2982.5,"y":3324.5},{"id":10,"size":384,"x":1235,"y":4383},{"id":11,"size":501,"x":1503.5,"y":845.5},{"id":12,"size":234,"x":2507,"y":2225},{"id":13,"size":573,"x":3603.5,"y":2764.5},{"id":14,"size":546,"x":932,"y":4000},{"id":15,"size":423,"x":1428.5,"y":1833.5},{"id":16,"size":312,"x":2421,"y":3723},{"id":17,"size":405,"x":3900.5,"y":845.5},{"id":18,"size":201,"x":2719.5,"y":391.5},{"id":19,"size":468,"x":4440,"y":1709},{"id":20,"size":177,"x":4050.5,"y":4853.5},{"id":21,"size":369,"x":390.5,"y":2925.5},{"id":22,"size":309,"x":4214.5,"y":2536.5},{"id":23,"size":300,"x":2497,"y":1842},{"id":24,"size":237,"x":3216.5,"y":2604.5},{"id":25,"size":504,"x":3299,"y":1806},{"id":26,"size":588,"x":298,"y":2039},{"id":27,"size":291,"x":2076.5,"y":1116.5},{"id":28,"size":438,"x":4619,"y":963},{"id":29,"size":216,"x":4264,"y":3225},{"id":30,"size":522,"x":3902,"y":4640},{"id":31,"size":291,"x":255.5,"y":1430.5},{"id":32,"size":342,"x":2779,"y":2066},{"id":33,"size":243,"x":4620.5,"y":703.5},{"id":34,"size":399,"x":296.5,"y":850.5},{"id":35,"size":465,"x":1834.5,"y":2910.5},{"id":36,"size":573,"x":3575.5,"y":2183.5},{"id":37,"size":174,"x":3732,"y":3574},{"id":38,"size":354,"x":1705,"y":4184},{"id":39,"size":231,"x":906.5,"y":2564.5},{"id":40,"size":213,"x":710.5,"y":4321.5},{"id":41,"size":366,"x":2553,"y":3555},{"id":42,"size":222,"x":4869,"y":2990},{"id":43,"size":471,"x":2366.5,"y":3879.5},{"id":44,"size":474,"x":1817,"y":2878},{"id":45,"size":249,"x":2129.5,"y":4789.5},{"id":46,"size":216,"x":1314,"y":4521},{"id":47,"size":207,"x":660.5,"y":2221.5},{"id":48,"size":219,"x":2154.5,"y":4158.5},{"id":49,"size":285,"x":3276.5,"y":3238.5},{"id":50,"size":300,"x":1452,"y":4306},{"id":51,"size":516,"x":3748,"y":733},{"id":52,"size":183,"x":1578.5,"y":3997.5},{"id":53,"size":537,"x":1250.5,"y":933.5},{"id":54,"size":504,"x":480,"y":1358},{"id":55,"size":390,"x":496,"y":2019}]}');
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
+class Minimap {
+  constructor(scene){
+    this.map = scene.add.rectangle(window.innerWidth - 220, window.innerHeight - 220, 200, 200, 0x0000000).setDepth(150).setAlpha(0.7).setOrigin(0);
+    this.map.scrollFactorX = 0;
+    this.map.scrollFactorY = 0;
+    scene.add.existing(this.map);
+    this.players = {};
+    this.scale = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / this.map.width;
+  }
+
+  addPlayer(scene, id, x, y){
+    var color = 0x0ff0000;
+    if(id == scene.socket.id) color = 0x0ffa500;
+    console.log(this.map.x);
+    let player = scene.add.circle(this.map.x + x / this.scale, this.map.y + y / this.scale, _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius / this.scale, color).setDepth(151);
+    player.scrollFactorX = 0;
+    player.scrollFactorY = 0;
+    scene.add.existing(player);
+    this.players[id] = player;
+  }
+
+  removePlayer(id){
+    this.players[id].destroy();
+    delete this.players[id];
+  }
+
+  update(players){
+    Object.values(players).forEach(player => {
+      this.players[player.id].x = this.map.x + player.x / this.scale;
+      this.players[player.id].y = this.map.y + player.y / this.scale;
+    });
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Minimap);
 
 /***/ }),
 /* 8 */
 /***/ ((module) => {
 
-module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":200},{"id":2,"url":"smileyface","cost":100},{"id":3,"url":"target","cost":100},{"id":4,"url":"basketball","cost":250}]');
+module.exports = JSON.parse('{"trees":[{"id":0,"size":513,"x":2999.5,"y":3200.5},{"id":1,"size":333,"x":3520.5,"y":3089.5},{"id":2,"size":543,"x":2272.5,"y":2900.5},{"id":3,"size":525,"x":4204.5,"y":4578.5},{"id":4,"size":426,"x":800,"y":1638},{"id":5,"size":459,"x":3770.5,"y":3611.5},{"id":6,"size":306,"x":4820,"y":593},{"id":7,"size":516,"x":1905,"y":556},{"id":8,"size":258,"x":1699,"y":2130},{"id":9,"size":567,"x":2982.5,"y":3324.5},{"id":10,"size":384,"x":1235,"y":4383},{"id":11,"size":501,"x":1503.5,"y":845.5},{"id":12,"size":234,"x":2507,"y":2225},{"id":13,"size":573,"x":3603.5,"y":2764.5},{"id":14,"size":546,"x":932,"y":4000},{"id":15,"size":423,"x":1428.5,"y":1833.5},{"id":16,"size":312,"x":2421,"y":3723},{"id":17,"size":405,"x":3900.5,"y":845.5},{"id":18,"size":201,"x":2719.5,"y":391.5},{"id":19,"size":468,"x":4440,"y":1709},{"id":20,"size":177,"x":4050.5,"y":4853.5},{"id":21,"size":369,"x":390.5,"y":2925.5},{"id":22,"size":309,"x":4214.5,"y":2536.5},{"id":23,"size":300,"x":2497,"y":1842},{"id":24,"size":237,"x":3216.5,"y":2604.5},{"id":25,"size":504,"x":3299,"y":1806},{"id":26,"size":588,"x":298,"y":2039},{"id":27,"size":291,"x":2076.5,"y":1116.5},{"id":28,"size":438,"x":4619,"y":963},{"id":29,"size":216,"x":4264,"y":3225},{"id":30,"size":522,"x":3902,"y":4640},{"id":31,"size":291,"x":255.5,"y":1430.5},{"id":32,"size":342,"x":2779,"y":2066},{"id":33,"size":243,"x":4620.5,"y":703.5},{"id":34,"size":399,"x":296.5,"y":850.5},{"id":35,"size":465,"x":1834.5,"y":2910.5},{"id":36,"size":573,"x":3575.5,"y":2183.5},{"id":37,"size":174,"x":3732,"y":3574},{"id":38,"size":354,"x":1705,"y":4184},{"id":39,"size":231,"x":906.5,"y":2564.5},{"id":40,"size":213,"x":710.5,"y":4321.5},{"id":41,"size":366,"x":2553,"y":3555},{"id":42,"size":222,"x":4869,"y":2990},{"id":43,"size":471,"x":2366.5,"y":3879.5},{"id":44,"size":474,"x":1817,"y":2878},{"id":45,"size":249,"x":2129.5,"y":4789.5},{"id":46,"size":216,"x":1314,"y":4521},{"id":47,"size":207,"x":660.5,"y":2221.5},{"id":48,"size":219,"x":2154.5,"y":4158.5},{"id":49,"size":285,"x":3276.5,"y":3238.5},{"id":50,"size":300,"x":1452,"y":4306},{"id":51,"size":516,"x":3748,"y":733},{"id":52,"size":183,"x":1578.5,"y":3997.5},{"id":53,"size":537,"x":1250.5,"y":933.5},{"id":54,"size":504,"x":480,"y":1358},{"id":55,"size":390,"x":496,"y":2019}]}');
 
 /***/ }),
 /* 9 */
+/***/ ((module) => {
+
+module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":200},{"id":2,"url":"smileyface","cost":100},{"id":3,"url":"target","cost":100},{"id":4,"url":"basketball","cost":250}]');
+
+/***/ }),
+/* 10 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -762,7 +812,7 @@ class joinscene extends Phaser.Scene {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (joinscene);
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -799,7 +849,7 @@ class howtoplay extends Phaser.Scene {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (howtoplay);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -837,7 +887,7 @@ class diedscene extends Phaser.Scene {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (diedscene);
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -876,7 +926,7 @@ class bestscores extends Phaser.Scene {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (bestscores);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -973,11 +1023,11 @@ var __webpack_exports__ = {};
 (() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(10);
-/* harmony import */ var _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
-/* harmony import */ var _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(12);
-/* harmony import */ var _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(13);
+/* harmony import */ var _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
+/* harmony import */ var _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+/* harmony import */ var _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
 
 
 

@@ -3,6 +3,7 @@ import Text from "../objects/text.js";
 import Button from "../objects/button.js";
 import Bar from "../objects/bar.js";
 import Chatbox from "./chat.js";
+import Minimap from "./minimap.js";
 import trees from "../trees.json";
 import skins from "../skins.json";
 
@@ -46,16 +47,10 @@ class gamescene extends Phaser.Scene {
       grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
           // Add your logic to submit to your backend server here.
         game.socket.emit("join", game.name, token);
+        game.verified = true;
+        document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
     });
-    /*grecaptcha.execute().then(() => {
-      var s = setInterval(() => {
-        if(!grecaptcha.getResponse()) return;
-        this.socket.emit("join", this.name, grecaptcha.getResponse());
-        this.verified = true;
-        clearInterval(s);
-        }, 100);
-      });*/
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
@@ -80,6 +75,9 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
+      this.minimap = new Minimap(this);
+      this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
+      
       this.data = {
         x: data.players[this.socket.id].x,
         y: data.players[this.socket.id].y,
@@ -99,6 +97,7 @@ class gamescene extends Phaser.Scene {
       for(let oplayer of Object.keys(data.players)){
         if(oplayer != this.socket.id){
           this.addPlayer(data.players[oplayer]);
+          this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
         }
       }
       this.main();
@@ -108,6 +107,7 @@ class gamescene extends Phaser.Scene {
     this.socket.on("new player", (data, id) => { // when new player joins
       if(!this.verified) return;
       this.addPlayer(data);
+      this.minimap.addPlayer(this, data.id, data.x, data.y);
     });
 
     this.socket.on("collected gold", id => {
@@ -233,10 +233,13 @@ class gamescene extends Phaser.Scene {
           duration: 1000 / 30
         });
       });
+
+      if(this.died) return;
+      this.minimap.update(data.players);
     });
 
     this.socket.on("new bullet", (id, data) => {
-      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(13);
+      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
       bullet_image.angle = data.angle;
       bullet_image.shooter = data.shooter;
       bullet_image.id = id;
@@ -259,7 +262,6 @@ class gamescene extends Phaser.Scene {
           alpha: 0,
           onComplete: function(){
             game.player.destroy();
-            game.gun.destroy();
             game.bar.destroy();
             game.nametext.destroy();
             game.playerstext.destroy();
@@ -269,7 +271,7 @@ class gamescene extends Phaser.Scene {
             game.fpstext.destroy();
             game.tps.destroy();
             let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;
@@ -294,13 +296,13 @@ class gamescene extends Phaser.Scene {
           }
         });
       } else {
+        game.enemies[id].gun.destroy();
         this.tweens.add({
           targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.enemies[id].player.destroy();
-            game.enemies[id].gun.destroy();
             game.enemies[id].healthbar.destroy();
             game.enemies[id].nametext.destroy();
             delete game.enemies[id];
