@@ -22,7 +22,8 @@ global.rooms = {
     players: {},
     bullets: {},
     coins: [],
-    new_bullet_id: 0
+    new_bullet_id: 0,
+    timeleft: 0
   }
 };
 global.playersize = 65;

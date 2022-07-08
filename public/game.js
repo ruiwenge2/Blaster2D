@@ -37,6 +37,7 @@ class gamescene extends Phaser.Scene {
   }
   
   preload() {
+    document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
     for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_7__)){
       this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].url}.png`);
     }
@@ -64,10 +65,8 @@ class gamescene extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
-          // Add your logic to submit to your backend server here.
         game.socket.emit("join", game.name, token);
         game.verified = true;
-        document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
     });
     
@@ -169,7 +168,7 @@ class gamescene extends Phaser.Scene {
         game.sys.game.destroy(true, false);
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
-        grecaptcha.reset();
+        document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
       });
     });
 
@@ -301,7 +300,7 @@ class gamescene extends Phaser.Scene {
             let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
               game.sys.game.destroy(true, false);
               document.querySelector("main").style.display = "block";
-              grecaptcha.reset();
+              document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
             }, { background: 0x00374ff });
             playAgain.text.setDepth(102).setAlpha(0);
             playAgain.button.setDepth(101).setAlpha(0);

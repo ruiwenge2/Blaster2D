@@ -24,9 +24,39 @@ class BotPlayer {
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
     this.bot = true;
+    this.timeleft = 0;
+    this.target = {
+      x: random(playersize, size - playersize),
+      y: random(playersize, size - playersize)
+    }
   }
   
   update(){
+    if(Math.abs(this.x - this.target.x) < 10){
+      this.left = false;
+      this.right = false;
+    } else {
+      if(this.x > this.target.x){
+        this.left = true;
+        this.right = false;
+      } else {
+        this.right = true;
+        this.left = false;
+      }
+    }
+    if(Math.abs(this.y - this.target.y) < 10){
+      this.up = false;
+      this.down = false;
+    } else {
+      if(this.y > this.target.y){
+        this.up = true;
+        this.down = false;
+      } else {
+        this.down = true;
+        this.up = false;
+      }
+    }
+    
     this.checkMovement();
     this.checkCollision();
     if(this.left) this.x -= this.leftspeed;
@@ -55,8 +85,15 @@ class BotPlayer {
         io.emit("removed bullet", bullet.id);
         io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
         rooms.main.players[bullet.shooter].score++;
+        if(!rooms.main.timeleft){
+          rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
+        }
       }
     });
+  }
+
+  closestPlayer(){
+    
   }
 }
 

@@ -4,11 +4,15 @@ const BotPlayer = require("./botplayer");
 const update = () => {
   setInterval(function(){
     try {
-      if(!random(0, 100) && Object.keys(rooms.main.players).length < 5){
+      if(!rooms.main.timeleft && Object.keys(rooms.main.players).length < 5){
         var id = generateCode();
         rooms.main.players[id] = new BotPlayer(id);
         io.emit("new player", rooms.main.players[id]);
+        rooms.main.timeleft = 30 * random(1, 5); // bot joins every random amount of seconds
       }
+
+      if(rooms.main.timeleft) rooms.main.timeleft--;
+      
       Object.values(rooms.main.players).forEach(player => {
         if(player.died){
           delete rooms.main.players[player.id];
