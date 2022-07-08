@@ -25,37 +25,61 @@ class BotPlayer {
     this.score = 0;
     this.bot = true;
     this.timeleft = 0;
+    this.movementTimeleft = 0;
     this.target = {
       x: random(playersize, size - playersize),
       y: random(playersize, size - playersize)
     }
+    this.finishedMovement = false;
   }
   
   update(){
-    if(Math.abs(this.x - this.target.x) < 10){
+    var xdone = false;
+    if(!this.movementTimeleft){
+      if(Math.abs(this.x - this.target.x) < 10){
+        this.left = false;
+        this.right = false;
+        xdone = true;
+      } else {
+        if(this.x > this.target.x){
+          this.left = true;
+          this.right = false;
+        } else {
+          this.right = true;
+          this.left = false;
+        }
+      }
+      if(Math.abs(this.y - this.target.y) < 10){
+        this.up = false;
+        this.down = false;
+        if(xdone) this.finishedMovement = true;
+      } else {
+        if(this.y > this.target.y){
+          this.up = true;
+          this.down = false;
+        } else {
+          this.down = true;
+          this.up = false;
+        }
+      }
+      if(this.finishedMovement){
+        this.movementTimeleft = 30 * random(0, 3); // random amount of seconds until the bot moves again
+        this.finishedMovement = false;
+      }
+    } else {
       this.left = false;
       this.right = false;
-    } else {
-      if(this.x > this.target.x){
-        this.left = true;
-        this.right = false;
-      } else {
-        this.right = true;
-        this.left = false;
-      }
-    }
-    if(Math.abs(this.y - this.target.y) < 10){
       this.up = false;
       this.down = false;
-    } else {
-      if(this.y > this.target.y){
-        this.up = true;
-        this.down = false;
-      } else {
-        this.down = true;
-        this.up = false;
+      this.movementTimeleft--;
+      if(!this.movementTimeleft){
+        this.target = {
+          x: random(playersize, size - playersize),
+          y: random(playersize, size - playersize)
+        }
       }
     }
+    
     
     this.checkMovement();
     this.checkCollision();
