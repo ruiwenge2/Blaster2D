@@ -11,6 +11,7 @@ class Minimap {
   }
 
   addPlayer(scene, id, x, y){
+    if(scene.died) return;
     var color = 0x0ff0000;
     if(id == scene.socket.id) color = 0x0ffa500;
     console.log(this.map.x);
@@ -22,6 +23,7 @@ class Minimap {
   }
 
   removePlayer(id){
+    if(!this.players[id]) return;
     this.players[id].destroy();
     delete this.players[id];
   }
