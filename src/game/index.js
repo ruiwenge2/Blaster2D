@@ -42,6 +42,7 @@ class gamescene extends Phaser.Scene {
     this.enemies = {};
     this.bullets = {};
     this.verified = false;
+    this.minimap = new Minimap(this);
     this.name = name || localStorage.getItem("name");
     let game = this;
     grecaptcha.ready(function() {
@@ -74,7 +75,6 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
-      this.minimap = new Minimap(this);
       this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
       
       this.data = {
@@ -274,8 +274,9 @@ class gamescene extends Phaser.Scene {
         this.died = true;
         this.gun.destroy();
         this.bar.destroy();
+        this.nametext.destroy();
         this.tweens.add({
-          targets: [this.player, this.nametext],
+          targets: [this.player],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
@@ -314,10 +315,11 @@ class gamescene extends Phaser.Scene {
           }
         });
       } else {
-        game.enemies[id].gun.destroy();
-        game.enemies[id].healthbar.destroy();
+        this.enemies[id].gun.destroy();
+        this.enemies[id].healthbar.destroy();
+        this.enemies[id].nametext.destroy();
         this.tweens.add({
-          targets: [this.enemies[id].player, this.enemies[id].nametext],
+          targets: [this.enemies[id].player],
           duration: 1000,
           alpha: 0,
           onComplete: function(){

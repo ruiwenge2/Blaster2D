@@ -5,7 +5,7 @@ const update = () => {
   setInterval(function(){
     try {
       if(!rooms.main.timeleft && Object.keys(rooms.main.players).length < 5){
-        var id = generateCode();
+        var id = generateCode(20, true);
         rooms.main.players[id] = new BotPlayer(id);
         io.emit("new player", rooms.main.players[id]);
         rooms.main.timeleft = 30 * random(1, 5); // bot joins every random amount of seconds

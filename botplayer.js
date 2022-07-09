@@ -63,7 +63,7 @@ class BotPlayer {
         }
       }
       if(this.finishedMovement){
-        this.movementTimeleft = 30 * random(0, 3); // random amount of seconds until the bot moves again
+        this.movementTimeleft = 30 * random(0, 10); // random amount of seconds until the bot moves again
         this.finishedMovement = false;
       }
     } else {
@@ -122,7 +122,9 @@ class BotPlayer {
         delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
         io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
-        rooms.main.players[bullet.shooter].score++;
+        if(rooms.main.players[bullet.shooter]){
+          rooms.main.players[bullet.shooter].score++;
+        }
         if(!rooms.main.timeleft){
           rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
         }

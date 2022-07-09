@@ -44,7 +44,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("player", "/img/skins/player.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
-    this.load.image("bullet", "/img/gameObjects/bullet.png");
+    this.load.image("bullet", "/img/gameObjects/bullet3.png");
     this.load.image("pistol", "/img/guns/pistol.png");
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
@@ -61,6 +61,7 @@ class gamescene extends Phaser.Scene {
     this.enemies = {};
     this.bullets = {};
     this.verified = false;
+    this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
     this.name = name || localStorage.getItem("name");
     let game = this;
     grecaptcha.ready(function() {
@@ -93,7 +94,6 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
-      this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
       this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
       
       this.data = {
@@ -293,8 +293,9 @@ class gamescene extends Phaser.Scene {
         this.died = true;
         this.gun.destroy();
         this.bar.destroy();
+        this.nametext.destroy();
         this.tweens.add({
-          targets: [this.player, this.nametext],
+          targets: [this.player],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
@@ -333,10 +334,11 @@ class gamescene extends Phaser.Scene {
           }
         });
       } else {
-        game.enemies[id].gun.destroy();
-        game.enemies[id].healthbar.destroy();
+        this.enemies[id].gun.destroy();
+        this.enemies[id].healthbar.destroy();
+        this.enemies[id].nametext.destroy();
         this.tweens.add({
-          targets: [this.enemies[id].player, this.enemies[id].nametext],
+          targets: [this.enemies[id].player],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
