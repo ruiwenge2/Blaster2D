@@ -31,8 +31,7 @@ class BotPlayer {
       y: random(playersize, size - playersize)
     }
     this.finishedMovement = false;
-    // this.shootrate = random(5, 10);
-    this.shootrate = 0;
+    this.shootrate = random(5, 10);
   }
   
   update(){
