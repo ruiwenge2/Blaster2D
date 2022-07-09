@@ -1,4 +1,4 @@
-const { random } = require("./functions.js");
+const { random, shoot } = require("./functions.js");
 const collide = require("line-circle-collision");
 const humanNames = require("human-names");
 
@@ -79,8 +79,6 @@ class BotPlayer {
         }
       }
     }
-    
-    
     this.checkMovement();
     this.checkCollision();
     if(this.left) this.x -= this.leftspeed;
@@ -91,6 +89,22 @@ class BotPlayer {
     this.rightspeed = speed;
     this.upspeed = speed;
     this.downspeed = speed;
+
+    var id = this.closestPlayer();
+    if(!id) return;
+    var player = rooms.main.players[id];
+    var angle = Math.atan2(player.y - this.y, player.x - this.x);
+    this.angle2 = angle;
+    this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
+    if(!this.timeleft){
+      if(!random(0, 10) && Math.abs(this.x - player.x) < 300 && Math.abs(this.y - player.y) < 300){ // if player within range
+        shoot(this.id, angle);
+        this.timeleft = 30;
+      }
+      
+    } else {
+      this.timeleft--;
+    }
   }
 
   checkMovement(){
@@ -117,7 +131,11 @@ class BotPlayer {
   }
 
   closestPlayer(){
-    
+    var players = {...rooms.main.players};
+    delete players[this.id];
+    if(!Object.keys(players).length) return undefined;
+    const player = Object.values(players).sort((a, b) =>  Math.hypot(this.x - a.x, this.y - a.y) - Math.hypot(this.x - b.x, this.y - b.y))[0];
+    return player.id;
   }
 }
 

@@ -99,11 +99,19 @@ class gamescene extends Phaser.Scene {
           this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
         }
       }
+
+      Object.values(data.bullets).forEach(bullet => {
+        let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.9);
+        bullet_image.angle = bullet.angle;
+        bullet_image.shooter = bullet.shooter;
+        bullet_image.id = bullet.id;
+        this.bullets[bullet.id] = bullet_image;
+      });
       this.main();
         
     });
 
-    this.socket.on("new player", (data, id) => { // when new player joins
+    this.socket.on("new player", data => { // when new player joins
       if(!this.verified) return;
       this.addPlayer(data);
       this.minimap.addPlayer(this, data.id, data.x, data.y);
@@ -185,6 +193,7 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("gamestate", data => {
+      if(!this.verified) return;
       if(this.socket.disconnected){
         this.scene.start("disconnect_scene");
         return;
@@ -204,20 +213,20 @@ class gamescene extends Phaser.Scene {
         });
       }
 
-      Object.keys(data.players).forEach(enemy => {
-        if(enemy == this.socket.id) return;
+      Object.values(data.players).forEach(enemy => {
+        if(enemy.id == this.socket.id) return;
         this.tweens.add({
-          targets: [this.enemies[enemy].player],
-          x: data.players[enemy].x,
-          y: data.players[enemy].y,
+          targets: [this.enemies[enemy.id].player],
+          x: enemy.x,
+          y: enemy.y,
           duration: 100,
           onUpdate: function(){
             try {
-              let player = game.enemies[enemy];
-              player.gun.x = player.player.x + Math.cos(data.players[enemy].angle2) * (radius + 29);
-             player.gun.y = player.player.y + Math.sin(data.players[enemy].angle2) * (radius + 29);
-              player.gun.angle = data.players[enemy].angle;
-              player.player.angle = data.players[enemy].angle;
+              let player = game.enemies[enemy.id];
+              player.gun.x = player.player.x + Math.cos(enemy.angle2) * (radius + 29);
+             player.gun.y = player.player.y + Math.sin(enemy.angle2) * (radius + 29);
+              player.gun.angle = enemy.angle;
+              player.player.angle = enemy.angle;
             } catch(e){
               console.log(e);
             }
@@ -225,13 +234,17 @@ class gamescene extends Phaser.Scene {
         });
       });
 
-      Object.keys(data.bullets).forEach(bullet => {
-        this.tweens.add({
-          targets: [this.bullets[bullet]],
-          x: data.bullets[bullet].x,
-          y: data.bullets[bullet].y,
-          duration: 1000 / 30
-        });
+      Object.values(data.bullets).forEach(bullet => {
+        try {
+          this.tweens.add({
+            targets: [this.bullets[bullet.id]],
+            x: data.bullets[bullet.id].x,
+            y: data.bullets[bullet.id].y,
+            duration: 1000 / 30
+          });
+        } catch(e){
+          console.log(e);
+        }
       });
 
       if(this.died) return;
@@ -239,6 +252,7 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("new bullet", (id, data) => {
+      if(!this.verified) return;
       let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
       bullet_image.angle = data.angle;
       bullet_image.shooter = data.shooter;
@@ -247,23 +261,25 @@ class gamescene extends Phaser.Scene {
     });
 
     this.socket.on("removed bullet", id => {
+      if(!this.verified) return;
       this.bullets[id].destroy();
       delete this.bullets[id];
     });
 
     this.socket.on("player died", (id, shooter, shooterName) => {
+      if(!this.verified) return;
       let game = this;
       if(id != this.socket.id) var playerName = this.enemies[id].name;
       if(id == this.socket.id){
         this.died = true;
         this.gun.destroy();
+        this.bar.destroy();
         this.tweens.add({
-          targets: [this.player, this.gun, this.bar, this.nametext],
+          targets: [this.player, this.nametext],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.player.destroy();
-            game.bar.destroy();
             game.nametext.destroy();
             game.playerstext.destroy();
             game.scorestext.destroy();
@@ -273,7 +289,7 @@ class gamescene extends Phaser.Scene {
             game.tps.destroy();
             game.minimap.destroy();
             let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 130, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+            let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
             
             deathRect.scrollFactorX = 0;
@@ -299,13 +315,13 @@ class gamescene extends Phaser.Scene {
         });
       } else {
         game.enemies[id].gun.destroy();
+        game.enemies[id].healthbar.destroy();
         this.tweens.add({
-          targets: [this.enemies[id].player, this.enemies[id].gun, this.enemies[id].healthbar, this.enemies[id].nametext],
+          targets: [this.enemies[id].player, this.enemies[id].nametext],
           duration: 1000,
           alpha: 0,
           onComplete: function(){
             game.enemies[id].player.destroy();
-            game.enemies[id].healthbar.destroy();
             game.enemies[id].nametext.destroy();
             delete game.enemies[id];
             game.minimap.removePlayer(id);
@@ -364,7 +380,7 @@ class gamescene extends Phaser.Scene {
     this.input.on("pointerdown", e => {
       if(!this.useweapon || this.died) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-      this.socket.emit("shoot", this.player.x, this.player.y, angle);
+      this.socket.emit("shoot", angle);
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
       this.useweapon = false;
@@ -386,6 +402,7 @@ class gamescene extends Phaser.Scene {
 
   update() {
     if(!this.loaded) return;
+    if(!this.verified) return;
     if(this.socket.disconnected){
       this.scene.start("disconnect_scene");
       return;
