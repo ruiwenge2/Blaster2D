@@ -31,6 +31,8 @@ class BotPlayer {
       y: random(playersize, size - playersize)
     }
     this.finishedMovement = false;
+    // this.shootrate = random(5, 10);
+    this.shootrate = 0;
   }
   
   update(){
@@ -97,7 +99,7 @@ class BotPlayer {
     this.angle2 = angle;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     if(!this.timeleft){
-      if(!random(0, 10) && Math.abs(this.x - player.x) < 300 && Math.abs(this.y - player.y) < 300){ // if player within range
+      if(!random(0, this.shootrate) && Math.abs(this.x - player.x) < 500 && Math.abs(this.y - player.y) < 300){ // if player within range
         shoot(this.id, angle);
         this.timeleft = 30;
       }
