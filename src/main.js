@@ -27,6 +27,7 @@ function startGame(){
     return;
   }
   localStorage.setItem("name", name);
+  localStorage.setItem("server", document.getElementById("server").value);
   
   const game = new Phaser.Game(config);
   
@@ -50,5 +51,8 @@ if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
 }
 
+if(localStorage.getItem("server")){
+  document.getElementById("server").value = localStorage.getItem("server");
+}
 
 document.getElementById("playbtn").addEventListener("click", startGame);

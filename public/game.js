@@ -44,7 +44,7 @@ class gamescene extends Phaser.Scene {
     this.load.image("player", "/img/skins/player.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
-    this.load.image("bullet", "/img/gameObjects/bullet3.png");
+    this.load.image("bullet", "/img/gameObjects/bullet.png");
     this.load.image("pistol", "/img/guns/pistol.png");
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
@@ -54,7 +54,7 @@ class gamescene extends Phaser.Scene {
 
   create() {
     this.loaded = false;
-    this.socket = io("https://blaster2d.ruiwenge2.repl.co");
+    this.socket = io(document.getElementById("server").value);
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
     this.bulletsGroup = this.physics.add.group();
@@ -1095,6 +1095,7 @@ function startGame(){
     return;
   }
   localStorage.setItem("name", name);
+  localStorage.setItem("server", document.getElementById("server").value);
   
   const game = new Phaser.Game(config);
   
@@ -1118,6 +1119,9 @@ if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
 }
 
+if(localStorage.getItem("server")){
+  document.getElementById("server").value = localStorage.getItem("server");
+}
 
 document.getElementById("playbtn").addEventListener("click", startGame);
 })();

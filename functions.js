@@ -15,7 +15,6 @@ module.exports.generateCode = function(length, cap = false){
   if(cap){
     code = code.toUpperCase();
   }
-  console.log(code);
   return code;
 };
 
