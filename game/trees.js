@@ -13,7 +13,8 @@ for(let i = 0; i < random(50, 75); i++){
     id: i,
     size: realsize,
     x: random(realsize / 2, size - realsize / 2),
-    y: random(realsize / 2, size - realsize / 2)
+    y: random(realsize / 2, size - realsize / 2),
+    angle: random(0, 360)
   });
 }
 

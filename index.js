@@ -40,12 +40,12 @@ app.set("view engine", "html");
 app.use(express.urlencoded({extended: true}));
 app.use(session({secret: process.env["secret"]}));
 
-const { random, generateCode, loggedIn, getUser, deleteUser, verify } = require("./functions.js");
+const { random, generateCode, loggedIn, getUser, deleteUser, verify } = require("./game/functions.js");
 
 const api = require("./api.js");
-const socketfunc = require("./socket.js");
-const skins = require("./skins.js");
-const update = require("./update.js");
+const socketfunc = require("./game/socket.js");
+const skins = require("./game/skins.js");
+const update = require("./game/update.js");
 const Database = require("./db.js");
 
 global.db = new Database();

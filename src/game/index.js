@@ -65,9 +65,13 @@ class gamescene extends Phaser.Scene {
       this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
       this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
       this.scorestext = new Text(this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+
       
-      this.fpstext = new Text(this, window.innerWidth - 150, 120, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-      this.tps = new Text(this, window.innerWidth - 150, 155, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+      this.gold = 0;
+      this.goldtext = new Text(this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
+      
+      this.fpstext = new Text(this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
+      this.tps = new Text(this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
 
       this.playerInfo = {
         x: this.player.x,
@@ -91,6 +95,7 @@ class gamescene extends Phaser.Scene {
       for(let i of trees.trees){
         let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
         tree.id = i.id;
+        tree.angle = i.angle;
       }
       
       for(let oplayer of Object.keys(data.players)){
@@ -181,10 +186,6 @@ class gamescene extends Phaser.Scene {
 
     this.score = 0;
 
-    this.scoretext = new Text(this, window.innerWidth - 150, 50, "Score: " + this.score, { fontSize: 30, fontFamily: "copperplate" });
-
-    this.gold = 0;
-    this.goldtext = new Text(this, window.innerWidth - 150, 85, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
 
     this.addWeaponActions();
 
@@ -285,7 +286,6 @@ class gamescene extends Phaser.Scene {
             game.playerstext.destroy();
             game.scorestext.destroy();
             game.goldtext.destroy();
-            game.scoretext.destroy();
             game.fpstext.destroy();
             game.tps.destroy();
             game.minimap.destroy();
