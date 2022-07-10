@@ -17,7 +17,6 @@ const socketfunc = socket => {
         socket.disconnect();
         return;
       }
-      setUpRoom();
       console.log(name + " joined");
       rooms.main.players[socket.id] = new Player(socket.id, name);
       socket.emit("gamedata", rooms.main);

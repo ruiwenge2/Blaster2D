@@ -7,7 +7,7 @@ import Minimap from "./minimap.js";
 import trees from "../trees.json";
 import skins from "../skins.json";
 
-class gamescene extends Phaser.Scene {
+class Game extends Phaser.Scene {
   constructor(){
     super();
     this.left = false;
@@ -79,6 +79,7 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
+      this.minimap.show(this);
       this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
       
       this.data = {
@@ -509,6 +510,6 @@ class gamescene extends Phaser.Scene {
 }
 
 
-export default gamescene;
+export default Game;
 
 // https://www.html5gamedevs.com/topic/7273-best-way-to-fix-weapon-to-player/

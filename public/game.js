@@ -26,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class gamescene extends Phaser.Scene {
+class Game extends Phaser.Scene {
   constructor(){
     super();
     this.left = false;
@@ -98,6 +98,7 @@ class gamescene extends Phaser.Scene {
       };
       
       this.cameras.main.startFollow(this.player);
+      this.minimap.show(this);
       this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
       
       this.data = {
@@ -528,7 +529,7 @@ class gamescene extends Phaser.Scene {
 }
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (gamescene);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Game);
 
 // https://www.html5gamedevs.com/topic/7273-best-way-to-fix-weapon-to-player/
 
@@ -735,9 +736,12 @@ class Minimap {
     this.map = scene.add.rectangle(window.innerWidth - 220, window.innerHeight - 220, 200, 200, 0x0000000).setDepth(150).setAlpha(0.7).setOrigin(0).setStrokeStyle(3, 0x0000ff);
     this.map.scrollFactorX = 0;
     this.map.scrollFactorY = 0;
-    scene.add.existing(this.map);
     this.players = {};
     this.scale = _functions_js__WEBPACK_IMPORTED_MODULE_0__.size / this.map.width;
+  }
+
+  show(scene){
+    scene.add.existing(this.map);
   }
 
   addPlayer(scene, id, x, y){
@@ -789,184 +793,6 @@ module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"sk
 
 /***/ }),
 /* 10 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class joinscene extends Phaser.Scene {
-  constructor(){
-    super();
-  }
-  
-  preload(){
-    
-  }
-  
-  create(){
-    if(!localStorage.getItem("bestscore")){
-      localStorage.setItem("bestscore", 0);
-    }
-    if(!localStorage.getItem("bestgold")){
-      localStorage.setItem("bestgold", 0);
-    }
-    this.add.text(window.innerWidth / 2, 100, "Game", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
-
-    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 2.5, 'Play', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button.width = this.text.width + 15;
-    this.button.height = this.text.height + 15;
-    this.button.x = this.text.x - (this.text.width / 2) - 5;
-    this.button.y = this.text.y - (this.text.height / 2) - 5;
-    this.button.setInteractive().on('pointerdown', () => {
-      this.scene.start("gamescene");
-    });
-
-    this.button2 = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text2 = this.add.text(window.innerWidth / 2, window.innerHeight / 1.8, 'How To Play', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button2.width = this.text2.width + 15;
-    this.button2.height = this.text2.height + 15;
-    this.button2.x = this.text2.x - (this.text2.width / 2) - 5;
-    this.button2.y = this.text2.y - (this.text2.height / 2) - 5;
-    this.button2.setInteractive().on('pointerdown', () => {
-      this.scene.start("howtoplay");
-    });
-
-    this.button3 = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text3 = this.add.text(window.innerWidth / 2, window.innerHeight / 1.4, 'Your Best Scores', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button3.width = this.text3.width + 15;
-    this.button3.height = this.text3.height + 15;
-    this.button3.x = this.text3.x - (this.text3.width / 2) - 5;
-    this.button3.y = this.text3.y - (this.text3.height / 2) - 5;
-    this.button3.setInteractive().on('pointerdown', () => {
-      this.scene.start("bestscores");
-    });
-  }
-  
-  update(){
-
-  }
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (joinscene);
-
-/***/ }),
-/* 11 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class howtoplay extends Phaser.Scene {
-  constructor(){
-    super();
-  }
-
-  preload(){
-    
-  }
-  
-  create(){
-    this.add.text(window.innerWidth / 2, 100, "How To Play", { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5 );
-    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 1.5, 'Back', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button.width = this.text.width + 10;
-    this.button.height = this.text.height + 10;
-    this.button.x = this.text.x - (this.text.width / 2) - 5;
-    this.button.y = this.text.y - (this.text.height / 2) - 5;
-    this.button.setInteractive().on('pointerdown', () => {
-      this.scene.start("joinscene");
-    });
-  }
-  
-  update(){
-
-  }
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (howtoplay);
-
-/***/ }),
-/* 12 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class diedscene extends Phaser.Scene {
-  constructor(){
-    super();
-  }
-  
-  preload(){
-     
-  }
-  
-  create(){
-    this.add.text(window.innerWidth / 2, 100, "You Died", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
-
-    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 2, 'OK', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button.width = this.text.width + 15;
-    this.button.height = this.text.height + 15;
-    this.button.x = this.text.x - (this.text.width / 2) - 5;
-    this.button.y = this.text.y - (this.text.height / 2) - 5;
-    this.button.setInteractive().on('pointerdown', () => {
-      this.scene.start("joinscene");
-    });
-  }
-  
-  update(){
-
-  }
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (diedscene);
-
-/***/ }),
-/* 13 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class bestscores extends Phaser.Scene {
-  constructor(){
-    super();
-  }
-
-  preload(){
-    
-  }
-  
-  create(){
-    this.add.text(window.innerWidth / 2, 100, "Your Best", { fontFamily: "Arial", fontSize:100 }).setOrigin(0.5);
-    this.add.text(window.innerWidth / 2, 300, "Score: " + localStorage.getItem("bestscore"), { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5);
-    this.add.text(window.innerWidth / 2, 400, "Gold: " + localStorage.getItem("bestgold"), { fontFamily: "Arial", fontSize:75 }).setOrigin(0.5);
-
-    this.button = this.add.rectangle(0, 0, 0, 0, 0x0f0);
-    this.text = this.add.text(window.innerWidth / 2, window.innerHeight / 1.25, 'Back', { fill: '#ffffff', fontFamily: "Arial", fontSize:50 }).setOrigin(0.5);
-    this.button.width = this.text.width + 15;
-    this.button.height = this.text.height + 15;
-    this.button.x = this.text.x - (this.text.width / 2) - 5;
-    this.button.y = this.text.y - (this.text.height / 2) - 5;
-    this.button.setInteractive().on('pointerdown', () => {
-      this.scene.start("joinscene");
-    });
-  }
-  update(){
-
-  }
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (bestscores);
-
-/***/ }),
-/* 14 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1063,15 +889,7 @@ var __webpack_exports__ = {};
 (() => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
-/* harmony import */ var _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
-/* harmony import */ var _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
-/* harmony import */ var _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
-
-
-
-
+/* harmony import */ var _game_disconnect_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
 
 
 
@@ -1102,11 +920,8 @@ function startGame(){
   const game = new Phaser.Game(config);
   
   game.scene.add("gamescene", _game__WEBPACK_IMPORTED_MODULE_0__["default"]);
-  game.scene.add("joinscene", _scenes_join_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
-  game.scene.add("howtoplay", _scenes_howtoplay_js__WEBPACK_IMPORTED_MODULE_2__["default"]);
-  game.scene.add("diedscene", _scenes_died_js__WEBPACK_IMPORTED_MODULE_3__["default"]);
-  game.scene.add("bestscores", _scenes_best_js__WEBPACK_IMPORTED_MODULE_4__["default"]);
-  game.scene.add("disconnect_scene", _scenes_disconnect_js__WEBPACK_IMPORTED_MODULE_5__["default"]);
+  game.scene.add("disconnect_scene", _game_disconnect_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  
   game.scene.start("gamescene");
   document.querySelector("canvas").style.cursor = "crosshair";
   

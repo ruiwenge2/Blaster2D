@@ -1,9 +1,5 @@
-import gamescene from "./game";
-import joinscene from "./scenes/join.js";
-import howtoplay from "./scenes/howtoplay.js";
-import diedscene from "./scenes/died.js";
-import bestscores from "./scenes/best.js";
-import disconnect_scene from "./scenes/disconnect.js";
+import Game from "./game";
+import disconnect_scene from "./game/disconnect.js";
 
 function startGame(){
   const config = {
@@ -31,12 +27,9 @@ function startGame(){
   
   const game = new Phaser.Game(config);
   
-  game.scene.add("gamescene", gamescene);
-  game.scene.add("joinscene", joinscene);
-  game.scene.add("howtoplay", howtoplay);
-  game.scene.add("diedscene", diedscene);
-  game.scene.add("bestscores", bestscores);
+  game.scene.add("gamescene", Game);
   game.scene.add("disconnect_scene", disconnect_scene);
+  
   game.scene.start("gamescene");
   document.querySelector("canvas").style.cursor = "crosshair";
   
