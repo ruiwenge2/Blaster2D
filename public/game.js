@@ -49,6 +49,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
+    this.load.html("chat", "/chat.html");
     this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
   }
 
@@ -62,6 +63,8 @@ class Game extends Phaser.Scene {
     this.bullets = {};
     this.verified = false;
     this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
+    this.chatbox = new _chat_js__WEBPACK_IMPORTED_MODULE_4__["default"](this);
+    this.chatbox.create();
     this.name = name || localStorage.getItem("name");
     let game = this;
     grecaptcha.ready(function() {
@@ -171,11 +174,11 @@ class Game extends Phaser.Scene {
       this.tps.setText("TPS: " + this.frames);
       this.frames = 0;
     }, 1000);
-    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
+    this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
+    this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
+    this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D, false);
+    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L, false);
     var game = this;
     this.l.on("down", function(){
       confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
@@ -400,6 +403,7 @@ class Game extends Phaser.Scene {
   addWeaponActions(){
     this.useweapon = true;
     this.input.on("pointerdown", e => {
+      if(this.chatbox.focus) return;
       if(!this.useweapon || this.died) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
       this.socket.emit("shoot", angle);
@@ -463,55 +467,57 @@ class Game extends Phaser.Scene {
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
-    if(cursors.left.isDown || this.a.isDown){
-      if(!this.left){
-        this.socket.emit("movement", "left");
-        this.left = true;
-        this.right = false;
+    if(!this.chatbox.focus){
+      if(cursors.left.isDown || this.a.isDown){
+        if(!this.left){
+          this.socket.emit("movement", "left");
+          this.left = true;
+          this.right = false;
+        }
+      } else {
+        if(this.left){
+          this.socket.emit("movement_end", "left");
+          this.left = false;
+        }
       }
-    } else {
-      if(this.left){
-        this.socket.emit("movement_end", "left");
-        this.left = false;
+      
+      if(cursors.right.isDown || this.d.isDown){
+        if(!this.right){
+          this.socket.emit("movement", "right");
+          this.right = true;
+          this.left = false;
+        }
+      } else {
+        if(this.right){
+          this.socket.emit("movement_end", "right");
+          this.right = false;
+        }
       }
-    }
-    
-    if(cursors.right.isDown || this.d.isDown){
-      if(!this.right){
-        this.socket.emit("movement", "right");
-        this.right = true;
-        this.left = false;
+      
+      if(cursors.up.isDown || this.w.isDown){
+        if(!this.up){
+          this.socket.emit("movement", "up");
+          this.up = true;
+          this.down = false;
+        }
+      } else {
+        if(this.up){
+          this.socket.emit("movement_end", "up");
+          this.up = false;
+        }
       }
-    } else {
-      if(this.right){
-        this.socket.emit("movement_end", "right");
-        this.right = false;
-      }
-    }
-    
-    if(cursors.up.isDown || this.w.isDown){
-      if(!this.up){
-        this.socket.emit("movement", "up");
-        this.up = true;
-        this.down = false;
-      }
-    } else {
-      if(this.up){
-        this.socket.emit("movement_end", "up");
-        this.up = false;
-      }
-    }
-    
-    if(cursors.down.isDown || this.s.isDown){
-      if(!this.down){
-        this.socket.emit("movement", "down");
-        this.down = true;
-        this.up = false;
-      }
-    } else {
-      if(this.down){
-        this.socket.emit("movement_end", "down");
-        this.down = false;
+      
+      if(cursors.down.isDown || this.s.isDown){
+        if(!this.down){
+          this.socket.emit("movement", "down");
+          this.down = true;
+          this.up = false;
+        }
+      } else {
+        if(this.down){
+          this.socket.emit("movement_end", "down");
+          this.down = false;
+        }
       }
     }
     
@@ -707,6 +713,10 @@ __webpack_require__.r(__webpack_exports__);
 class Chatbox {
   constructor(game){
     this.socket = game.socket;
+    this.chat = game.add.dom(150, window.innerHeight - 150).createFromCache("chat").setDepth(200);
+    this.chat.scrollFactorX = 0;
+    this.chat.scrollFactorY = 0;
+    game.add.existing(this);
   }
   
   create(){
@@ -907,7 +917,11 @@ function startGame(){
         },
         debug: false
       }
-    }
+    },
+    dom: {
+      createContainer: true
+    },
+    parent: "game"
   };
   let name = document.getElementById("input").value;
   if(!name.replace(/\s/g, "")){
