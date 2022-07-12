@@ -36,14 +36,15 @@
       <input id="input" maxlength="15">
       <% } %>
       <p style="color:red; display:none">Please enter a name.</p><br><br>
-      <!--<div id="recaptcha" class="g-recaptcha"
-        data-sitekey="6Lcv-r4gAAAAAI1Ak_qlSlpZvTC5xzasno8nIuSJ"
-        data-callback="onSubmit"
-        data-size="invisible"></div>-->
       <button id="playbtn" class="button">Play</button><br><br>
       <button id="createbtn" class="button">Create Private Game</button>
       <button id="joinbtn" class="button">Join Private Game</button>
     </main>
+    <div id="chatbox">
+      <h3>Chat</h3>
+      <div id="messages"></div>
+      <input id="chat-input" placeholder="Click here to chat">
+    </div>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script>
       const homepage = true;

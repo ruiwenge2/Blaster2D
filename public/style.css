@@ -119,3 +119,27 @@ p {
   color:black;
   font-size:18px;
 }
+
+#chatbox {
+  width:300px;
+  text-align:center;
+  position:absolute;
+  left:20px;
+  bottom:20px;
+  display:none;
+}
+#messages {
+  height:90%;
+  width:90%;
+  overflow:auto;
+  height:150px;
+  margin:0 auto;
+}
+input {
+  height:23px;
+  width:200px;
+  font-size:18px;
+}
+input:focus {
+  outline:none;
+}

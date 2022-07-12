@@ -49,7 +49,6 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
-    this.load.html("chat", "/chat.html");
     this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
   }
 
@@ -65,6 +64,7 @@ class Game extends Phaser.Scene {
     this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
     this.chatbox = new _chat_js__WEBPACK_IMPORTED_MODULE_4__["default"](this);
     this.chatbox.create();
+    this.spawned = false;
     this.name = name || localStorage.getItem("name");
     let game = this;
     grecaptcha.ready(function() {
@@ -82,7 +82,7 @@ class Game extends Phaser.Scene {
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2);
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.6);
       this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
       this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
       this.playerstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
@@ -228,7 +228,10 @@ class Game extends Phaser.Scene {
         this.playerInfo.x = self.x;
         this.playerInfo.y = self.y;
         let game = this;
-  
+
+        if(!self.spawntimeleft && !this.spawned){
+          this.player.setAlpha(1);
+        }
         this.tweens.add({
           targets: this.player,
           x: this.playerInfo.x,
@@ -239,6 +242,10 @@ class Game extends Phaser.Scene {
 
       Object.values(data.players).forEach(enemy => {
         if(enemy.id == this.socket.id) return;
+        if(!enemy.spawntimeleft && !this.enemies[enemy.id].spawned){
+          this.enemies[enemy.id].player.setAlpha(1);
+          this.enemies[enemy.id].spawned = true;
+        }
         this.tweens.add({
           targets: [this.enemies[enemy.id].player],
           x: enemy.x,
@@ -312,6 +319,7 @@ class Game extends Phaser.Scene {
             game.fpstext.destroy();
             game.tps.destroy();
             game.minimap.destroy();
+            game.chatbox.destroy();
             let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
             let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
             let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
@@ -371,18 +379,25 @@ class Game extends Phaser.Scene {
   }
 
   addPlayer(player){
+    var alpha = 0.6;
+    var done = false;
+    if(!player.spawntimeleft){
+      alpha = 1;
+      done = true;
+    }
     var playerObj = {
       id: player.id,
       x: player.x,
       y: player.y,
       name: player.name,
-      player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1),
+      player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
       healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 1),
       gun: this.add.image(player.x + Math.cos(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), player.y + Math.sin(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), "pistol").setDepth(1),
       angle: null,
       health: 100,
-      score: player.score
+      score: player.score,
+      spawned: done
     }
     this.enemies[player.id] = playerObj;
   }
@@ -403,7 +418,7 @@ class Game extends Phaser.Scene {
   addWeaponActions(){
     this.useweapon = true;
     this.input.on("pointerdown", e => {
-      if(this.chatbox.focus) return;
+      document.getElementById("chat-input").blur();
       if(!this.useweapon || this.died) return;
       var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
       this.socket.emit("shoot", angle);
@@ -713,18 +728,22 @@ __webpack_require__.r(__webpack_exports__);
 class Chatbox {
   constructor(game){
     this.socket = game.socket;
-    this.chat = game.add.dom(150, window.innerHeight - 150).createFromCache("chat").setDepth(200);
-    this.chat.scrollFactorX = 0;
-    this.chat.scrollFactorY = 0;
-    game.add.existing(this);
+    this.on = true;
+    this.chatbox = document.getElementById("chatbox");
+    this.input = document.getElementById("chat-input");
+    this.messages = document.getElementById("messages");
+    this.chatbox.style.display = "block";
   }
   
   create(){
     
   }
   
-  remove(){
-    
+  destroy(){
+    this.on = false;
+    this.chatbox.style.display = "none";
+    this.messages.innerHTML = "";
+    this.input.value = "";
   }
 }
 

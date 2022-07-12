@@ -31,8 +31,9 @@ global.radius = playersize / 2;
 global.size = 5000;
 global.treesize = 300;
 global.coinsize = 37.5;
-global.speed = 8;
+global.speed = 10;
 global.bullet_speed = 40;
+global.spawntime = 3;
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);

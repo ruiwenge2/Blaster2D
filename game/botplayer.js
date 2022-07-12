@@ -15,10 +15,7 @@ class BotPlayer {
     this.right = false;
     this.up = false;
     this.down = false;
-    this.leftspeed = speed;
-    this.rightspeed = speed;
-    this.upspeed = speed;
-    this.downspeed = speed;
+    this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
     this.died = false;
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
@@ -32,9 +29,11 @@ class BotPlayer {
     }
     this.finishedMovement = false;
     this.shootrate = random(3, 10);
+    this.spawntimeleft = spawntime * 30;
   }
   
   update(){
+    if(this.spawntimeleft) this.spawntimeleft --;
     var xdone = false;
     if(!this.movementTimeleft){
       if(Math.abs(this.x - this.target.x) < 10){
@@ -80,16 +79,14 @@ class BotPlayer {
         }
       }
     }
+    this.checkDiagonal();
     this.checkMovement();
     this.checkCollision();
     if(this.left) this.x -= this.leftspeed;
     if(this.right) this.x += this.rightspeed;
     if(this.up) this.y -= this.upspeed;
     if(this.down) this.y += this.downspeed;
-    this.leftspeed = speed;
-    this.rightspeed = speed;
-    this.upspeed = speed;
-    this.downspeed = speed;
+    this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
 
     var id = this.closestPlayer();
     if(!id) return;
@@ -105,6 +102,21 @@ class BotPlayer {
       
     } else {
       this.timeleft--;
+    }
+  }
+
+  checkDiagonal(){
+    if(this.left && this.up){
+      this.leftspeed = this.upspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.left && this.down){
+      this.leftspeed = this.downspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.right && this.down){
+      this.rightspeed = this.downspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.right && this.up){
+      this.rightspeed = this.upspeed = Math.sqrt(speed * speed / 2);
     }
   }
 

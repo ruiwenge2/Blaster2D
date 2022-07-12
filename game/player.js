@@ -5,8 +5,8 @@ class Player {
   constructor(id, name){
     this.id = id;
     this.name = name;
-    this.x = random(playersize, size - playersize);
-    this.y = random(playersize, size - playersize);
+    this.x = random(playersize, 400 - playersize);
+    this.y = random(playersize, 400 - playersize);
     this.gun = "pistol";
     this.health = 100;
     this.ammo = 10;
@@ -14,27 +14,39 @@ class Player {
     this.right = false;
     this.up = false;
     this.down = false;
-    this.leftspeed = speed;
-    this.rightspeed = speed;
-    this.upspeed = speed;
-    this.downspeed = speed;
+    this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
     this.died = false;
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
+    this.spawntimeleft = spawntime * 30;
   }
   
   update(){
+    if(this.spawntimeleft) this.spawntimeleft --;
+    this.checkDiagonal();
     this.checkMovement();
     this.checkCollision();
     if(this.left) this.x -= this.leftspeed;
     if(this.right) this.x += this.rightspeed;
     if(this.up) this.y -= this.upspeed;
     if(this.down) this.y += this.downspeed;
-    this.leftspeed = speed;
-    this.rightspeed = speed;
-    this.upspeed = speed;
-    this.downspeed = speed;
+    this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
+  }
+
+  checkDiagonal(){
+    if(this.left && this.up){
+      this.leftspeed = this.upspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.left && this.down){
+      this.leftspeed = this.downspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.right && this.down){
+      this.rightspeed = this.downspeed = Math.sqrt(speed * speed / 2);
+    }
+    if(this.right && this.up){
+      this.rightspeed = this.upspeed = Math.sqrt(speed * speed / 2);
+    }
   }
 
   checkMovement(){
@@ -45,6 +57,7 @@ class Player {
   }
 
   checkCollision(){
+    if(this.spawntimeleft) return;
     Object.values(rooms.main.bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){

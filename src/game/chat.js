@@ -1,18 +1,22 @@
 class Chatbox {
   constructor(game){
     this.socket = game.socket;
-    this.chat = game.add.dom(150, window.innerHeight - 150).createFromCache("chat").setDepth(200);
-    this.chat.scrollFactorX = 0;
-    this.chat.scrollFactorY = 0;
-    game.add.existing(this);
+    this.on = true;
+    this.chatbox = document.getElementById("chatbox");
+    this.input = document.getElementById("chat-input");
+    this.messages = document.getElementById("messages");
+    this.chatbox.style.display = "block";
   }
   
   create(){
     
   }
   
-  remove(){
-    
+  destroy(){
+    this.on = false;
+    this.chatbox.style.display = "none";
+    this.messages.innerHTML = "";
+    this.input.value = "";
   }
 }
 
