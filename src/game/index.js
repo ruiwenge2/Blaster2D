@@ -18,7 +18,6 @@ class Game extends Phaser.Scene {
   }
   
   preload() {
-    document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
     for(let i of Object.keys(skins)){
       this.load.image(`skin_${skins[i].id}`, `/img/skins/${skins[i].url}.png`);
     }
@@ -36,6 +35,7 @@ class Game extends Phaser.Scene {
   create() {
     this.loaded = false;
     this.socket = io(document.getElementById("server").value);
+    this.name = name || localStorage.getItem("name");
     this.coins = this.physics.add.group();
     this.trees = this.physics.add.group();
     this.bulletsGroup = this.physics.add.group();
@@ -44,14 +44,13 @@ class Game extends Phaser.Scene {
     this.verified = false;
     this.minimap = new Minimap(this);
     this.chatbox = new Chatbox(this);
-    this.chatbox.create();
     this.spawned = false;
-    this.name = name || localStorage.getItem("name");
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
         game.socket.emit("join", game.name, token);
         game.verified = true;
+        document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
     });
     
@@ -159,16 +158,26 @@ class Game extends Phaser.Scene {
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
     this.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D, false);
-    this.l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L, false);
+    var l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L, false);
+    var spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false);
+    var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER, false);
+
     var game = this;
-    this.l.on("down", function(){
+    l.on("down", function(){
+      if(game.chatbox.focus) return;
       confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
         game.sys.game.destroy(true, false);
+        game.chatbox.destroy();
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
       });
     });
+
+    enterKey.on("down", function(){
+      game.chatbox.input.focus();
+    });
+    
 
     for(let i = size / (ratio * 2); i < size; i += size / ratio){
       for(let j = size / (ratio * 2); j < size; j += size / ratio){
@@ -311,6 +320,7 @@ class Game extends Phaser.Scene {
               game.sys.game.destroy(true, false);
               document.querySelector("main").style.display = "block";
               document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+              game.socket.disconnect();
             }, { background: 0x00374ff });
             playAgain.text.setDepth(102).setAlpha(0);
             playAgain.button.setDepth(101).setAlpha(0);
@@ -399,13 +409,15 @@ class Game extends Phaser.Scene {
   addWeaponActions(){
     this.useweapon = true;
     this.input.on("pointerdown", e => {
-      document.getElementById("chat-input").blur();
       if(!this.useweapon || this.died) return;
-      var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-      this.socket.emit("shoot", angle);
-      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      this.gun.angle2 = angle;
-      this.useweapon = false;
+      if(!this.chatbox.focus){
+        var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
+        this.socket.emit("shoot", angle);
+        this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+        this.gun.angle2 = angle;
+        this.useweapon = false;
+      }
+      document.getElementById("chat-input").blur();
     });
     
     window.addEventListener("mousemove", e => {

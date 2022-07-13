@@ -60,6 +60,10 @@ const socketfunc = socket => {
     shoot(socket.id, angle);
   });
 
+  socket.on("chat message", (name, message) => {
+    io.emit("chat message", `${name}: ${message}`);
+  });
+
   socket.on("leaveGame", () => {
     socket.disconnect();
   });

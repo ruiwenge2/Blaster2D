@@ -65,6 +65,7 @@ module.exports.verify = async function(token, secret){
 }
 
 module.exports.shoot = function(id, angle){
+  // if(rooms.main.players[id].spawntimeleft) return;
   rooms.main.bullets[rooms.main.new_bullet_id] = {
     shooter: id,
     x: rooms.main.players[id].x + Math.cos(angle) * (radius + 40), 

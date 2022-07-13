@@ -18,8 +18,7 @@ function startGame(){
     },
     dom: {
       createContainer: true
-    },
-    parent: "game"
+    }
   };
   let name = document.getElementById("input").value;
   if(!name.replace(/\s/g, "")){
