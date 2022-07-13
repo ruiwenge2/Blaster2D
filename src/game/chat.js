@@ -4,6 +4,7 @@ class Chatbox {
     this.on = true;
     this.name = game.name;
     this.focus = false;
+    this.sent = false;
     this.chatbox = document.getElementById("chatbox");
     this.input = document.getElementById("chat-input");
     this.messages = document.getElementById("messages");
@@ -12,9 +13,10 @@ class Chatbox {
     this.input.addEventListener("keydown", e => {
       if(!this.on) return;
       if(e.key == "Enter"){
-        if(!this.validMessage(this.input.value)) return;
+        if(!this.validMessage(this.input.value)) return this.sent = false;
         this.socket.emit("chat message", this.name, this.input.value);
         this.input.value = "";
+        this.sent = true;
       }
 
       if(e.key == "Tab"){

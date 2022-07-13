@@ -6,7 +6,7 @@ function embedded() {
   }
 }
 
-if(embedded()){
+if(embedded() && location.hostname == "191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co"){
   alertmodal("", "Please open this in a new tab for best results.", ok="Open").then(() => {window.open("https://blaster2d.ruiwenge2.repl.co" + location.pathname)});
 }
 

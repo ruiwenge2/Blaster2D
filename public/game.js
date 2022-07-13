@@ -194,7 +194,11 @@ class Game extends Phaser.Scene {
     });
 
     enterKey.on("down", function(){
-      game.chatbox.input.focus();
+      if(game.chatbox.sent){
+        game.chatbox.sent = false;
+        return game.chatbox.input.blur();
+      }
+      if(!game.chatbox.focus) game.chatbox.input.focus();
     });
     
 
@@ -217,7 +221,6 @@ class Game extends Phaser.Scene {
     this.health = 100;
 
     this.score = 0;
-
 
     this.addWeaponActions();
 
@@ -335,6 +338,7 @@ class Game extends Phaser.Scene {
             
             deathRect.scrollFactorX = 0;
             deathRect.scrollFactorY = 0;
+            deathRect.setStrokeStyle(5, 0x0000000);
             let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
               game.sys.game.destroy(true, false);
               document.querySelector("main").style.display = "block";
@@ -343,16 +347,18 @@ class Game extends Phaser.Scene {
             }, { background: 0x00374ff });
             playAgain.text.setDepth(102).setAlpha(0);
             playAgain.button.setDepth(101).setAlpha(0);
+            game.cameras.main.startFollow(game.enemies[shooter].player);
             game.tweens.add({
               targets: deathRect,
               duration: 300,
-              alpha:0.7
+              alpha:0.5
             });
             game.tweens.add({
               targets: [deathtext, infotext, playAgain.text, playAgain.button],
               duration: 300,
               alpha:1
             });
+            
           }
         });
       } else {
@@ -743,6 +749,7 @@ class Chatbox {
     this.on = true;
     this.name = game.name;
     this.focus = false;
+    this.sent = false;
     this.chatbox = document.getElementById("chatbox");
     this.input = document.getElementById("chat-input");
     this.messages = document.getElementById("messages");
@@ -751,9 +758,10 @@ class Chatbox {
     this.input.addEventListener("keydown", e => {
       if(!this.on) return;
       if(e.key == "Enter"){
-        if(!this.validMessage(this.input.value)) return;
+        if(!this.validMessage(this.input.value)) return this.sent = false;
         this.socket.emit("chat message", this.name, this.input.value);
         this.input.value = "";
+        this.sent = true;
       }
 
       if(e.key == "Tab"){
