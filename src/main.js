@@ -15,9 +15,6 @@ function startGame(){
         },
         debug: false
       }
-    },
-    dom: {
-      createContainer: true
     }
   };
   let name = document.getElementById("input").value;
