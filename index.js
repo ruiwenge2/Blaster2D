@@ -21,7 +21,7 @@ global.rooms = {
   main: {
     players: {},
     bullets: {},
-    coins: [],
+    coins: {},
     new_bullet_id: 0,
     timeleft: 0
   }

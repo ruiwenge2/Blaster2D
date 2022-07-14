@@ -30,12 +30,6 @@ const socketfunc = socket => {
     rooms.main.players[socket.id].angle2 = data.angle2;
   });
 
-  socket.on("collect gold", id => {
-    if(!checkUser(socket.id)) return;
-    rooms.main.coins.splice(id, 1);
-    socket.broadcast.emit("collected gold", id);
-  });
-
   socket.on("disconnect", () => {
     if(!checkUser(socket.id)) return;
     let name = rooms.main.players[socket.id].name;

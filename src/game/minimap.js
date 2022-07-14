@@ -17,7 +17,6 @@ class Minimap {
     if(scene.died) return;
     var color = 0x0ff0000;
     if(id == scene.socket.id) color = 0x0ffa500;
-    console.log(this.map.x);
     let player = scene.add.circle(this.map.x + x / this.scale, this.map.y + y / this.scale, radius / this.scale, color).setDepth(151);
     player.scrollFactorX = 0;
     player.scrollFactorY = 0;

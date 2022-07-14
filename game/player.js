@@ -1,4 +1,4 @@
-const { random } = require("./functions.js");
+const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
@@ -57,6 +57,13 @@ class Player {
   }
 
   checkCollision(){
+    Object.values(rooms.main.coins).forEach(coin => {
+      if(circleCol(coin.x, coin.y, coinsize / 2, this.x, this.y, radius)){
+        console.log("e");
+        delete rooms.main.coins[coin.id];
+        io.emit("collected gold", coin.id);
+      }
+    });
     if(this.spawntimeleft) return;
     Object.values(rooms.main.bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;

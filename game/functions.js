@@ -24,13 +24,13 @@ module.exports.checkUser = function(id){
 
 module.exports.setUpRoom = function(){
   if(Object.keys(rooms.main.players).length == 0){
-    rooms.main.coins = [];
+    rooms.main.coins = {};
     for(let i = 0; i < module.exports.random(30, 50); i++){
-      rooms.main.coins.push({
+      rooms.main.coins[i] = {
         id: i,
         x: module.exports.random(coinsize / 2, size - coinsize / 2),
         y: module.exports.random(coinsize / 2, size - coinsize / 2)
-      });
+      };
     }
     
   }
@@ -78,4 +78,12 @@ module.exports.shoot = function(id, angle){
   
   io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);
   rooms.main.new_bullet_id++;
+}
+
+module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
+  var dx = (x1 + r1) - (x2 + r2);
+  var dy = (y1 + r1) - (y2 + r2);
+  var distance = Math.sqrt(dx * dx + dy * dy);
+  if (distance < r1 + r2) return true;
+  return false;
 }

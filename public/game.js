@@ -110,7 +110,7 @@ class Game extends Phaser.Scene {
         angle2:0
       };
   
-      for(let i of data.coins){
+      for(let i of Object.values(data.coins)){
         let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
         coin.id = i.id;
       }
@@ -145,6 +145,7 @@ class Game extends Phaser.Scene {
     });
 
     this.socket.on("collected gold", id => {
+      console.log(id);
       if(!this.verified) return;
       this.coins.children.entries.forEach(coin => {
         if(coin.id == id){
@@ -223,10 +224,6 @@ class Game extends Phaser.Scene {
     this.score = 0;
 
     this.addWeaponActions();
-
-    this.physics.add.collider(this.player, this.coins, (player, coin) => { // player collects coin
-      this.collect(player, coin);
-    });
 
     this.socket.on("gamestate", data => {
       if(!this.verified) return;
@@ -416,19 +413,6 @@ class Game extends Phaser.Scene {
       spawned: done
     }
     this.enemies[player.id] = playerObj;
-  }
-
-  collect(player, coin){
-    this.socket.emit("collect gold", coin.id);
-    this.gold += 1;
-    this.goldtext.setText("Gold: " + this.gold);
-    coin.destroy();
-    if(this.gold > localStorage.getItem("bestgold")){
-      localStorage.setItem("bestgold", this.gold);
-    }
-    for(let i = 0; i < (0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(0, 2); i++){
-      this.coins.create((0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(_functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size - _functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2), (0,_functions_js__WEBPACK_IMPORTED_MODULE_0__.random)(_functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2, _functions_js__WEBPACK_IMPORTED_MODULE_0__.size - _functions_js__WEBPACK_IMPORTED_MODULE_0__.coinsize / 2), "coin").setScale(0.75, 0.75);
-    }
   }
 
   addWeaponActions(){
@@ -838,7 +822,6 @@ class Minimap {
     if(scene.died) return;
     var color = 0x0ff0000;
     if(id == scene.socket.id) color = 0x0ffa500;
-    console.log(this.map.x);
     let player = scene.add.circle(this.map.x + x / this.scale, this.map.y + y / this.scale, _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius / this.scale, color).setDepth(151);
     player.scrollFactorX = 0;
     player.scrollFactorY = 0;
