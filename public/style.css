@@ -132,6 +132,7 @@ p {
 }
 #messages {
   width: 270px;
+  overflow-x: hidden;
   overflow-y:auto;
   height:150px;
   margin:0 auto;

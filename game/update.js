@@ -31,6 +31,18 @@ const update = () => {
         bullet.x += Math.cos(bullet.angle2) * bullet_speed;
         bullet.y += Math.sin(bullet.angle2) * bullet_speed;
       });
+
+      if(Object.keys(rooms.main.coins).length <= 10){
+        for(let i = 0; i < 10; i++){
+          rooms.main.coins[rooms.main.new_coin_id] = {
+            id: rooms.main.new_coin_id,
+            x: random(coinsize / 2, size - coinsize / 2),
+            y: random(coinsize / 2, size - coinsize / 2)
+          };
+          io.emit("new coin", rooms.main.coins[rooms.main.new_coin_id]);
+          rooms.main.new_coin_id++;
+        }
+      }
       
       io.emit("gamestate", rooms.main);
       

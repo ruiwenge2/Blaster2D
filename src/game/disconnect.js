@@ -15,6 +15,7 @@ class disconnect_scene extends Phaser.Scene {
     this.button = new Button(this, window.innerWidth / 2, window.innerHeight / 2, "Reload", () => {
       location.reload();
     });
+    
   }
   
   update(){

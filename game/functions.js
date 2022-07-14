@@ -26,13 +26,13 @@ module.exports.setUpRoom = function(){
   if(Object.keys(rooms.main.players).length == 0){
     rooms.main.coins = {};
     for(let i = 0; i < module.exports.random(30, 50); i++){
-      rooms.main.coins[i] = {
-        id: i,
+      rooms.main.coins[rooms.main.new_coin_id] = {
+        id: rooms.main.new_coin_id,
         x: module.exports.random(coinsize / 2, size - coinsize / 2),
         y: module.exports.random(coinsize / 2, size - coinsize / 2)
       };
+      rooms.main.new_coin_id++;
     }
-    
   }
 };
 

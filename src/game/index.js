@@ -36,7 +36,7 @@ class Game extends Phaser.Scene {
     this.loaded = false;
     this.socket = io(document.getElementById("server").value);
     this.name = name || localStorage.getItem("name");
-    this.coins = this.physics.add.group();
+    this.coins = {};
     this.trees = this.physics.add.group();
     this.bulletsGroup = this.physics.add.group();
     this.enemies = {};
@@ -62,7 +62,7 @@ class Game extends Phaser.Scene {
     this.socket.on("gamedata", data => { // when game data arrives
       this.loaded = true;
       this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.6);
+      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
       this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
       this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
       this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
@@ -92,8 +92,11 @@ class Game extends Phaser.Scene {
       };
   
       for(let i of Object.values(data.coins)){
-        let coin = this.coins.create(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1);
-        coin.id = i.id;
+        let coin = {
+          coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1),
+          id: i.id
+        }
+        this.coins[i.id] = coin;
       }
       for(let i of trees.trees){
         let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
@@ -125,14 +128,34 @@ class Game extends Phaser.Scene {
       this.minimap.addPlayer(this, data.id, data.x, data.y);
     });
 
-    this.socket.on("collected gold", id => {
-      console.log(id);
+    this.socket.on("collected coin", (id, playerId) => {
+      try {
+        if(!this.verified) return;
+        let player;
+        if(playerId == this.socket.id) player = this.player;
+        else player = this.enemies[playerId].player;
+        let coin = this.coins[id];
+        this.tweens.add({
+          targets: coin.coin,
+          x: player.x,
+          y: player.y,
+          duration: 75,
+          onComplete: function(){
+            coin.coin.destroy();
+          }
+        });
+      } catch(e){
+        console.log(e);
+      }
+    });
+
+    this.socket.on("new coin", data => {
       if(!this.verified) return;
-      this.coins.children.entries.forEach(coin => {
-        if(coin.id == id){
-          coin.destroy();
-        }
-      });
+      let coin = {
+        coin: this.add.image(data.x, data.y, "coin").setScale(0.75, 0.75).setDepth(1),
+        id: data.id
+      }
+      this.coins[data.id] = coin;
     });
   
     this.socket.on("left", id => {
@@ -146,6 +169,7 @@ class Game extends Phaser.Scene {
     });
   
     this.socket.on("leave", () => {
+      this.chatbox.destroy();
       this.scene.start("disconnect_scene");
     });
   }
@@ -209,6 +233,7 @@ class Game extends Phaser.Scene {
     this.socket.on("gamestate", data => {
       if(!this.verified) return;
       if(this.socket.disconnected){
+        this.chatbox.destroy();
         this.scene.start("disconnect_scene");
         return;
       }
@@ -325,7 +350,9 @@ class Game extends Phaser.Scene {
             }, { background: 0x00374ff });
             playAgain.text.setDepth(102).setAlpha(0);
             playAgain.button.setDepth(101).setAlpha(0);
-            game.cameras.main.startFollow(game.enemies[shooter].player);
+            if(game.enemies[shooter]){
+              game.cameras.main.startFollow(game.enemies[shooter].player);
+            }
             game.tweens.add({
               targets: deathRect,
               duration: 300,
@@ -373,7 +400,7 @@ class Game extends Phaser.Scene {
   }
 
   addPlayer(player){
-    var alpha = 0.6;
+    var alpha = 0.5;
     var done = false;
     if(!player.spawntimeleft){
       alpha = 1;
@@ -428,6 +455,7 @@ class Game extends Phaser.Scene {
     if(!this.loaded) return;
     if(!this.verified) return;
     if(this.socket.disconnected){
+      this.chatbox.destroy();
       this.scene.start("disconnect_scene");
       return;
     }

@@ -23,6 +23,7 @@ global.rooms = {
     bullets: {},
     coins: {},
     new_bullet_id: 0,
+    new_coin_id: 0,
     timeleft: 0
   }
 };

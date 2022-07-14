@@ -129,9 +129,18 @@ class BotPlayer {
 
   checkCollision(){
     Object.values(rooms.main.coins).forEach(coin => {
-      if(circleCol(coin.x, coin.y, coinsize / 2, this.x, this.y, radius)){
+      if(circleCol(coin.x, coin.y, coinsize, this.x, this.y, radius)){
         delete rooms.main.coins[coin.id];
-        io.emit("collected gold", coin.id);
+        io.emit("collected coin", coin.id, this.id);
+        for(let i = 0; i < random(0, 2); i++){
+          rooms.main.coins[rooms.main.new_coin_id] = {
+            id: rooms.main.new_coin_id,
+            x: random(coinsize / 2, size - coinsize / 2),
+            y: random(coinsize / 2, size - coinsize / 2)
+          };
+          io.emit("new coin", rooms.main.coins[rooms.main.new_coin_id]);
+          rooms.main.new_coin_id++;
+        }
       }
     });
     if(this.spawntimeleft) return;
@@ -160,6 +169,13 @@ class BotPlayer {
     if(!Object.keys(players).length) return undefined;
     const player = Object.values(players).sort((a, b) =>  Math.hypot(this.x - a.x, this.y - a.y) - Math.hypot(this.x - b.x, this.y - b.y))[0];
     return player.id;
+  }
+
+  closestCoin(){
+    var coins = {...rooms.main.coins};
+    if(!Object.keys(coins).length) return undefined;
+    const coin = Object.values(coins).sort((a, b) =>  Math.hypot(this.x - a.x, this.y - a.y) - Math.hypot(this.x - b.x, this.y - b.y))[0];
+    return coin.id;
   }
 }
 
