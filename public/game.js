@@ -92,7 +92,7 @@ class Game extends Phaser.Scene {
       this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
       
       this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "Tick speed: 100%", { fontSize: 30, fontFamily: "copperplate" });
 
       this.playerInfo = {
         x: this.player.x,
@@ -169,22 +169,28 @@ class Game extends Phaser.Scene {
     });
 
     this.socket.on("new coin", data => {
-      if(!this.verified) return;
-      let coin = {
-        coin: this.add.image(data.x, data.y, "coin").setScale(0.75, 0.75).setDepth(1),
-        id: data.id
+      try {
+        let coin = {
+          coin: this.add.image(data.x, data.y, "coin").setScale(0.75, 0.75).setDepth(1),
+          id: data.id
+        }
+        this.coins[data.id] = coin;
+      } catch(e){
+        console.log(e);
       }
-      this.coins[data.id] = coin;
     });
   
     this.socket.on("left", id => {
-      if(!this.verified) return;
-      this.enemies[id].player.destroy();
-      this.enemies[id].gun.destroy();
-      this.enemies[id].healthbar.destroy();
-      this.enemies[id].nametext.destroy();
-      delete this.enemies[id];
-      this.minimap.removePlayer(id);
+      try {
+        this.enemies[id].player.destroy();
+        this.enemies[id].gun.destroy();
+        this.enemies[id].healthbar.destroy();
+        this.enemies[id].nametext.destroy();
+        delete this.enemies[id];
+        this.minimap.removePlayer(id);
+      } catch(e){
+        console.log(e);
+      }
     });
   
     this.socket.on("leave", () => {
@@ -195,7 +201,7 @@ class Game extends Phaser.Scene {
 
   main(){
     setInterval(() => {
-      this.tps.setText("TPS: " + this.frames);
+      this.tps.setText(`Tick speed: ${Math.round(this.frames / 30 * 100)}%`);
       this.frames = 0;
     }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
@@ -326,94 +332,103 @@ class Game extends Phaser.Scene {
     });
 
     this.socket.on("removed bullet", id => {
-      if(!this.verified) return;
-      this.bullets[id].destroy();
-      delete this.bullets[id];
+      try {
+        if(!this.verified) return;
+        this.bullets[id].destroy();
+        delete this.bullets[id];
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("player died", (id, shooter, shooterName) => {
+      
       if(!this.verified) return;
-      let game = this;
-      if(id != this.socket.id) var playerName = this.enemies[id].name;
-      if(id == this.socket.id){
-        this.died = true;
-        this.gun.destroy();
-        this.bar.destroy();
-        this.nametext.destroy();
-        this.tweens.add({
-          targets: [this.player],
-          duration: 1000,
-          alpha: 0,
-          onComplete: function(){
-            game.player.destroy();
-            game.nametext.destroy();
-            game.playerstext.destroy();
-            game.scorestext.destroy();
-            game.goldtext.destroy();
-            game.fpstext.destroy();
-            game.tps.destroy();
-            game.minimap.destroy();
-            game.chatbox.destroy();
-            let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-            let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
-            let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
-            
-            deathRect.scrollFactorX = 0;
-            deathRect.scrollFactorY = 0;
-            deathRect.setStrokeStyle(5, 0x0000000);
-            let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-              game.sys.game.destroy(true, false);
-              document.querySelector("main").style.display = "block";
-              document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
-              game.socket.disconnect();
-            }, { background: 0x00374ff });
-            playAgain.text.setDepth(102).setAlpha(0);
-            playAgain.button.setDepth(101).setAlpha(0);
-            if(game.enemies[shooter]){
-              game.cameras.main.startFollow(game.enemies[shooter].player);
+      try {
+        let game = this;
+        if(id != this.socket.id) var playerName = this.enemies[id].name;
+        if(id == this.socket.id){
+          this.died = true;
+          this.gun.destroy();
+          this.bar.destroy();
+          this.nametext.destroy();
+          this.tweens.add({
+            targets: [this.player],
+            duration: 1000,
+            alpha: 0,
+            onComplete: function(){
+              game.player.destroy();
+              game.nametext.destroy();
+              game.playerstext.destroy();
+              game.scorestext.destroy();
+              game.goldtext.destroy();
+              game.fpstext.destroy();
+              game.tps.destroy();
+              game.minimap.destroy();
+              game.chatbox.destroy();
+              let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
+              let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+              let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
+              
+              deathRect.scrollFactorX = 0;
+              deathRect.scrollFactorY = 0;
+              deathRect.setStrokeStyle(5, 0x0000000);
+              let playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
+                game.sys.game.destroy(true, false);
+                document.querySelector("main").style.display = "block";
+                document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+                game.socket.disconnect();
+              }, { background: 0x00374ff });
+              playAgain.text.setDepth(102).setAlpha(0);
+              playAgain.button.setDepth(101).setAlpha(0);
+              if(game.enemies[shooter]){
+                game.cameras.main.startFollow(game.enemies[shooter].player);
+              }
+              game.tweens.add({
+                targets: deathRect,
+                duration: 300,
+                alpha:0.5
+              });
+              game.tweens.add({
+                targets: [deathtext, infotext, playAgain.text, playAgain.button],
+                duration: 300,
+                alpha:1
+              });
+              
             }
-            game.tweens.add({
-              targets: deathRect,
-              duration: 300,
-              alpha:0.5
-            });
-            game.tweens.add({
-              targets: [deathtext, infotext, playAgain.text, playAgain.button],
-              duration: 300,
-              alpha:1
-            });
-            
-          }
-        });
-      } else {
-        this.enemies[id].gun.destroy();
-        this.enemies[id].healthbar.destroy();
-        this.enemies[id].nametext.destroy();
-        this.tweens.add({
-          targets: [this.enemies[id].player],
-          duration: 1000,
-          alpha: 0,
-          onComplete: function(){
-            game.enemies[id].player.destroy();
-            game.enemies[id].nametext.destroy();
-            delete game.enemies[id];
-            game.minimap.removePlayer(id);
-          }
-        });
-      }
-      if(shooter == this.socket.id){
-        this.score++;
-        if(this.killText){
-          this.killText.setText(`You killed ${playerName}\n\nKill Streak: ${this.score}`);
+          });
         } else {
-          this.killText = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight - 100, `You killed ${playerName}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
+          this.enemies[id].gun.destroy();
+          this.enemies[id].healthbar.destroy();
+          this.enemies[id].nametext.destroy();
+          this.tweens.add({
+            targets: [this.enemies[id].player],
+            duration: 1000,
+            alpha: 0,
+            onComplete: function(){
+              game.enemies[id].player.destroy();
+              game.enemies[id].nametext.destroy();
+              delete game.enemies[id];
+              game.minimap.removePlayer(id);
+            }
+          });
         }
-        setTimeout(() => {
-          this.killText.destroy();
-          this.killText = undefined;
-        }, 4000);
-      } else {
-        this.enemies[shooter].score++;
+        if(shooter == this.socket.id){
+          this.score++;
+          if(this.killText){
+            this.killText.setText(`You killed ${playerName}\n\nKill Streak: ${this.score}`);
+          } else {
+            this.killText = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight - 90, `You killed ${playerName}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
+          }
+          setTimeout(() => {
+            this.killText.destroy();
+            this.killText = undefined;
+          }, 4000);
+        } else {
+          this.enemies[shooter].score++;
+        }
+      } catch(e){
+        console.log(e);
       }
     });
   }

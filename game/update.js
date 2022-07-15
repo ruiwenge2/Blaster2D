@@ -8,7 +8,7 @@ const update = () => {
         var id = generateCode(20, true);
         rooms.main.players[id] = new BotPlayer(id);
         io.emit("new player", rooms.main.players[id]);
-        rooms.main.timeleft = 30 * random(1, 2); // bot joins every random amount of seconds (5)
+        rooms.main.timeleft = 30 * random(1, 2); // bot joins every random amount of seconds
       }
 
       if(rooms.main.timeleft) rooms.main.timeleft--;
