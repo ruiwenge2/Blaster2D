@@ -33,7 +33,6 @@ class Game extends Phaser.Scene {
     this.right = false;
     this.up = false;
     this.down = false;
-    this.frames = 0;
   }
   
   preload() {
@@ -92,7 +91,7 @@ class Game extends Phaser.Scene {
       this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
       
       this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "Tick speed: 100%", { fontSize: 30, fontFamily: "copperplate" });
+      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
 
       this.playerInfo = {
         x: this.player.x,
@@ -112,7 +111,7 @@ class Game extends Phaser.Scene {
   
       for(let i of Object.values(data.coins)){
         let coin = {
-          coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(1),
+          coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
           id: i.id
         }
         this.coins[i.id] = coin;
@@ -179,6 +178,15 @@ class Game extends Phaser.Scene {
         console.log(e);
       }
     });
+
+    this.socket.on("tps", tps => {
+      try {
+        // this.tps.setText(`Tick speed: ${Math.round(tps / 30 * 100)}%`);
+        this.tps.setText("TPS: " + tps);
+      } catch(e){
+        console.log(e);
+      }
+    });
   
     this.socket.on("left", id => {
       try {
@@ -200,10 +208,6 @@ class Game extends Phaser.Scene {
   }
 
   main(){
-    setInterval(() => {
-      this.tps.setText(`Tick speed: ${Math.round(this.frames / 30 * 100)}%`);
-      this.frames = 0;
-    }, 1000);
     this.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
     this.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
@@ -262,7 +266,7 @@ class Game extends Phaser.Scene {
         this.scene.start("disconnect_scene");
         return;
       }
-      this.frames += 1;
+      
       if(!this.died){
         let self = data.players[this.socket.id];
         this.playerInfo.x = self.x;
@@ -318,6 +322,19 @@ class Game extends Phaser.Scene {
         }
       });
 
+      var playerIds = Object.keys(data.players);
+      /* Object.keys(this.enemies).forEach(id => {
+        if(!playerIds.includes(id)){
+          this.enemies[id].gun.destroy();
+          this.enemies[id].healthbar.destroy();
+          this.enemies[id].nametext.destroy();
+          this.enemies[id].player.destroy();
+          this.enemies[id].nametext.destroy();
+          delete game.enemies[id];
+          this.minimap.removePlayer(id);
+        }
+      }); */
+
       if(this.died) return;
       this.minimap.update(data.players);
     });
@@ -368,7 +385,7 @@ class Game extends Phaser.Scene {
               game.chatbox.destroy();
               let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
-              let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x032a852).setOrigin(0.5).setAlpha(0).setDepth(100);
+              let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);
               
               deathRect.scrollFactorX = 0;
               deathRect.scrollFactorY = 0;
@@ -394,7 +411,6 @@ class Game extends Phaser.Scene {
                 duration: 300,
                 alpha:1
               });
-              
             }
           });
         } else {
@@ -597,7 +613,7 @@ class Game extends Phaser.Scene {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Game);
 
-// https://www.html5gamedevs.com/topic/7273-best-way-to-fix-weapon-to-player/
+
 
 /***/ }),
 /* 2 */

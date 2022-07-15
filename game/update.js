@@ -4,6 +4,21 @@ const BotPlayer = require("./botplayer");
 const update = () => {
   setInterval(function(){
     try {
+      if(Date.now() - time >= 1000){
+        io.emit("tps", tps);
+        tps = 0;
+        time = Date.now();
+      }
+      if(Object.keys(rooms.main.coins).length < maxCoins){
+        rooms.main.coins[rooms.main.new_coin_id] = {
+          id: rooms.main.new_coin_id,
+          x: random(coinsize / 2, size - coinsize / 2),
+          y: random(coinsize / 2, size - coinsize / 2)
+        };
+        io.emit("new coin", rooms.main.coins[rooms.main.new_coin_id]);
+        rooms.main.new_coin_id++;
+      }
+      
       if(!rooms.main.timeleft && Object.keys(rooms.main.players).length < 8){
         var id = generateCode(20, true);
         rooms.main.players[id] = new BotPlayer(id);
@@ -45,7 +60,7 @@ const update = () => {
       }
       
       io.emit("gamestate", rooms.main);
-      
+      tps++;
     } catch(e){
       console.log(e);
     }

@@ -25,7 +25,7 @@ module.exports.checkUser = function(id){
 module.exports.setUpRoom = function(){
   if(Object.keys(rooms.main.players).length == 0){
     rooms.main.coins = {};
-    for(let i = 0; i < module.exports.random(300, 500); i++){
+    for(let i = 0; i < maxCoins; i++){
       rooms.main.coins[rooms.main.new_coin_id] = {
         id: rooms.main.new_coin_id,
         x: module.exports.random(coinsize / 2, size - coinsize / 2),

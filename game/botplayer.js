@@ -132,15 +132,6 @@ class BotPlayer {
       if(circleCol(coin.x, coin.y, coinsize, this.x, this.y, radius)){
         delete rooms.main.coins[coin.id];
         io.emit("collected coin", coin.id, this.id);
-        for(let i = 0; i < random(0, 2); i++){
-          rooms.main.coins[rooms.main.new_coin_id] = {
-            id: rooms.main.new_coin_id,
-            x: random(coinsize / 2, size - coinsize / 2),
-            y: random(coinsize / 2, size - coinsize / 2)
-          };
-          io.emit("new coin", rooms.main.coins[rooms.main.new_coin_id]);
-          rooms.main.new_coin_id++;
-        }
       }
     });
     if(this.spawntimeleft) return;
