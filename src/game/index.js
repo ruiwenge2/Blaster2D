@@ -241,92 +241,92 @@ class Game extends Phaser.Scene {
     this.addWeaponActions();
 
     this.socket.on("gamestate", data => {
-      if(!this.verified) return;
-      if(this.socket.disconnected){
-        this.chatbox.destroy();
-        this.scene.start("disconnect_scene");
-        return;
-      }
-      
-      if(!this.died){
-        let self = data.players[this.socket.id];
-        this.playerInfo.x = self.x;
-        this.playerInfo.y = self.y;
-        let game = this;
-
-        if(!self.spawntimeleft && !this.spawned){
-          this.player.setAlpha(1);
+      try {
+        if(!this.verified) return;
+        if(this.socket.disconnected){
+          this.chatbox.destroy();
+          this.scene.start("disconnect_scene");
+          return;
         }
-        this.tweens.add({
-          targets: this.player,
-          x: this.playerInfo.x,
-          y: this.playerInfo.y,
-          duration: 100
-        });
-      }
-
-      Object.values(data.players).forEach(enemy => {
-        if(enemy.id == this.socket.id) return;
-        if(!enemy.spawntimeleft && !this.enemies[enemy.id].spawned){
-          this.enemies[enemy.id].player.setAlpha(1);
-          this.enemies[enemy.id].spawned = true;
+        
+        if(!this.died){
+          let self = data.players[this.socket.id];
+          this.playerInfo.x = self.x;
+          this.playerInfo.y = self.y;
+          let game = this;
+  
+          if(!self.spawntimeleft && !this.spawned){
+            this.player.setAlpha(1);
+          }
+          this.tweens.add({
+            targets: this.player,
+            x: this.playerInfo.x,
+            y: this.playerInfo.y,
+            duration: 100
+          });
         }
-        this.tweens.add({
-          targets: [this.enemies[enemy.id].player],
-          x: enemy.x,
-          y: enemy.y,
-          duration: 100,
-          onUpdate: function(){
-            try {
+  
+        Object.values(data.players).forEach(enemy => {
+          if(enemy.id == this.socket.id) return;
+          if(!enemy.spawntimeleft && !this.enemies[enemy.id].spawned){
+            this.enemies[enemy.id].player.setAlpha(1);
+            this.enemies[enemy.id].spawned = true;
+          }
+          this.tweens.add({
+            targets: [this.enemies[enemy.id].player],
+            x: enemy.x,
+            y: enemy.y,
+            duration: 100,
+            onUpdate: function(){
               let player = game.enemies[enemy.id];
               player.gun.x = player.player.x + Math.cos(enemy.angle2) * (radius + 29);
              player.gun.y = player.player.y + Math.sin(enemy.angle2) * (radius + 29);
               player.gun.angle = enemy.angle;
               player.player.angle = enemy.angle;
-            } catch(e){
-              console.log(e);
-            }
-          } 
+            } 
+          });
         });
-      });
-
-      Object.values(data.bullets).forEach(bullet => {
-        try {
+  
+        Object.values(data.bullets).forEach(bullet => {
           this.tweens.add({
             targets: [this.bullets[bullet.id]],
             x: data.bullets[bullet.id].x,
             y: data.bullets[bullet.id].y,
             duration: 1000 / 30
           });
-        } catch(e){
-          console.log(e);
-        }
-      });
-
-      var playerIds = Object.keys(data.players);
-      /* Object.keys(this.enemies).forEach(id => {
-        if(!playerIds.includes(id)){
-          this.enemies[id].gun.destroy();
-          this.enemies[id].healthbar.destroy();
-          this.enemies[id].nametext.destroy();
-          this.enemies[id].player.destroy();
-          this.enemies[id].nametext.destroy();
-          delete game.enemies[id];
-          this.minimap.removePlayer(id);
-        }
-      }); */
-
-      if(this.died) return;
-      this.minimap.update(data.players);
+        });
+  
+        /* var playerIds = Object.keys(data.players);
+        Object.keys(this.enemies).forEach(id => {
+          if(!playerIds.includes(id)){
+            this.enemies[id].gun.destroy();
+            this.enemies[id].healthbar.destroy();
+            this.enemies[id].nametext.destroy();
+            this.enemies[id].player.destroy();
+            this.enemies[id].nametext.destroy();
+            delete game.enemies[id];
+            this.minimap.removePlayer(id);
+          }
+        }); */
+  
+        if(this.died) return;
+        this.minimap.update(data.players);
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("new bullet", (id, data) => {
-      if(!this.verified) return;
-      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
-      bullet_image.angle = data.angle;
-      bullet_image.shooter = data.shooter;
-      bullet_image.id = id;
-      this.bullets[id] = bullet_image;
+      try {
+        if(!this.verified) return;
+        let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
+        bullet_image.angle = data.angle;
+        bullet_image.shooter = data.shooter;
+        bullet_image.id = id;
+        this.bullets[id] = bullet_image;
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("removed bullet", id => {
@@ -339,10 +339,9 @@ class Game extends Phaser.Scene {
       }
     });
 
-    this.socket.on("player died", (id, shooter, shooterName) => {
-      
-      if(!this.verified) return;
+    this.socket.on("player died", (id, shooter, shooterName) => {   
       try {
+        if(!this.verified) return;
         let game = this;
         if(id != this.socket.id) var playerName = this.enemies[id].name;
         if(id == this.socket.id){
