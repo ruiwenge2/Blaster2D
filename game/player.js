@@ -6,14 +6,8 @@ class Player {
     this.id = id;
     this.name = name;
     this.bot = bot;
-    if(!this.bot){
-      this.x = random(playersize, 400 - playersize);
-      this.y = random(playersize, 400 - playersize);
-    } else {
-      this.x = random(playersize, size - playersize);
-      this.y = random(playersize, size - playersize);
-    }
-    
+    this.x = random(playersize, size - playersize);
+    this.y = random(playersize, size - playersize);
     this.gun = "pistol";
     this.health = 100;
     this.ammo = 10;
