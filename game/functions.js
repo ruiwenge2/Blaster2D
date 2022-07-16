@@ -19,8 +19,12 @@ module.exports.generateCode = function(length, cap = false){
 };
 
 module.exports.checkUser = function(id){
-  return Object.keys(rooms.main.players).includes(id);
+  return Object.keys(rooms.main.players).includes(id) || rooms.main.diedPlayers.includes(id);
 };
+
+module.exports.playerDead = function(id){
+  return rooms.main.diedPlayers.includes(id);
+}
 
 module.exports.setUpRoom = function(){
   if(Object.keys(rooms.main.players).length == 0){
@@ -74,7 +78,7 @@ module.exports.shoot = function(id, angle){
     angle2: angle,
     id: rooms.main.new_bullet_id,
     shooterName: rooms.main.players[id].name,
-    damage: rooms.main.players[id].damage
+    gun: rooms.main.players[id].gun
   }
   
   io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);

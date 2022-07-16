@@ -2,12 +2,18 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name){
+  constructor(id, name, bot){
     this.id = id;
     this.name = name;
-    this.x = random(playersize, size - playersize);
-    this.y = random(playersize, size - playersize);
-    this.bot = false;
+    this.bot = bot;
+    if(!this.bot){
+      this.x = random(playersize, 400 - playersize);
+      this.y = random(playersize, 400 - playersize);
+    } else {
+      this.x = random(playersize, size - playersize);
+      this.y = random(playersize, size - playersize);
+    }
+    
     this.gun = "pistol";
     this.health = 100;
     this.ammo = 10;
@@ -20,8 +26,8 @@ class Player {
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
-    this.bot = false;
     this.joinTime = Date.now();
+    this.shootTime = Date.now();
     this.spawned = false;
     this.damage = damage;
     this.healTime = undefined;
@@ -63,6 +69,20 @@ class Player {
     if(this.right && this.x + radius + speed > size) this.rightspeed = size - this.x - radius;
     if(this.up && this.y - radius - speed < 0) this.upspeed = this.y - radius;
     if(this.down && this.y + radius + speed > size) this.downspeed = size - this.y - radius;
+
+
+    let players = {...rooms.main.players};
+    delete players[this.id];
+    Object.values(players).forEach(player => {
+      if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
+        (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
+        (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.8, player.x, player.y, radius * 0.8)) || 
+         (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.8, player.x, player.y, radius * 0.8))) this.stop();
+    });
+  }
+
+  stop(){
+    this.left = this.right = this.up = this.down = false;
   }
 
   checkCollision(){
@@ -76,7 +96,7 @@ class Player {
     Object.values(rooms.main.bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
-        this.health -= bullet.damage;
+        this.health -= random(weapons[bullet.gun].min, weapons[bullet.gun].max);
         delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
         this.healTime = Date.now() + 5000;
@@ -89,6 +109,8 @@ class Player {
             if(!rooms.main.timeleft){
               rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
             }
+          } else {
+            rooms.main.diedPlayers.push(this.id);
           }
         }
       }

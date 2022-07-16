@@ -24,7 +24,8 @@ global.rooms = {
     coins: {},
     new_bullet_id: 0,
     new_coin_id: 0,
-    timeleft: 0
+    timeleft: 0,
+    diedPlayers: []
   }
 };
 global.playersize = 65;
@@ -39,6 +40,12 @@ global.maxCoins = 200;
 global.tps = 0;
 global.time = Date.now();
 global.damage = 50;
+global.weapons = {
+  pistol: {
+    min: 40,
+    max: 60
+  }
+}
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);

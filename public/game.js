@@ -304,6 +304,7 @@ class Game extends Phaser.Scene {
             duration: 100,
             onUpdate: function(){
               let player = game.enemies[enemy.id];
+              if(!player) return;
               player.gun.x = player.player.x + Math.cos(enemy.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
              player.gun.y = player.player.y + Math.sin(enemy.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
               player.gun.angle = enemy.angle;
@@ -479,15 +480,13 @@ class Game extends Phaser.Scene {
   }
 
   addWeaponActions(){
-    this.useweapon = true;
     this.input.on("pointerdown", e => {
-      if(!this.useweapon || this.died) return;
+      if(this.died) return;
       if(!this.chatbox.focus){
         var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
         this.socket.emit("shoot", angle);
         this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
         this.gun.angle2 = angle;
-        this.useweapon = false;
       }
       document.getElementById("chat-input").blur();
     });
@@ -498,12 +497,6 @@ class Game extends Phaser.Scene {
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
     });
-
-    setInterval(() => {
-      if(!this.useweapon){
-        this.useweapon = true;
-      }
-    }, 500);
   }
 
   update() {

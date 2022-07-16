@@ -5,10 +5,8 @@ const Player = require("./player.js");
 
 class BotPlayer extends Player {
   constructor(id){
-    super(id, humanNames.allRandom());
-    this.bot = true;
-    this.timeleft = 0;
-    this.movementTimeleft = 0;
+    super(id, humanNames.allRandom(), true);
+    this.movementTime = Date.now();
     this.target = {
       x: random(playersize, size - playersize),
       y: random(playersize, size - playersize)
@@ -19,7 +17,7 @@ class BotPlayer extends Player {
   
   botUpdate(){
     var xdone = false;
-    if(!this.movementTimeleft){
+    if(!this.finishedMovement){
       if(Math.abs(this.x - this.target.x) < 10){
         this.left = false;
         this.right = false;
@@ -47,20 +45,20 @@ class BotPlayer extends Player {
         }
       }
       if(this.finishedMovement){
-        this.movementTimeleft = 30 * random(0, 10); // random amount of seconds until the bot moves again
-        this.finishedMovement = false;
+        this.movementTime = Date.now() + random(0, 10) * 1000; // random amount of seconds until the bot moves again
+        this.finishedMovement = true;
       }
     } else {
       this.left = false;
       this.right = false;
       this.up = false;
       this.down = false;
-      this.movementTimeleft--;
-      if(!this.movementTimeleft){
+      if(Date.now() >= this.movementTime){
         this.target = {
           x: random(playersize, size - playersize),
           y: random(playersize, size - playersize)
         }
+        this.finishedMovement = false;
       }
     }
 
@@ -70,14 +68,12 @@ class BotPlayer extends Player {
     var angle = Math.atan2(player.y - this.y, player.x - this.x);
     this.angle2 = angle;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
-    if(!this.timeleft){
+    if(Date.now() >= this.shootTime){
       if(!random(0, this.shootrate) && Math.abs(this.x - player.x) < 500 && Math.abs(this.y - player.y) < 300){ // if player within range
         shoot(this.id, angle);
-        this.timeleft = 30;
+        this.shootTime = Date.now() + 500;
       }
       
-    } else {
-      this.timeleft--;
     }
     
     this.update();
