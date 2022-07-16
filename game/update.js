@@ -33,7 +33,8 @@ const update = () => {
           delete rooms.main.players[player.id];
           return;
         }
-        player.update();
+        if(player.bot) player.botUpdate();
+        else player.update();
       });
       
       Object.values(rooms.main.bullets).forEach(bullet => {

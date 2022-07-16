@@ -73,7 +73,8 @@ module.exports.shoot = function(id, angle){
     angle: ((angle * 180 / Math.PI) + 360) % 360,
     angle2: angle,
     id: rooms.main.new_bullet_id,
-    shooterName: rooms.main.players[id].name
+    shooterName: rooms.main.players[id].name,
+    damage: rooms.main.players[id].damage
   }
   
   io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);

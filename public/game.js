@@ -78,66 +78,70 @@ class Game extends Phaser.Scene {
     });
     
     this.socket.on("gamedata", data => { // when game data arrives
-      this.loaded = true;
-      this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
-      this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
-      this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
-      this.playerstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
-      this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
-
-      
-      this.gold = 0;
-      this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
-      
-      this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-      this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
-
-      this.playerInfo = {
-        x: this.player.x,
-        y: this.player.y
-      };
-      
-      this.cameras.main.startFollow(this.player);
-      this.minimap.show(this);
-      this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
-      
-      this.data = {
-        x: data.players[this.socket.id].x,
-        y: data.players[this.socket.id].y,
-        angle: 0,
-        angle2:0
-      };
+      try {
+        this.loaded = true;
+        this.loadingtext.destroy();
+        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
+        this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
+        this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
+        this.playerstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+        this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
   
-      for(let i of Object.values(data.coins)){
-        let coin = {
-          coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
-          id: i.id
-        }
-        this.coins[i.id] = coin;
-      }
-      for(let i of _trees_json__WEBPACK_IMPORTED_MODULE_6__.trees){
-        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.treesize).setDepth(10).setAlpha(0.7);
-        tree.id = i.id;
-        tree.angle = i.angle;
-      }
-      
-      for(let oplayer of Object.keys(data.players)){
-        if(oplayer != this.socket.id){
-          this.addPlayer(data.players[oplayer]);
-          this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
-        }
-      }
-
-      Object.values(data.bullets).forEach(bullet => {
-        let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.9);
-        bullet_image.angle = bullet.angle;
-        bullet_image.shooter = bullet.shooter;
-        bullet_image.id = bullet.id;
-        this.bullets[bullet.id] = bullet_image;
-      });
-      this.main();
         
+        this.gold = 0;
+        this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
+        
+        this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
+        this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+  
+        this.playerInfo = {
+          x: this.player.x,
+          y: this.player.y
+        };
+        
+        this.cameras.main.startFollow(this.player);
+        this.minimap.show(this);
+        this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
+        
+        this.data = {
+          x: data.players[this.socket.id].x,
+          y: data.players[this.socket.id].y,
+          angle: 0,
+          angle2:0
+        };
+    
+        for(let i of Object.values(data.coins)){
+          let coin = {
+            coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
+            id: i.id
+          }
+          this.coins[i.id] = coin;
+        }
+        for(let i of _trees_json__WEBPACK_IMPORTED_MODULE_6__.trees){
+          let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / _functions_js__WEBPACK_IMPORTED_MODULE_0__.treesize).setDepth(10).setAlpha(0.7);
+          tree.id = i.id;
+          tree.angle = i.angle;
+        }
+        
+        for(let oplayer of Object.keys(data.players)){
+          if(oplayer != this.socket.id){
+            this.addPlayer(data.players[oplayer]);
+            this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
+          }
+        }
+  
+        Object.values(data.bullets).forEach(bullet => {
+          let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.999);
+          bullet_image.angle = bullet.angle;
+          bullet_image.shooter = bullet.shooter;
+          bullet_image.id = bullet.id;
+          this.bullets[bullet.id] = bullet_image;
+        });
+        
+        this.main();
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("new player", data => { // when new player joins
@@ -260,92 +264,94 @@ class Game extends Phaser.Scene {
     this.addWeaponActions();
 
     this.socket.on("gamestate", data => {
-      if(!this.verified) return;
-      if(this.socket.disconnected){
-        this.chatbox.destroy();
-        this.scene.start("disconnect_scene");
-        return;
-      }
-      
-      if(!this.died){
-        let self = data.players[this.socket.id];
-        this.playerInfo.x = self.x;
-        this.playerInfo.y = self.y;
+      try {
+        if(!this.verified) return;
+        if(this.socket.disconnected){
+          this.chatbox.destroy();
+          this.scene.start("disconnect_scene");
+          return;
+        }
         let game = this;
-
-        if(!self.spawntimeleft && !this.spawned){
-          this.player.setAlpha(1);
+        
+        if(!this.died){
+          let self = data.players[this.socket.id];
+          this.playerInfo.x = self.x;
+          this.playerInfo.y = self.y;
+          this.health = self.health;
+  
+          if(self.spawned && !this.spawned){
+            this.player.setAlpha(1);
+          }
+          this.tweens.add({
+            targets: this.player,
+            x: this.playerInfo.x,
+            y: this.playerInfo.y,
+            duration: 100
+          });
         }
-        this.tweens.add({
-          targets: this.player,
-          x: this.playerInfo.x,
-          y: this.playerInfo.y,
-          duration: 100
-        });
-      }
-
-      Object.values(data.players).forEach(enemy => {
-        if(enemy.id == this.socket.id) return;
-        if(!enemy.spawntimeleft && !this.enemies[enemy.id].spawned){
-          this.enemies[enemy.id].player.setAlpha(1);
-          this.enemies[enemy.id].spawned = true;
-        }
-        this.tweens.add({
-          targets: [this.enemies[enemy.id].player],
-          x: enemy.x,
-          y: enemy.y,
-          duration: 100,
-          onUpdate: function(){
-            try {
+  
+        Object.values(data.players).forEach(enemy => {
+          if(enemy.id == this.socket.id) return;
+          if(enemy.spawned && !this.enemies[enemy.id].spawned){
+            this.enemies[enemy.id].player.setAlpha(1);
+            this.enemies[enemy.id].spawned = true;
+          }
+           this.enemies[enemy.id].health = enemy.health;
+          this.tweens.add({
+            targets: [this.enemies[enemy.id].player],
+            x: enemy.x,
+            y: enemy.y,
+            duration: 100,
+            onUpdate: function(){
               let player = game.enemies[enemy.id];
               player.gun.x = player.player.x + Math.cos(enemy.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
              player.gun.y = player.player.y + Math.sin(enemy.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29);
               player.gun.angle = enemy.angle;
               player.player.angle = enemy.angle;
-            } catch(e){
-              console.log(e);
-            }
-          } 
+            } 
+          });
         });
-      });
-
-      Object.values(data.bullets).forEach(bullet => {
-        try {
+  
+        Object.values(data.bullets).forEach(bullet => {
           this.tweens.add({
             targets: [this.bullets[bullet.id]],
             x: data.bullets[bullet.id].x,
             y: data.bullets[bullet.id].y,
             duration: 1000 / 30
           });
-        } catch(e){
-          console.log(e);
-        }
-      });
-
-      var playerIds = Object.keys(data.players);
-      /* Object.keys(this.enemies).forEach(id => {
-        if(!playerIds.includes(id)){
-          this.enemies[id].gun.destroy();
-          this.enemies[id].healthbar.destroy();
-          this.enemies[id].nametext.destroy();
-          this.enemies[id].player.destroy();
-          this.enemies[id].nametext.destroy();
-          delete game.enemies[id];
-          this.minimap.removePlayer(id);
-        }
-      }); */
-
-      if(this.died) return;
-      this.minimap.update(data.players);
+        });
+  
+        /* var playerIds = Object.keys(data.players);
+        Object.keys(this.enemies).forEach(id => {
+          if(!playerIds.includes(id)){
+            this.enemies[id].gun.destroy();
+            this.enemies[id].healthbar.destroy();
+            this.enemies[id].nametext.destroy();
+            this.enemies[id].player.destroy();
+            this.enemies[id].nametext.destroy();
+            delete game.enemies[id];
+            this.minimap.removePlayer(id);
+          }
+        }); */
+  
+        if(this.died) return;
+        this.minimap.update(data.players);
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("new bullet", (id, data) => {
-      if(!this.verified) return;
-      let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
-      bullet_image.angle = data.angle;
-      bullet_image.shooter = data.shooter;
-      bullet_image.id = id;
-      this.bullets[id] = bullet_image;
+      try {
+        if(!this.verified) return;
+        let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.999);
+        bullet_image.angle = data.angle;
+        bullet_image.shooter = data.shooter;
+        bullet_image.id = id;
+        this.bullets[id] = bullet_image;
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("removed bullet", id => {
@@ -358,10 +364,9 @@ class Game extends Phaser.Scene {
       }
     });
 
-    this.socket.on("player died", (id, shooter, shooterName) => {
-      
-      if(!this.verified) return;
+    this.socket.on("player died", (id, shooter, shooterName) => {   
       try {
+        if(!this.verified) return;
         let game = this;
         if(id != this.socket.id) var playerName = this.enemies[id].name;
         if(id == this.socket.id){
@@ -452,7 +457,7 @@ class Game extends Phaser.Scene {
   addPlayer(player){
     var alpha = 0.5;
     var done = false;
-    if(!player.spawntimeleft){
+    if(player.spawned){
       alpha = 1;
       done = true;
     }
@@ -517,7 +522,7 @@ class Game extends Phaser.Scene {
 
     if(this.died) return;
 
-    this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100);
+    this.bar.setData(this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, this.health);
     this.nametext.setPosition(this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20);
     
     Array.prototype.insert = function(index, item) {

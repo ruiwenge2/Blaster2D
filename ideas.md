@@ -17,3 +17,5 @@
   - client recieves data, and passes the data into the phaser object
   - in the update function, the game will be updated
 - use line-circle-collision library in server
+- feat: use `Date.now()` instead of counting down in update function (because of potential lag)
+- use `extends` for the bot class, using the player class

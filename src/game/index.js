@@ -59,66 +59,70 @@ class Game extends Phaser.Scene {
     });
     
     this.socket.on("gamedata", data => { // when game data arrives
-      this.loaded = true;
-      this.loadingtext.destroy();
-      this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
-      this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
-      this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
-      this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
-      this.scorestext = new Text(this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
-
-      
-      this.gold = 0;
-      this.goldtext = new Text(this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
-      
-      this.fpstext = new Text(this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-      this.tps = new Text(this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
-
-      this.playerInfo = {
-        x: this.player.x,
-        y: this.player.y
-      };
-      
-      this.cameras.main.startFollow(this.player);
-      this.minimap.show(this);
-      this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
-      
-      this.data = {
-        x: data.players[this.socket.id].x,
-        y: data.players[this.socket.id].y,
-        angle: 0,
-        angle2:0
-      };
+      try {
+        this.loaded = true;
+        this.loadingtext.destroy();
+        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
+        this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
+        this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
+        this.playerstext = new Text(this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+        this.scorestext = new Text(this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
   
-      for(let i of Object.values(data.coins)){
-        let coin = {
-          coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
-          id: i.id
-        }
-        this.coins[i.id] = coin;
-      }
-      for(let i of trees.trees){
-        let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
-        tree.id = i.id;
-        tree.angle = i.angle;
-      }
-      
-      for(let oplayer of Object.keys(data.players)){
-        if(oplayer != this.socket.id){
-          this.addPlayer(data.players[oplayer]);
-          this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
-        }
-      }
-
-      Object.values(data.bullets).forEach(bullet => {
-        let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.9);
-        bullet_image.angle = bullet.angle;
-        bullet_image.shooter = bullet.shooter;
-        bullet_image.id = bullet.id;
-        this.bullets[bullet.id] = bullet_image;
-      });
-      this.main();
         
+        this.gold = 0;
+        this.goldtext = new Text(this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
+        
+        this.fpstext = new Text(this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
+        this.tps = new Text(this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+  
+        this.playerInfo = {
+          x: this.player.x,
+          y: this.player.y
+        };
+        
+        this.cameras.main.startFollow(this.player);
+        this.minimap.show(this);
+        this.minimap.addPlayer(this, this.socket.id, data.players[this.socket.id].x, data.players[this.socket.id].y)
+        
+        this.data = {
+          x: data.players[this.socket.id].x,
+          y: data.players[this.socket.id].y,
+          angle: 0,
+          angle2:0
+        };
+    
+        for(let i of Object.values(data.coins)){
+          let coin = {
+            coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
+            id: i.id
+          }
+          this.coins[i.id] = coin;
+        }
+        for(let i of trees.trees){
+          let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
+          tree.id = i.id;
+          tree.angle = i.angle;
+        }
+        
+        for(let oplayer of Object.keys(data.players)){
+          if(oplayer != this.socket.id){
+            this.addPlayer(data.players[oplayer]);
+            this.minimap.addPlayer(this, data.players[oplayer].id, data.players[oplayer].x, data.players[oplayer].y);
+          }
+        }
+  
+        Object.values(data.bullets).forEach(bullet => {
+          let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.999);
+          bullet_image.angle = bullet.angle;
+          bullet_image.shooter = bullet.shooter;
+          bullet_image.id = bullet.id;
+          this.bullets[bullet.id] = bullet_image;
+        });
+        
+        this.main();
+      } catch(e){
+        console.log(e);
+      }
     });
 
     this.socket.on("new player", data => { // when new player joins
@@ -248,14 +252,15 @@ class Game extends Phaser.Scene {
           this.scene.start("disconnect_scene");
           return;
         }
+        let game = this;
         
         if(!this.died){
           let self = data.players[this.socket.id];
           this.playerInfo.x = self.x;
           this.playerInfo.y = self.y;
-          let game = this;
+          this.health = self.health;
   
-          if(!self.spawntimeleft && !this.spawned){
+          if(self.spawned && !this.spawned){
             this.player.setAlpha(1);
           }
           this.tweens.add({
@@ -268,10 +273,11 @@ class Game extends Phaser.Scene {
   
         Object.values(data.players).forEach(enemy => {
           if(enemy.id == this.socket.id) return;
-          if(!enemy.spawntimeleft && !this.enemies[enemy.id].spawned){
+          if(enemy.spawned && !this.enemies[enemy.id].spawned){
             this.enemies[enemy.id].player.setAlpha(1);
             this.enemies[enemy.id].spawned = true;
           }
+           this.enemies[enemy.id].health = enemy.health;
           this.tweens.add({
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
@@ -319,7 +325,7 @@ class Game extends Phaser.Scene {
     this.socket.on("new bullet", (id, data) => {
       try {
         if(!this.verified) return;
-        let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.9);
+        let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.999);
         bullet_image.angle = data.angle;
         bullet_image.shooter = data.shooter;
         bullet_image.id = id;
@@ -432,7 +438,7 @@ class Game extends Phaser.Scene {
   addPlayer(player){
     var alpha = 0.5;
     var done = false;
-    if(!player.spawntimeleft){
+    if(player.spawned){
       alpha = 1;
       done = true;
     }
@@ -497,7 +503,7 @@ class Game extends Phaser.Scene {
 
     if(this.died) return;
 
-    this.bar.setData(this.player.x, this.player.y - radius - 20, 100);
+    this.bar.setData(this.player.x, this.player.y - radius - 20, this.health);
     this.nametext.setPosition(this.player.x, this.player.y + radius + 20);
     
     Array.prototype.insert = function(index, item) {

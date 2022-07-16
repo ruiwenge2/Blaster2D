@@ -7,6 +7,7 @@ class Player {
     this.name = name;
     this.x = random(playersize, size - playersize);
     this.y = random(playersize, size - playersize);
+    this.bot = false;
     this.gun = "pistol";
     this.health = 100;
     this.ammo = 10;
@@ -19,11 +20,19 @@ class Player {
     this.angle2 = 0;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
-    this.spawntimeleft = spawntime * 30;
+    this.bot = false;
+    this.joinTime = Date.now();
+    this.spawned = false;
+    this.damage = damage;
+    this.healTime = undefined;
   }
   
   update(){
-    if(this.spawntimeleft) this.spawntimeleft --;
+    if(Date.now() - this.joinTime >= spawntime * 1000 && !this.spawned) this.spawned = true;
+    if(this.health < 100 && Date.now() >= this.healTime){
+      this.health += 1;
+      this.healTime = Date.now() + 500;
+    }
     this.checkDiagonal();
     this.checkMovement();
     this.checkCollision();
@@ -58,20 +67,30 @@ class Player {
 
   checkCollision(){
     Object.values(rooms.main.coins).forEach(coin => {
-      if(circleCol(coin.x, coin.y, coinsize * 1.5, this.x, this.y, radius)){
+      if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
         delete rooms.main.coins[coin.id];
         io.emit("collected coin", coin.id, this.id);
       }
     });
-    if(this.spawntimeleft) return;
+    if(!this.spawned) return;
     Object.values(rooms.main.bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
-        this.died = true;
+        this.health -= bullet.damage;
         delete rooms.main.bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
-        io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
-        rooms.main.players[bullet.shooter].score++;
+        this.healTime = Date.now() + 5000;
+        if(this.health <= 0){
+          this.health = 0;
+          this.died = true;
+          io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
+          rooms.main.players[bullet.shooter].score++;
+          if(this.bot){
+            if(!rooms.main.timeleft){
+              rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
+            }
+          }
+        }
       }
     });
   }
