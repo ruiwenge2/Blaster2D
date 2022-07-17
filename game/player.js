@@ -2,10 +2,10 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name, bot){
+  constructor(id, name, isBot){
     this.id = id;
     this.name = name;
-    this.bot = bot;
+    this.bot = isBot;
     this.x = random(playersize, size - playersize);
     this.y = random(playersize, size - playersize);
     this.gun = "pistol";
@@ -71,7 +71,7 @@ class Player {
       if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
         (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
         (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.8, player.x, player.y, radius * 0.8)) || 
-         (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.8, player.x, player.y, radius * 0.8))) this.stop();
+        (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.8, player.x, player.y, radius * 0.8))) this.stop();
     });
   }
 
