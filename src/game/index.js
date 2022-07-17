@@ -390,6 +390,7 @@ class Game extends Phaser.Scene {
               }, { background: 0x00374ff });
               playAgain.text.setDepth(102).setAlpha(0);
               playAgain.button.setDepth(101).setAlpha(0);
+              
               if(game.enemies[shooter]){
                 game.cameras.main.startFollow(game.enemies[shooter].player);
               }
@@ -448,6 +449,7 @@ class Game extends Phaser.Scene {
       alpha = 1;
       done = true;
     }
+    
     var playerObj = {
       id: player.id,
       x: player.x,
@@ -596,4 +598,3 @@ class Game extends Phaser.Scene {
 
 
 export default Game;
-
