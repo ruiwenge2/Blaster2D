@@ -31,6 +31,7 @@ class BotPlayer extends Player {
           this.left = false;
         }
       }
+      
       if(Math.abs(this.y - this.target.y) < 10){
         this.up = false;
         this.down = false;
@@ -44,6 +45,7 @@ class BotPlayer extends Player {
           this.up = false;
         }
       }
+      
       if(this.finishedMovement){
         this.movementTime = Date.now() + random(0, 10) * 1000; // random amount of seconds until the bot moves again
         this.finishedMovement = true;
