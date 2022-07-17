@@ -135,7 +135,11 @@ class Game extends Phaser.Scene {
       try {
         if(!this.verified) return;
         let player;
-        if(playerId == this.socket.id) player = this.player;
+        if(playerId == this.socket.id){
+          this.gold++;
+          this.goldtext.setText("Gold: " + this.gold);
+          player = this.player;
+        }
         else player = this.enemies[playerId].player;
         let coin = this.coins[id];
         this.tweens.add({
@@ -277,7 +281,7 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].player.setAlpha(1);
             this.enemies[enemy.id].spawned = true;
           }
-           this.enemies[enemy.id].health = enemy.health;
+          this.enemies[enemy.id].health = enemy.health;
           this.tweens.add({
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
@@ -370,6 +374,7 @@ class Game extends Phaser.Scene {
               game.tps.destroy();
               game.minimap.destroy();
               game.chatbox.destroy();
+              
               let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
               let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);

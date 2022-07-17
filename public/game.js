@@ -154,7 +154,11 @@ class Game extends Phaser.Scene {
       try {
         if(!this.verified) return;
         let player;
-        if(playerId == this.socket.id) player = this.player;
+        if(playerId == this.socket.id){
+          this.gold++;
+          this.goldtext.setText("Gold: " + this.gold);
+          player = this.player;
+        }
         else player = this.enemies[playerId].player;
         let coin = this.coins[id];
         this.tweens.add({
