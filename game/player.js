@@ -98,12 +98,15 @@ class Player {
           this.health = 0;
           this.died = true;
           io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
-          rooms.main.players[bullet.shooter].score++;
+          if(rooms.main.players[bullet.shooter]){
+            rooms.main.players[bullet.shooter].score++;
+          }
           if(this.bot){
             if(!rooms.main.timeleft){
               rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
             }
           } else {
+            console.log(this.name + " left");
             rooms.main.diedPlayers.push(this.id);
           }
         }
