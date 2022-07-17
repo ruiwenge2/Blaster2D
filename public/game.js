@@ -300,7 +300,7 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].player.setAlpha(1);
             this.enemies[enemy.id].spawned = true;
           }
-           this.enemies[enemy.id].health = enemy.health;
+          this.enemies[enemy.id].health = enemy.health;
           this.tweens.add({
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
@@ -393,6 +393,7 @@ class Game extends Phaser.Scene {
               game.tps.destroy();
               game.minimap.destroy();
               game.chatbox.destroy();
+              
               let deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               let infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
               let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);
@@ -408,6 +409,7 @@ class Game extends Phaser.Scene {
               }, { background: 0x00374ff });
               playAgain.text.setDepth(102).setAlpha(0);
               playAgain.button.setDepth(101).setAlpha(0);
+              
               if(game.enemies[shooter]){
                 game.cameras.main.startFollow(game.enemies[shooter].player);
               }
@@ -466,6 +468,7 @@ class Game extends Phaser.Scene {
       alpha = 1;
       done = true;
     }
+    
     var playerObj = {
       id: player.id,
       x: player.x,
@@ -614,8 +617,6 @@ class Game extends Phaser.Scene {
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Game);
-
-
 
 /***/ }),
 /* 2 */
