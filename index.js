@@ -5,17 +5,19 @@ const hcaptcha = require("hcaptcha");
 const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
+const cors = require("cors");
 
 global.io = socketio(server, {
-  cors: {
-    origins: [
-      "https://blaster2d.ruiwenge2.repl.co",
-      "https://blaster2d.herokuapp.com",
-      "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co",
-      "https://blaster2d--ruiwenge2.repl.co"
-    ],
-    methods: ["GET", "POST"]
-  }
+  // cors: {
+  //   origins: [
+  //     "https://blaster2d.ruiwenge2.repl.co",
+  //     "https://blaster2d.herokuapp.com",
+  //     "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co",
+  //     "https://blaster2d--ruiwenge2.repl.co"
+  //   ],
+  //   methods: ["GET", "POST"]
+  // }
+  cors: { origin: "*" }
 });
 global.rooms = {
   main: {
@@ -184,7 +186,7 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.get("/serverstats", (req, res) => {
+app.get("/serverstats", cors(), (req, res) => {
   res.send(TPS.toString());
 });
 

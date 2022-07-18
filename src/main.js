@@ -49,3 +49,12 @@ if(localStorage.getItem("server")){
 }
 
 document.getElementById("playbtn").addEventListener("click", startGame);
+
+const servers = ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com"];
+
+let num = 1;
+servers.forEach(url => {
+  fetch(url + "/serverstats").then(body => body.text()).then(tps => {
+    document.getElementById("server" + num).innerHTML += ` (${tps} TPS)`;
+  });
+})
