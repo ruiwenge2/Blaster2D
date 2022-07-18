@@ -38,6 +38,7 @@ global.bullet_speed = 40;
 global.spawntime = 3;
 global.maxCoins = 200;
 global.tps = 0;
+global.TPS = 0;
 global.time = Date.now();
 global.damage = 50;
 global.weapons = {
@@ -183,6 +184,9 @@ app.post("/signup", (req, res) => {
   });
 });
 
+app.get("/serverstats", (req, res) => {
+  res.send(TPS.toString());
+});
 
 app.get("/logout", (req, res) => {
   req.session.destroy();

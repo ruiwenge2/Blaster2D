@@ -6,6 +6,7 @@ const update = () => {
     try {
       if(Date.now() - time >= 1000){
         io.emit("tps", tps);
+        TPS = tps;
         tps = 0;
         time = Date.now();
       }
