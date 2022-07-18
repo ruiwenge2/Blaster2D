@@ -1097,6 +1097,7 @@ let num = 1;
 servers.forEach(url => {
   fetch(url + "/serverstats").then(body => body.text()).then(tps => {
     document.getElementById("server" + num).innerHTML += ` (${tps} TPS)`;
+    num++;
   });
 })
 })();
