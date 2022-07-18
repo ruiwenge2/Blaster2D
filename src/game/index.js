@@ -59,7 +59,7 @@ class Game extends Phaser.Scene {
     });
     
     const handle = function(){
-      window.error = "Failed to join server\nTry again or choose a different server";
+      window.error = "Failed to join server\n\nTry again or choose a different server";
       game.scene.start("disconnect_scene");
       game.chatbox.destroy();
     }

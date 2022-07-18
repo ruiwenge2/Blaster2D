@@ -68,9 +68,9 @@ global.db = new Database();
 // require("./trees.js");
 require("./webpack.config.js");
 
-db.get("users").then(obj => {
+/* db.get("users").then(obj => {
   if(obj == "Not Found") db.set("users", {});
-});
+}); */
 
 const saltRounds = 10;
 const allchars = [
