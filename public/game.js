@@ -244,6 +244,7 @@ class Game extends Phaser.Scene {
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+        getServerData();
       });
     });
 
@@ -418,6 +419,7 @@ class Game extends Phaser.Scene {
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                 game.socket.disconnect();
+                getServerData();
               }, { background: 0x00374ff });
               playAgain.text.setDepth(102).setAlpha(0);
               playAgain.button.setDepth(101).setAlpha(0);
@@ -1091,16 +1093,19 @@ if(localStorage.getItem("server")){
 
 document.getElementById("playbtn").addEventListener("click", startGame);
 
-const servers = ["https://blaster2d.ruiwenge2.repl.co", "https://blaster2d.herokuapp.com"];
+window.getServerData = () => {
+  const servers = {
+    "https://blaster2d.ruiwenge2.repl.co": 1,      "https://blaster2d.herokuapp.com": 2
+  };
+  for(let url of Object.keys(servers)){
+    fetch(url + "/stats").then(res => res.json()).then(data => {
+      document.getElementById("server" + servers[url]).innerHTML = `Server ${servers[url]} (${data.tps} TPS)`;
+      console.log(url, ": ", data.tps);
+    });
+  }
+};
 
-let num = 1;
-
-servers.forEach(url => {
-  fetch(url + "/stats").then(res => res.json()).then(data => {
-    document.getElementById("server" + num).innerHTML += ` (${data.tps} TPS)`;
-    num++;
-  });
-})
+getServerData();
 })();
 
 /******/ })()

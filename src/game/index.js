@@ -225,6 +225,7 @@ class Game extends Phaser.Scene {
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+        getServerData();
       });
     });
 
@@ -399,6 +400,7 @@ class Game extends Phaser.Scene {
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                 game.socket.disconnect();
+                getServerData();
               }, { background: 0x00374ff });
               playAgain.text.setDepth(102).setAlpha(0);
               playAgain.button.setDepth(101).setAlpha(0);
