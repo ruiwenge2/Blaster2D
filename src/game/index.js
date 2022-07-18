@@ -57,6 +57,12 @@ class Game extends Phaser.Scene {
       this.scale.resize(window.innerWidth, window.innerHeight);
       // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     });
+
+    this.socket.on("connect_error", (error) => {
+      window.error = error;
+      this.scene.start("disconnect_scene");
+      this.chatbox.destroy();
+    });
     
     this.socket.on("gamedata", data => { // when game data arrives
       try {
@@ -192,6 +198,7 @@ class Game extends Phaser.Scene {
   
     this.socket.on("leave", () => {
       this.chatbox.destroy();
+      window.error = "You got disconnected";
       this.scene.start("disconnect_scene");
     });
   }
@@ -253,6 +260,7 @@ class Game extends Phaser.Scene {
         if(!this.verified) return;
         if(this.socket.disconnected){
           this.chatbox.destroy();
+          window.error = "You got disconnected";
           this.scene.start("disconnect_scene");
           return;
         }
@@ -492,6 +500,7 @@ class Game extends Phaser.Scene {
     if(!this.verified) return;
     if(this.socket.disconnected){
       this.chatbox.destroy();
+      window.error = "You got disconnected";
       this.scene.start("disconnect_scene");
       return;
     }
