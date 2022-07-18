@@ -57,11 +57,11 @@ class Game extends Phaser.Scene {
       this.scale.resize(window.innerWidth, window.innerHeight);
       // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     });
-
+    
     const handle = function(){
       window.error = "Failed to join server\nTry again or choose a different server";
-      this.scene.start("disconnect_scene");
-      this.chatbox.destroy();
+      game.scene.start("disconnect_scene");
+      game.chatbox.destroy();
     }
 
     this.socket.on("connect_error", handle);
