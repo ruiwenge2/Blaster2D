@@ -186,8 +186,11 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.get("/serverstats", cors(), (req, res) => {
-  res.send(TPS.toString());
+app.get("/stats", cors(), (req, res) => {
+  res.send({
+    tps: TPS,
+    players: Object.keys(rooms.main.players).length
+  });
 });
 
 app.get("/logout", (req, res) => {
