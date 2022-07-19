@@ -48,6 +48,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
     this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
+    this.load.plugin('rexbbcodetextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js', true);
   }
 
   create() {
@@ -94,8 +95,10 @@ class Game extends Phaser.Scene {
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
         this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
-        this.playerstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 20, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
-        this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 20, fontFamily: "Arial" }).setOrigin(0);
+        this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
+        this.playerstext.scrollFactorX = 0;
+        this.playerstext.scrollFactorY = 0;
+        this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
   
         
         this.gold = 0;
@@ -495,7 +498,8 @@ class Game extends Phaser.Scene {
       angle: null,
       health: 100,
       score: player.score,
-      spawned: done
+      spawned: done,
+      bot: player.bot
     }
     this.enemies[player.id] = playerObj;
   }
@@ -545,21 +549,27 @@ class Game extends Phaser.Scene {
     };
 
     let playerslist = [...Object.values(this.enemies)];
+    let colors = {};
 
     playerslist.insert(0, {
       score: this.score,
-      name: this.name
+      name: this.name,
+      bot: false
     });
     
     let sorted_players = playerslist.sort(function(a, b){return b.score - a.score});
     let text = "";
     let text2 = "";
-    for(let i of sorted_players){
-      text += i.name + "\n";
-      text2 += i.score + "\n";
+    for(let p of sorted_players){
+      text += `[color=${p.bot ? "#2b2bff": "white"}]${p.name}[/color]\n`;
+      text2 += p.score + "\n";
     }
     this.playerstext.setText(text);
     this.scorestext.setText(text2);
+
+    for(let num of Object.keys(colors)){
+      this.playerstext.addColor(colors[num], num);
+    }
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
     let cursors = this.input.keyboard.createCursorKeys();
