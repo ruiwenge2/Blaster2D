@@ -22,7 +22,11 @@ function startGame(){
     document.querySelector("p").style.display = "block";
     return;
   }
-  localStorage.setItem("name", name);
+  if(!loggedIn){
+    localStorage.setItem("name", name);
+  } else {
+    localStorage.setItem("name", "");
+  }
   localStorage.setItem("server", document.getElementById("server").value);
   
   const game = new Phaser.Game(config);
@@ -42,6 +46,10 @@ function startGame(){
 
 if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
+}
+
+if(loggedIn){
+  localStorage.setItem("name", "");
 }
 
 if(localStorage.getItem("server")){
