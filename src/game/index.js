@@ -29,7 +29,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
-    this.load.plugin('rexbbcodetextplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js', true);
+    this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
 
   create() {
@@ -47,7 +47,7 @@ class Game extends Phaser.Scene {
     this.spawned = false;
     let game = this;
     grecaptcha.ready(function() {
-      grecaptcha.execute('6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77', {action: 'submit'}).then(function(token) {
+      grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
         game.socket.emit("join", game.name, token);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
