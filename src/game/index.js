@@ -68,6 +68,12 @@ class Game extends Phaser.Scene {
     this.socket.on("connect_error", handle);
     
     this.socket.on("connect_failed", handle);
+
+    this.socket.on("kick", message => {
+      window.error = message;
+      game.scene.start("disconnect_scene");
+      game.chatbox.destroy();
+    });
     
     this.socket.on("gamedata", data => { // when game data arrives
       try {

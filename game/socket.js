@@ -13,11 +13,14 @@ const socketfunc = socket => {
     verify(token, process.env.recaptcha_secret).then(verified => {
       if(!verified){
         console.log(name + " is a bot");
-        socket.emit("leave");
-        socket.disconnect();
+        socket.emit("kick", "No bots allowed");
+        // socket.disconnect();
         return;
       }
       console.log(name + " joined");
+      if(Object.keys(rooms.main.players).includes(socket.id)){
+        socket.emit("kick", "Same ID as another player.\n\nPlease try again")
+      }
       rooms.main.players[socket.id] = new Player(socket.id, name, false, loggedIn);
       socket.emit("gamedata", rooms.main);
       socket.broadcast.emit("new player", rooms.main.players[socket.id]);
