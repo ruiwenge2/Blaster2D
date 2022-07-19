@@ -2,10 +2,11 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name, isBot){
+  constructor(id, name, isBot, loggedIn){
     this.id = id;
     this.name = name;
     this.bot = isBot;
+    this.account = loggedIn;
     this.x = random(playersize, size - playersize);
     this.y = random(playersize, size - playersize);
     this.gun = "pistol";

@@ -67,7 +67,7 @@ class Game extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, token);
+        game.socket.emit("join", game.name, token, loggedIn);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
@@ -94,7 +94,7 @@ class Game extends Phaser.Scene {
         this.loadingtext.destroy();
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
-        this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif" }, 2, true);
+        this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
         this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
         this.playerstext.scrollFactorX = 0;
         this.playerstext.scrollFactorY = 0;
@@ -492,14 +492,15 @@ class Game extends Phaser.Scene {
       y: player.y,
       name: player.name,
       player: this.add.image(player.x, player.y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1).setAlpha(alpha),
-      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif" }, 1, true),
+      nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 1),
       gun: this.add.image(player.x + Math.cos(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), player.y + Math.sin(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), "pistol").setDepth(1),
       angle: null,
       health: 100,
       score: player.score,
       spawned: done,
-      bot: player.bot
+      bot: player.bot,
+      account: player.account
     }
     this.enemies[player.id] = playerObj;
   }
@@ -554,14 +555,15 @@ class Game extends Phaser.Scene {
     playerslist.insert(0, {
       score: this.score,
       name: this.name,
-      bot: false
+      bot: false,
+      account: loggedIn
     });
     
     let sorted_players = playerslist.sort(function(a, b){return b.score - a.score});
     let text = "";
     let text2 = "";
     for(let p of sorted_players){
-      text += `[color=${p.bot ? "#2b2bff": "white"}]${p.name}[/color]\n`;
+      text += `[color=${p.bot ? "red": (p.account ? "blue": "white")}]${p.name}[/color]\n`; // #2b2bff
       text2 += p.score + "\n";
     }
     this.playerstext.setText(text);

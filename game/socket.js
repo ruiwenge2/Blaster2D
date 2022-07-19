@@ -9,7 +9,7 @@ const opposites = {
 }
 
 const socketfunc = socket => {
-  socket.on("join", (name, token) => {
+  socket.on("join", (name, token, loggedIn) => {
     verify(token, process.env.recaptcha_secret).then(verified => {
       if(!verified){
         console.log(name + " is a bot");
@@ -18,7 +18,7 @@ const socketfunc = socket => {
         return;
       }
       console.log(name + " joined");
-      rooms.main.players[socket.id] = new Player(socket.id, name, false);
+      rooms.main.players[socket.id] = new Player(socket.id, name, false, loggedIn);
       socket.emit("gamedata", rooms.main);
       socket.broadcast.emit("new player", rooms.main.players[socket.id]);
     });

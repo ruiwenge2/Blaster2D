@@ -5,7 +5,7 @@ const Player = require("./player.js");
 
 class BotPlayer extends Player {
   constructor(id){
-    super(id, humanNames.allRandom(), true);
+    super(id, humanNames.allRandom(), true, false);
     this.movementTime = Date.now();
     this.target = {
       x: random(playersize, size - playersize),
