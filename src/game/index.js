@@ -60,7 +60,10 @@ class Game extends Phaser.Scene {
     });
     
     const handle = function(){
-      window.error = "Failed to join server\n\nTry again or choose a different server";
+      window.error = {
+        message: "Failed to join server\n\nTry again or choose a different server",
+        reload: false
+      };
       game.scene.start("disconnect_scene");
       game.chatbox.destroy();
     }
@@ -69,8 +72,11 @@ class Game extends Phaser.Scene {
     
     this.socket.on("connect_failed", handle);
 
-    this.socket.on("kick", message => {
-      window.error = message;
+    this.socket.on("kick", (message, reload) => {
+      window.error = {
+        message,
+        reload
+      };
       game.scene.start("disconnect_scene");
       game.chatbox.destroy();
     });
@@ -271,10 +277,17 @@ class Game extends Phaser.Scene {
 
     this.socket.on("gamestate", data => {
       try {
+        function degrees_to_radians(degrees){
+          var pi = Math.PI;
+          return (degrees) * (pi / 180);
+        }
         if(!this.verified) return;
         if(this.socket.disconnected){
           this.chatbox.destroy();
-          window.error = "You got disconnected";
+          window.error = {
+            message: "You got disconnected",
+            reload: false
+          };
           this.scene.start("disconnect_scene");
           return;
         }
@@ -308,12 +321,12 @@ class Game extends Phaser.Scene {
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
             y: enemy.y,
-            duration: 100,
+            duration: 1000 / 30,
             onUpdate: function(){
               let player = game.enemies[enemy.id];
               if(!player) return;
               player.gun.x = player.player.x + Math.cos(enemy.angle2) * (radius + 29);
-             player.gun.y = player.player.y + Math.sin(enemy.angle2) * (radius + 29);
+              player.gun.y = player.player.y + Math.sin(enemy.angle2) * (radius + 29);
               player.gun.angle = enemy.angle;
               player.player.angle = enemy.angle;
             } 
@@ -481,7 +494,7 @@ class Game extends Phaser.Scene {
       player: this.add.image(player.x, player.y, "player").setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
-      gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1),
+      gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1.1),
       angle: null,
       health: 100,
       score: player.score,
@@ -517,7 +530,10 @@ class Game extends Phaser.Scene {
     if(!this.verified) return;
     if(this.socket.disconnected){
       this.chatbox.destroy();
-      window.error = "You got disconnected";
+      window.error = {
+        message: "You got disconnected",
+        reload: false
+      };
       this.scene.start("disconnect_scene");
       return;
     }
