@@ -60,6 +60,7 @@ class Game extends Phaser.Scene {
     });
     
     const handle = function(){
+      if(game.loaded) return;
       window.error = {
         message: "Failed to join server\n\nTry again or choose a different server",
         reload: false
@@ -217,7 +218,10 @@ class Game extends Phaser.Scene {
   
     this.socket.on("leave", () => {
       this.chatbox.destroy();
-      window.error = "You got disconnected";
+      window.error = {
+        message: "You got disconnected",
+        reload: false
+      };
       this.scene.start("disconnect_scene");
     });
   }
@@ -321,7 +325,7 @@ class Game extends Phaser.Scene {
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
             y: enemy.y,
-            duration: 1000 / 30,
+            duration: 100,
             onUpdate: function(){
               let player = game.enemies[enemy.id];
               if(!player) return;
@@ -395,6 +399,7 @@ class Game extends Phaser.Scene {
           this.gun.destroy();
           this.bar.destroy();
           this.nametext.destroy();
+          
           this.tweens.add({
             targets: [this.player],
             duration: 1000,

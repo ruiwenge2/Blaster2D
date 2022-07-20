@@ -54,13 +54,26 @@ if(loggedIn){
 
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
+} else {
+  document.getElementById("server").value = "https://blaster2d.ruiwenge2.repl.co"
 }
 
 document.getElementById("playbtn").addEventListener("click", startGame);
 
+document.getElementById("createbtn").addEventListener("click", function(){
+  
+});
+
+document.getElementById("joinbtn").addEventListener("click", function(){
+  promptmodal("", "Enter room code to join:").then(code => {
+    // alert(code);
+  });
+});
+
 window.getServerData = () => {
   const servers = {
-    "https://blaster2d.ruiwenge2.repl.co": 1,      "https://blaster2d.herokuapp.com": 2
+    "https://blaster2d.ruiwenge2.repl.co": 1,
+    "https://blaster2d.herokuapp.com": 2
   };
   for(let url of Object.keys(servers)){
     fetch(url + "/stats").then(res => res.json()).then(data => {
