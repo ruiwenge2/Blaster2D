@@ -504,9 +504,9 @@ class Game extends Phaser.Scene {
       document.getElementById("chat-input").blur();
     });
     
-    window.addEventListener("mousemove", e => {
+    this.input.on("pointermove", e => {
       if(this.died || this.socket.disconnected) return;
-      var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+      var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
     });
