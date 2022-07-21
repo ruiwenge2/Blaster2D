@@ -14,7 +14,7 @@ class Chatbox {
       if(!this.on) return;
       if(e.key == "Enter"){
         if(!this.validMessage(this.input.value)) return this.sent = false;
-        this.socket.emit("chat message", this.name, this.input.value);
+        this.socket.emit("chat message", this.name, this.input.value, game.room);
         this.input.value = "";
         this.sent = true;
       }

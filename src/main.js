@@ -4,6 +4,7 @@ import disconnect_scene from "./game/disconnect.js";
 window.room = false;
 window.rejoin = false;
 
+
 function startGame(){
   const config = {
     type: Phaser.AUTO,
@@ -45,6 +46,7 @@ function startGame(){
   });
   
   document.querySelector("main").style.display = "none";
+  document.querySelector("p").style.display = "none";
 }
 
 if(localStorage.getItem("name") && !loggedIn){
@@ -81,7 +83,13 @@ document.getElementById("createbtn").addEventListener("click", function(){
 });
 
 document.getElementById("joinbtn").addEventListener("click", function(){
-  promptmodal("", "Enter room code to join:").then(code => {
+  let a;
+  if(autojoin){
+    a = promptmodal("", "Enter room code to join:", "Join", true, autojoin);
+  } else {
+    a = promptmodal("", "Enter room code to join:", "Join");
+  }
+  a.then(code => {
     window.room = {
       mode: "join",
       code
@@ -89,6 +97,10 @@ document.getElementById("joinbtn").addEventListener("click", function(){
     startGame();
   });
 });
+
+if(autojoin){
+  document.getElementById("joinbtn").click();
+}
 
 window.getServerData = () => {
   const servers = {

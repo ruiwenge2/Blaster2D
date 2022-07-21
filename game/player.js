@@ -90,7 +90,7 @@ class Player {
     Object.values(rooms[this.room].coins).forEach(coin => {
       if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
         delete rooms[this.room].coins[coin.id];
-        io.emit("collected coin", coin.id, this.id);
+        io.to(this.room).emit("collected coin", coin.id, this.id);
       }
     });
     if(!this.spawned) return;
@@ -99,12 +99,12 @@ class Player {
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
         this.health -= random(weapons[bullet.gun].min, weapons[bullet.gun].max);
         delete rooms[this.room].bullets[bullet.id];
-        io.emit("removed bullet", bullet.id);
+        io.to(this.room).emit("removed bullet", bullet.id);
         this.healTime = Date.now() + 5000;
         if(this.health <= 0){
           this.health = 0;
           this.died = true;
-          io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
+          io.to(this.room).emit("player died", this.id, bullet.shooter, bullet.shooterName);
           if(rooms[this.room].players[bullet.shooter]){
             rooms[this.room].players[bullet.shooter].score++;
           }

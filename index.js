@@ -92,7 +92,7 @@ update();
 app.use("/api", api);
 
 app.get("/", (req, res) => {
-  res.render("index.html", {loggedIn: loggedIn(req), username: (loggedIn(req) ? req.session.username: null)});
+  res.render("index.html", {loggedIn: loggedIn(req), username: (loggedIn(req) ? req.session.username: null), room: req.query.code});
 });
 
 app.get("/login", (req, res) => {

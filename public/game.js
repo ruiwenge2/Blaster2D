@@ -102,6 +102,12 @@ class Game extends Phaser.Scene {
       game.chatbox.destroy();
       window.rejoin = false;
     });
+
+    this.socket.on("roomdata", room => {
+      promptmodal("", "Copy the link and share with your friends to play!", "Copy", true, `https://${location.host}/?code=${room}`, true).then((e) => {
+        navigator.clipboard.writeText(e);
+      });
+    });
     
     this.socket.on("gamedata", (data, room) => { // when game data arrives
       try {
@@ -875,7 +881,7 @@ class Chatbox {
       if(!this.on) return;
       if(e.key == "Enter"){
         if(!this.validMessage(this.input.value)) return this.sent = false;
-        this.socket.emit("chat message", this.name, this.input.value);
+        this.socket.emit("chat message", this.name, this.input.value, game.room);
         this.input.value = "";
         this.sent = true;
       }
@@ -1107,6 +1113,7 @@ __webpack_require__.r(__webpack_exports__);
 window.room = false;
 window.rejoin = false;
 
+
 function startGame(){
   const config = {
     type: Phaser.AUTO,
@@ -1148,6 +1155,7 @@ function startGame(){
   });
   
   document.querySelector("main").style.display = "none";
+  document.querySelector("p").style.display = "none";
 }
 
 if(localStorage.getItem("name") && !loggedIn){
@@ -1184,7 +1192,13 @@ document.getElementById("createbtn").addEventListener("click", function(){
 });
 
 document.getElementById("joinbtn").addEventListener("click", function(){
-  promptmodal("", "Enter room code to join:").then(code => {
+  let a;
+  if(autojoin){
+    a = promptmodal("", "Enter room code to join:", "Join", true, autojoin);
+  } else {
+    a = promptmodal("", "Enter room code to join:", "Join");
+  }
+  a.then(code => {
     window.room = {
       mode: "join",
       code
@@ -1192,6 +1206,10 @@ document.getElementById("joinbtn").addEventListener("click", function(){
     startGame();
   });
 });
+
+if(autojoin){
+  document.getElementById("joinbtn").click();
+}
 
 window.getServerData = () => {
   const servers = {

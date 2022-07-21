@@ -83,6 +83,12 @@ class Game extends Phaser.Scene {
       game.chatbox.destroy();
       window.rejoin = false;
     });
+
+    this.socket.on("roomdata", room => {
+      promptmodal("", "Copy the link and share with your friends to play!", "Copy", true, `https://${location.host}/?code=${room}`, true).then((e) => {
+        navigator.clipboard.writeText(e);
+      });
+    });
     
     this.socket.on("gamedata", (data, room) => { // when game data arrives
       try {

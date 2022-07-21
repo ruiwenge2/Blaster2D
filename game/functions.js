@@ -91,7 +91,7 @@ module.exports.shoot = function(id, angle, room){
     gun: rooms[room].players[id].gun
   }
   
-  io.emit("new bullet", rooms[room].new_bullet_id, rooms[room].bullets[rooms[room].new_bullet_id]);
+  io.to(room).emit("new bullet", rooms[room].new_bullet_id, rooms[room].bullets[rooms[room].new_bullet_id]);
   rooms[room].new_bullet_id++;
 }
 

@@ -40,6 +40,7 @@ const socketfunc = socket => {
           diedPlayers: []
         };
         setUpRoom(code);
+        socket.emit("roomdata", code);
       } else {
         code = "main";
       }

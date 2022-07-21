@@ -49,9 +49,11 @@
       const homepage = true;
       const loggedIn = <%- loggedIn %>;
 
-      function onSubmit(){
-        
-      }
+      <% if(room){ %>
+      const autojoin = "<%- room %>";
+      <% } else { %>
+      const autojoin = false;
+      <% } %>
     </script>
     <script src="/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
