@@ -1,0 +1,191 @@
+
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)
+TypeError: Cannot read properties of undefined (reading 'players')
+    at BotPlayer.checkMovement (/home/runner/Blaster2D/game/player.js:75:40)
+    at BotPlayer.update (/home/runner/Blaster2D/game/player.js:44:10)
+    at /home/runner/Blaster2D/game/update.js:42:23
+    at Array.forEach (<anonymous>)
+    at /home/runner/Blaster2D/game/update.js:36:44
+    at Array.forEach (<anonymous>)
+    at Timeout._onTimeout (/home/runner/Blaster2D/game/update.js:7:26)
+    at listOnTimeout (node:internal/timers:557:17)

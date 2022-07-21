@@ -9,7 +9,7 @@ module.exports.random = function(number1, number2){
 module.exports.generateCode = function(length, cap = false){
   const characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   var code = "";
-  for(i = 0; i < 20; i++){
+  for(i = 0; i < length; i++){
     code += characters[module.exports.random(0, characters.length - 1)];
   }
   if(cap){
@@ -19,23 +19,33 @@ module.exports.generateCode = function(length, cap = false){
 };
 
 module.exports.checkUser = function(id){
-  return Object.keys(rooms.main.players).includes(id) || rooms.main.diedPlayers.includes(id);
+  var check;
+  Object.keys(rooms).forEach(room => {
+    if(check) return;
+    check = Object.keys(rooms[room].players).includes(id) || rooms[room].diedPlayers.includes(id);
+  })
+  return check;
 };
 
 module.exports.playerDead = function(id){
-  return rooms.main.diedPlayers.includes(id);
+  var check;
+  Object.keys(rooms).forEach(room => {
+    if(check) return;
+    check = rooms[room].diedPlayers.includes(id);
+  })
+  return check;
 }
 
-module.exports.setUpRoom = function(){
-  if(Object.keys(rooms.main.players).length == 0){
-    rooms.main.coins = {};
+module.exports.setUpRoom = function(room){
+  if(Object.keys(rooms[room].players).length == 0){
+    rooms[room].coins = {};
     for(let i = 0; i < maxCoins; i++){
-      rooms.main.coins[rooms.main.new_coin_id] = {
-        id: rooms.main.new_coin_id,
+      rooms[room].coins[rooms[room].new_coin_id] = {
+        id: rooms[room].new_coin_id,
         x: module.exports.random(coinsize / 2, size - coinsize / 2),
         y: module.exports.random(coinsize / 2, size - coinsize / 2)
       };
-      rooms.main.new_coin_id++;
+      rooms[room].new_coin_id++;
     }
   }
 };
@@ -68,21 +78,21 @@ module.exports.verify = async function(token, secret){
   return result.data.success;
 }
 
-module.exports.shoot = function(id, angle){
-  // if(rooms.main.players[id].spawntimeleft) return;
-  rooms.main.bullets[rooms.main.new_bullet_id] = {
+module.exports.shoot = function(id, angle, room){
+  // if(rooms[room].players[id].spawntimeleft) return;
+  rooms[room].bullets[rooms[room].new_bullet_id] = {
     shooter: id,
-    x: rooms.main.players[id].x + Math.cos(angle) * (radius + 40), 
-    y: rooms.main.players[id].y + Math.sin(angle) * (radius + 40),
+    x: rooms[room].players[id].x + Math.cos(angle) * (radius + 40), 
+    y: rooms[room].players[id].y + Math.sin(angle) * (radius + 40),
     angle: ((angle * 180 / Math.PI) + 360) % 360,
     angle2: angle,
-    id: rooms.main.new_bullet_id,
-    shooterName: rooms.main.players[id].name,
-    gun: rooms.main.players[id].gun
+    id: rooms[room].new_bullet_id,
+    shooterName: rooms[room].players[id].name,
+    gun: rooms[room].players[id].gun
   }
   
-  io.emit("new bullet", rooms.main.new_bullet_id, rooms.main.bullets[rooms.main.new_bullet_id]);
-  rooms.main.new_bullet_id++;
+  io.emit("new bullet", rooms[room].new_bullet_id, rooms[room].bullets[rooms[room].new_bullet_id]);
+  rooms[room].new_bullet_id++;
 }
 
 module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){

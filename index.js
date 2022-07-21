@@ -63,7 +63,7 @@ const skins = require("./game/skins.js");
 const update = require("./game/update.js");
 const Database = require("./db.js");
 
-setUpRoom();
+setUpRoom("main");
 
 global.db = new Database();
 

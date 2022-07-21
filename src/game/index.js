@@ -48,7 +48,7 @@ class Game extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, token, loggedIn);
+        game.socket.emit("join", game.name, token, loggedIn, window.room);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
@@ -67,6 +67,7 @@ class Game extends Phaser.Scene {
       };
       game.scene.start("disconnect_scene");
       game.chatbox.destroy();
+      window.rejoin = false;
     }
 
     this.socket.on("connect_error", handle);
@@ -80,11 +81,13 @@ class Game extends Phaser.Scene {
       };
       game.scene.start("disconnect_scene");
       game.chatbox.destroy();
+      window.rejoin = false;
     });
     
-    this.socket.on("gamedata", data => { // when game data arrives
+    this.socket.on("gamedata", (data, room) => { // when game data arrives
       try {
         this.loaded = true;
+        this.room = room;
         this.loadingtext.destroy();
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
@@ -93,13 +96,13 @@ class Game extends Phaser.Scene {
         this.playerstext.scrollFactorX = 0;
         this.playerstext.scrollFactorY = 0;
         this.scorestext = new Text(this, 200, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
-  
         
         this.gold = 0;
-        this.goldtext = new Text(this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 30, fontFamily: "copperplate" });
+        this.goldtext = new Text(this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 25, fontFamily: "copperplate" });
         
-        this.fpstext = new Text(this, window.innerWidth - 150, 85, "FPS: 60", { fontSize: 30, fontFamily: "copperplate" });
-        this.tps = new Text(this, window.innerWidth - 150, 120, "TPS: 30", { fontSize: 30, fontFamily: "copperplate" });
+        this.fpstext = new Text(this, window.innerWidth - 150, 80, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
+        this.tps = new Text(this, window.innerWidth - 150, 110, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
+        this.ping = new Text(this, window.innerWidth - 150, 140, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
   
         this.playerInfo = {
           x: this.player.x,
@@ -198,6 +201,11 @@ class Game extends Phaser.Scene {
       try {
         // this.tps.setText(`Tick speed: ${Math.round(tps / 30 * 100)}%`);
         this.tps.setText("TPS: " + tps);
+        let time = Date.now();
+        this.socket.emit("get_ping", () => {
+          console.log(Date.now() - time);
+          this.ping.setText(`Ping: ${Date.now() - time} ms`);
+        });
       } catch(e){
         console.log(e);
       }
@@ -223,6 +231,7 @@ class Game extends Phaser.Scene {
         reload: false
       };
       this.scene.start("disconnect_scene");
+      window.rejoin = false;
     });
   }
 
@@ -245,6 +254,7 @@ class Game extends Phaser.Scene {
         game.socket.emit("leaveGame");
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
         getServerData();
+        window.rejoin = false;
       });
     });
 
@@ -281,10 +291,7 @@ class Game extends Phaser.Scene {
 
     this.socket.on("gamestate", data => {
       try {
-        function degrees_to_radians(degrees){
-          var pi = Math.PI;
-          return (degrees) * (pi / 180);
-        }
+        console.log(data)
         if(!this.verified) return;
         if(this.socket.disconnected){
           this.chatbox.destroy();
@@ -293,6 +300,7 @@ class Game extends Phaser.Scene {
             reload: false
           };
           this.scene.start("disconnect_scene");
+          window.rejoin = false;
           return;
         }
         let game = this;
@@ -412,6 +420,7 @@ class Game extends Phaser.Scene {
               game.goldtext.destroy();
               game.fpstext.destroy();
               game.tps.destroy();
+              game.ping.destroy();
               game.minimap.destroy();
               game.chatbox.destroy();
               
@@ -428,6 +437,12 @@ class Game extends Phaser.Scene {
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                 game.socket.disconnect();
                 getServerData();
+                if(game.room == "main"){
+                  window.rejoin = false;
+                } else {
+                  window.rejoin = game.room;
+                  document.getElementById("playbtn").click();
+                }
               }, { background: 0x00374ff });
               playAgain.text.setDepth(102).setAlpha(0);
               playAgain.button.setDepth(101).setAlpha(0);
@@ -515,7 +530,7 @@ class Game extends Phaser.Scene {
       if(this.died) return;
       if(!this.chatbox.focus){
         var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-        this.socket.emit("shoot", angle);
+        this.socket.emit("shoot", angle, this.room);
         this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
         this.gun.angle2 = angle;
       }
@@ -540,6 +555,7 @@ class Game extends Phaser.Scene {
         reload: false
       };
       this.scene.start("disconnect_scene");
+      window.rejoin = false;
       return;
     }
     
@@ -586,52 +602,52 @@ class Game extends Phaser.Scene {
     if(!this.chatbox.focus){
       if(cursors.left.isDown || this.a.isDown){
         if(!this.left){
-          this.socket.emit("movement", "left");
+          this.socket.emit("movement", "left", this.room);
           this.left = true;
           this.right = false;
         }
       } else {
         if(this.left){
-          this.socket.emit("movement_end", "left");
+          this.socket.emit("movement_end", "left", this.room);
           this.left = false;
         }
       }
       
       if(cursors.right.isDown || this.d.isDown){
         if(!this.right){
-          this.socket.emit("movement", "right");
+          this.socket.emit("movement", "right", this.room);
           this.right = true;
           this.left = false;
         }
       } else {
         if(this.right){
-          this.socket.emit("movement_end", "right");
+          this.socket.emit("movement_end", "right", this.room);
           this.right = false;
         }
       }
       
       if(cursors.up.isDown || this.w.isDown){
         if(!this.up){
-          this.socket.emit("movement", "up");
+          this.socket.emit("movement", "up", this.room);
           this.up = true;
           this.down = false;
         }
       } else {
         if(this.up){
-          this.socket.emit("movement_end", "up");
+          this.socket.emit("movement_end", "up", this.room);
           this.up = false;
         }
       }
       
       if(cursors.down.isDown || this.s.isDown){
         if(!this.down){
-          this.socket.emit("movement", "down");
+          this.socket.emit("movement", "down", this.room);
           this.down = true;
           this.up = false;
         }
       } else {
         if(this.down){
-          this.socket.emit("movement_end", "down");
+          this.socket.emit("movement_end", "down", this.room);
           this.down = false;
         }
       }
@@ -645,7 +661,7 @@ class Game extends Phaser.Scene {
     if(this.player.angle != this.data.angle){
       this.data.angle = this.gun.angle;
       this.data.angle2 = this.gun.angle2;
-      this.socket.emit("player angle", this.data);
+      this.socket.emit("player angle", this.data, this.room);
     }
   }
 }

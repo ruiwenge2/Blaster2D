@@ -5,7 +5,7 @@ const Player = require("./player.js");
 
 class BotPlayer extends Player {
   constructor(id){
-    super(id, humanNames.allRandom(), true, false);
+    super(id, humanNames.allRandom(), "main", true, false);
     this.movementTime = Date.now();
     this.target = {
       x: random(playersize, size - playersize),
@@ -66,13 +66,13 @@ class BotPlayer extends Player {
 
     var id = this.closestPlayer();
     if(!id) return;
-    var player = rooms.main.players[id];
+    var player = rooms[this.room].players[id];
     var angle = Math.atan2(player.y - this.y, player.x - this.x);
     this.angle2 = angle;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     if(Date.now() >= this.shootTime){
       if(!random(0, this.shootrate) && Math.abs(this.x - player.x) < 500 && Math.abs(this.y - player.y) < 300){ // if player within range
-        shoot(this.id, angle);
+        shoot(this.id, angle, this.room);
         this.shootTime = Date.now() + 500;
       }
       
@@ -82,7 +82,7 @@ class BotPlayer extends Player {
   }
 
   closestPlayer(){
-    var players = {...rooms.main.players};
+    var players = {...rooms[this.room].players};
     delete players[this.id];
     if(!Object.keys(players).length) return undefined;
     const player = Object.values(players).sort((a, b) =>  Math.hypot(this.x - a.x, this.y - a.y) - Math.hypot(this.x - b.x, this.y - b.y))[0];
@@ -90,7 +90,7 @@ class BotPlayer extends Player {
   }
 
   closestCoin(){
-    var coins = {...rooms.main.coins};
+    var coins = {...rooms[this.room].coins};
     if(!Object.keys(coins).length) return undefined;
     const coin = Object.values(coins).sort((a, b) =>  Math.hypot(this.x - a.x, this.y - a.y) - Math.hypot(this.x - b.x, this.y - b.y))[0];
     return coin.id;

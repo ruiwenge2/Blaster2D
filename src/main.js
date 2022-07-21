@@ -1,6 +1,9 @@
 import Game from "./game";
 import disconnect_scene from "./game/disconnect.js";
 
+window.room = false;
+window.rejoin = false;
+
 function startGame(){
   const config = {
     type: Phaser.AUTO,
@@ -55,18 +58,35 @@ if(loggedIn){
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
 } else {
-  document.getElementById("server").value = "https://blaster2d.ruiwenge2.repl.co"
+  document.getElementById("server").value = "https://blaster2d.ruiwenge2.repl.co";
 }
 
-document.getElementById("playbtn").addEventListener("click", startGame);
+document.getElementById("playbtn").addEventListener("click", function(){
+  if(!window.rejoin){
+    window.room = false;
+  } else {
+    window.room = {
+      mode: "join",
+      code: window.rejoin
+    }
+  }
+  startGame();
+});
 
 document.getElementById("createbtn").addEventListener("click", function(){
-  
+  window.room = {
+    mode: "create"
+  };
+  startGame();
 });
 
 document.getElementById("joinbtn").addEventListener("click", function(){
   promptmodal("", "Enter room code to join:").then(code => {
-    // alert(code);
+    window.room = {
+      mode: "join",
+      code
+    };
+    startGame();
   });
 });
 

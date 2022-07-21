@@ -2,7 +2,7 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name, isBot, loggedIn){
+  constructor(id, name, room, isBot, loggedIn){
     this.id = id;
     this.name = name;
     this.bot = isBot;
@@ -31,6 +31,7 @@ class Player {
     this.spawned = false;
     this.damage = damage;
     this.healTime = undefined;
+    this.room = room;
   }
   
   update(){
@@ -71,7 +72,7 @@ class Player {
     if(this.down && this.y + radius + speed > size) this.downspeed = size - this.y - radius;
 
 
-    let players = {...rooms.main.players};
+    let players = {...rooms[this.room].players};
     delete players[this.id];
     Object.values(players).forEach(player => {
       if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
@@ -86,34 +87,34 @@ class Player {
   }
 
   checkCollision(){
-    Object.values(rooms.main.coins).forEach(coin => {
+    Object.values(rooms[this.room].coins).forEach(coin => {
       if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
-        delete rooms.main.coins[coin.id];
+        delete rooms[this.room].coins[coin.id];
         io.emit("collected coin", coin.id, this.id);
       }
     });
     if(!this.spawned) return;
-    Object.values(rooms.main.bullets).forEach(bullet => {
+    Object.values(rooms[this.room].bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
         this.health -= random(weapons[bullet.gun].min, weapons[bullet.gun].max);
-        delete rooms.main.bullets[bullet.id];
+        delete rooms[this.room].bullets[bullet.id];
         io.emit("removed bullet", bullet.id);
         this.healTime = Date.now() + 5000;
         if(this.health <= 0){
           this.health = 0;
           this.died = true;
           io.emit("player died", this.id, bullet.shooter, bullet.shooterName);
-          if(rooms.main.players[bullet.shooter]){
-            rooms.main.players[bullet.shooter].score++;
+          if(rooms[this.room].players[bullet.shooter]){
+            rooms[this.room].players[bullet.shooter].score++;
           }
           if(this.bot){
-            if(!rooms.main.timeleft){
-              rooms.main.timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
+            if(!rooms[this.room].timeleft){
+              rooms[this.room].timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
             }
           } else {
             console.log(this.name + " left");
-            rooms.main.diedPlayers.push(this.id);
+            rooms[this.room].diedPlayers.push(this.id);
           }
         }
       }
