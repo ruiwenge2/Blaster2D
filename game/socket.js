@@ -98,16 +98,19 @@ const socketfunc = socket => {
   socket.on("shoot", (angle, room) => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     if(playerDead(socket.id)) return;
-    if(Date.now() >= rooms[room].players[socket.id].shootTime){
-      shoot(socket.id, angle, room);
-      rooms[room].players[socket.id].shootTime = Date.now() + 500;
-    }
+    rooms[room].players[socket.id].shoot(angle);
   });
 
   socket.on("chat message", (name, message, room) => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     if(playerDead(socket.id)) return;
     io.to(room).emit("chat message", `${name}: ${message}`);
+  });
+
+  socket.on("reload", room => {
+    if(rooms[room].players[socket.id].shots == weapons[rooms[room].players[socket.id].gun].shots) return;
+    rooms[room].players[socket.id].reloading = true;
+    rooms[room].players[socket.id].reloadTime = Date.now();
   });
 
   socket.on("get_ping", (callback) => {

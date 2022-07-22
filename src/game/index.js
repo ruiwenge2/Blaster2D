@@ -109,6 +109,9 @@ class Game extends Phaser.Scene {
         this.fpstext = new Text(this, window.innerWidth - 150, 80, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
         this.tps = new Text(this, window.innerWidth - 150, 110, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
         this.ping = new Text(this, window.innerWidth - 150, 140, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
+        
+        this.reloading = new Text(this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
+        this.shots = new Text(this, window.innerWidth - 300, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
   
         this.playerInfo = {
           x: this.player.x,
@@ -248,6 +251,7 @@ class Game extends Phaser.Scene {
     var l = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L, false);
     var spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false);
     var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER, false);
+    var r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R, false);
 
     var game = this;
     l.on("down", function(){
@@ -269,6 +273,10 @@ class Game extends Phaser.Scene {
         return game.chatbox.input.blur();
       }
       if(!game.chatbox.focus) game.chatbox.input.focus();
+    });
+
+    r.on("down", function(){
+      game.socket.emit("reload", game.room);
     });
     
 
@@ -316,6 +324,12 @@ class Game extends Phaser.Scene {
           this.playerInfo.x = self.x;
           this.playerInfo.y = self.y;
           this.health = self.health;
+          this.shots.setText(`${self.shots}/${self.shotsLeft}`);
+          if(self.reloading){
+            this.reloading.setText("Reloading...");
+          } else {
+            this.reloading.setText("");
+          }
   
           if(self.spawned && !this.spawned){
             this.player.setAlpha(1);
@@ -429,6 +443,8 @@ class Game extends Phaser.Scene {
               game.ping.destroy();
               game.minimap.destroy();
               game.chatbox.destroy();
+              game.reloading.destroy();
+              game.shots.destroy();
               
               let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);

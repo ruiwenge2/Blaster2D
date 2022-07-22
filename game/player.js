@@ -32,6 +32,8 @@ class Player {
     this.damage = damage;
     this.healTime = undefined;
     this.room = room;
+    this.shots = weapons[this.gun].shots;
+    this.shotsLeft = weapons[this.gun].total;
   }
   
   update(){
@@ -39,6 +41,13 @@ class Player {
     if(this.health < 100 && Date.now() >= this.healTime){
       this.health += 1;
       this.healTime = Date.now() + 500;
+    }
+    if(this.reloading && Date.now() - this.reloadTime >=  weapons[this.gun].reloadTime){
+      var shotsAdded = weapons[this.gun].shots - this.shots;
+      if(shotsAdded > this.shotsLeft) shotsAdded = this.shotsLeft;
+      this.shots += shotsAdded;
+      this.shotsLeft -= shotsAdded;
+      this.reloading = false;
     }
     this.checkDiagonal();
     this.checkMovement();
@@ -84,6 +93,32 @@ class Player {
 
   stop(){
     this.left = this.right = this.up = this.down = false;
+  }
+
+  shoot(angle){
+  // if(!this.spawned) return;
+    if(Date.now() < this.shootTime || this.reloading) return;
+    if(!this.shots){
+      if(!this.shotsLeft) return;
+      this.reloading = true;
+      this.reloadTime = Date.now();
+      return;
+    }
+    rooms[this.room].bullets[rooms[this.room].new_bullet_id] = {
+      shooter: this.id,
+      x: this.x + Math.cos(angle) * (radius + 40), 
+      y: this.y + Math.sin(angle) * (radius + 40),
+      angle: ((angle * 180 / Math.PI) + 360) % 360,
+      angle2: angle,
+      id: rooms[this.room].new_bullet_id,
+      shooterName: this.name,
+      gun: this.gun
+    }
+    
+    io.to(this.room).emit("new bullet", rooms[this.room].new_bullet_id, rooms[this.room].bullets[rooms[this.room].new_bullet_id]);
+    rooms[this.room].new_bullet_id++;
+    this.shootTime = Date.now() + weapons[this.gun].coolDown;
+    this.shots--;
   }
 
   checkCollision(){

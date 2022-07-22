@@ -36,7 +36,7 @@ global.size = 5000;
 global.treesize = 300;
 global.coinsize = 37.5;
 global.speed = 10;
-global.bullet_speed = 40;
+global.bullet_speed = 50;
 global.spawntime = 3;
 global.maxCoins = 50;
 global.tps = 0;
@@ -46,7 +46,11 @@ global.damage = 50;
 global.weapons = {
   pistol: {
     min: 40,
-    max: 60
+    max: 60,
+    shots: 5,
+    total: 20,
+    reloadTime: 2000,
+    coolDown: 500
   }
 }
 
