@@ -75,10 +75,10 @@ class Player {
     let players = {...rooms[this.room].players};
     delete players[this.id];
     Object.values(players).forEach(player => {
-      if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
-        (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.8, player.x, player.y, radius * 0.8)) || 
-        (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.8, player.x, player.y, radius * 0.8)) || 
-        (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.8, player.x, player.y, radius * 0.8))) this.stop();
+      if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+        (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+        (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+        (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.75, player.x, player.y, radius * 0.75))) this.stop();
     });
   }
 

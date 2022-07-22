@@ -10,7 +10,7 @@ const config = {
     filename: "[name].js",
     path: path.resolve(__dirname, "public"),
   },
-  mode: "none"
+  mode: "production"
 };
 
 const compiler = webpack(config, (err, stats) => {
