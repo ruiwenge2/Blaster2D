@@ -228,7 +228,6 @@ class Game extends Phaser.Scene {
         this.tps.setText("TPS: " + tps);
         let time = Date.now();
         this.socket.emit("get_ping", () => {
-          console.log(Date.now() - time);
           this.ping.setText(`Ping: ${Date.now() - time} ms`);
         });
       } catch(e){
@@ -316,7 +315,6 @@ class Game extends Phaser.Scene {
 
     this.socket.on("gamestate", data => {
       try {
-        console.log(data)
         if(!this.verified) return;
         if(this.socket.disconnected){
           this.chatbox.destroy();
@@ -1107,6 +1105,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _game_disconnect_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+
 
 
 
@@ -1160,7 +1160,10 @@ function startGame(){
 
 if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
-}
+} 
+// else {
+//   document.getElementById("input").value = "Gamer" + random(1000, 9999);
+// }
 
 if(loggedIn){
   localStorage.setItem("name", "");
@@ -1199,11 +1202,22 @@ document.getElementById("joinbtn").addEventListener("click", function(){
     a = promptmodal("", "Enter room code to join:", "Join");
   }
   a.then(code => {
-    window.room = {
-      mode: "join",
-      code
-    };
-    startGame();
+    if(!document.getElementById("input").value.replace(/\s/g, "")){
+      promptmodal("", "Enter your name: ", "OK", true).then(name => {
+        document.getElementById("input").value = name;
+        window.room = {
+          mode: "join",
+          code
+        };
+        startGame();
+      });
+    } else {
+      window.room = {
+        mode: "join",
+        code
+      };
+      startGame();
+    }
   });
 });
 

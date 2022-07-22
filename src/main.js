@@ -1,5 +1,6 @@
 import Game from "./game";
 import disconnect_scene from "./game/disconnect.js";
+import { random } from "./functions.js";
 
 window.room = false;
 window.rejoin = false;
@@ -51,7 +52,10 @@ function startGame(){
 
 if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
-}
+} 
+// else {
+//   document.getElementById("input").value = "Gamer" + random(1000, 9999);
+// }
 
 if(loggedIn){
   localStorage.setItem("name", "");
@@ -90,11 +94,22 @@ document.getElementById("joinbtn").addEventListener("click", function(){
     a = promptmodal("", "Enter room code to join:", "Join");
   }
   a.then(code => {
-    window.room = {
-      mode: "join",
-      code
-    };
-    startGame();
+    if(!document.getElementById("input").value.replace(/\s/g, "")){
+      promptmodal("", "Enter your name: ", "OK", true).then(name => {
+        document.getElementById("input").value = name;
+        window.room = {
+          mode: "join",
+          code
+        };
+        startGame();
+      });
+    } else {
+      window.room = {
+        mode: "join",
+        code
+      };
+      startGame();
+    }
   });
 });
 

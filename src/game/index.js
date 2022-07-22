@@ -209,7 +209,6 @@ class Game extends Phaser.Scene {
         this.tps.setText("TPS: " + tps);
         let time = Date.now();
         this.socket.emit("get_ping", () => {
-          console.log(Date.now() - time);
           this.ping.setText(`Ping: ${Date.now() - time} ms`);
         });
       } catch(e){
@@ -297,7 +296,6 @@ class Game extends Phaser.Scene {
 
     this.socket.on("gamestate", data => {
       try {
-        console.log(data)
         if(!this.verified) return;
         if(this.socket.disconnected){
           this.chatbox.destroy();

@@ -77,7 +77,7 @@ const socketfunc = socket => {
         let s = await io.in(room).fetchSockets();
         if(s.length) return;
         delete rooms[room];
-        console.log(`the room ${room} has been deleted`);
+        console.log(`removed room ${room}`);
       }, 5000);
     }
   });
