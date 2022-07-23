@@ -130,7 +130,7 @@ if(autojoin){
 const servers = {
   1: {
     url: "https://blaster2d.ruiwenge2.repl.co",
-    num: 1
+    num: 1,
   },
   2: {
     url: "https://blaster2d.herokuapp.com",
@@ -139,13 +139,19 @@ const servers = {
 };
 
 async function showServerData(num){
-  let url = servers[num].url;
-  let data = await fetch(url + "/stats");
-  data = await data.json();
-  document.getElementById("server" + num).innerHTML = `Server ${num} (${data.tps} TPS)`;
-  console.log(url, ": ", data.tps);
-  servers[num].tps = data.tps;
-  return data.tps;
+  try {
+    let url = servers[num].url;
+    let res = await fetch(url + "/stats");
+    let data = await res.json();
+    document.getElementById("server" + num).innerHTML = `Server ${num} (${data.tps} TPS)`;
+    console.log(url, ": ", data.tps);
+    servers[num].tps = data.tps;
+    return data.tps;
+  } catch(e){
+    console.log(e);
+    document.getElementById("server" + num).innerHTML = `Server ${num} (offline)`;
+    servers[num].tps = 0;
+  }
 }
 
 window.getServerData = () => {

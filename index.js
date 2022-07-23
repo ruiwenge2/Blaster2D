@@ -7,6 +7,7 @@ const socketio = require("socket.io");
 const session = require("express-session");
 const cors = require("cors");
 
+
 global.io = socketio(server, {
   // cors: {
   //   origins: [
@@ -74,6 +75,7 @@ global.db = new Database();
 // require("./tests.js");
 // require("./trees.js");
 require("./webpack.config.js");
+
 
 /* db.get("users").then(obj => {
   if(obj == "Not Found") db.set("users", {});
@@ -205,4 +207,15 @@ app.get("/logout", (req, res) => {
 server.listen(process.env.PORT || 3000, () => {
   console.log("server started");
   console.log(`${db.db_url}/users`);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("There was an uncaught error", err)
+  process.exit(1) //mandatory (as per the Node docs)
+})
+
+process.on("SIGTERM", () => {
+  server.close(() => {
+    console.log("Process terminated");
+  });
 });

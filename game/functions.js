@@ -78,23 +78,6 @@ module.exports.verify = async function(token, secret){
   return result.data.success;
 }
 
-module.exports.shoot = function(id, angle, room){
-  // if(rooms[room].players[id].spawntimeleft) return;
-  rooms[room].bullets[rooms[room].new_bullet_id] = {
-    shooter: id,
-    x: rooms[room].players[id].x + Math.cos(angle) * (radius + 40), 
-    y: rooms[room].players[id].y + Math.sin(angle) * (radius + 40),
-    angle: ((angle * 180 / Math.PI) + 360) % 360,
-    angle2: angle,
-    id: rooms[room].new_bullet_id,
-    shooterName: rooms[room].players[id].name,
-    gun: rooms[room].players[id].gun
-  }
-  
-  io.to(room).emit("new bullet", rooms[room].new_bullet_id, rooms[room].bullets[rooms[room].new_bullet_id]);
-  rooms[room].new_bullet_id++;
-}
-
 module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
   var dx = (x1 + r1) - (x2 + r2);
   var dy = (y1 + r1) - (y2 + r2);
