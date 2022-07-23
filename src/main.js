@@ -68,9 +68,9 @@ if(loggedIn){
 
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
-} else {
+}/* else {
   document.getElementById("server").value = "auto";
-}
+}*/
 
 document.getElementById("playbtn").addEventListener("click", function(){
   if(!window.rejoin){

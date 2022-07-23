@@ -126,6 +126,7 @@ class Player {
       if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
         delete rooms[this.room].coins[coin.id];
         io.to(this.room).emit("collected coin", coin.id, this.id);
+        this.shotsLeft += weapons[this.gun].shots;
       }
     });
     if(!this.spawned) return;
