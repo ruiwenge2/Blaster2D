@@ -53,7 +53,7 @@ class Game extends Phaser.Scene {
 
   create() {
     this.loaded = false;
-    this.socket = io(window.room ? "https://blaster2d.ruiwenge2.repl.co": document.getElementById("server").value);
+    this.socket = io(window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer);
     this.name = name || localStorage.getItem("name");
     this.coins = {};
     this.trees = this.physics.add.group();
@@ -1166,8 +1166,13 @@ function startGame(){
   } else {
     localStorage.setItem("name", "");
   }
-  localStorage.setItem("server", document.getElementById("server").value);
   
+  if(document.getElementById("server").value == "auto"){
+    localStorage.setItem("server", "auto");
+  } else {
+    window.chosenServer = document.getElementById("server").value;
+    localStorage.setItem("server", window.chosenServer);
+  }
   const game = new Phaser.Game(config);
   
   game.scene.add("gamescene", _game__WEBPACK_IMPORTED_MODULE_0__["default"]);
@@ -1198,7 +1203,7 @@ if(loggedIn){
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
 } else {
-  document.getElementById("server").value = "https://blaster2d.ruiwenge2.repl.co";
+  document.getElementById("server").value = "auto";
 }
 
 document.getElementById("playbtn").addEventListener("click", function(){
@@ -1251,20 +1256,43 @@ if(autojoin){
   document.getElementById("joinbtn").click();
 }
 
-window.getServerData = () => {
-  const servers = {
-    "https://blaster2d.ruiwenge2.repl.co": 1,
-    "https://blaster2d.herokuapp.com": 2
-  };
-  for(let url of Object.keys(servers)){
-    fetch(url + "/stats").then(res => res.json()).then(data => {
-      document.getElementById("server" + servers[url]).innerHTML = `Server ${servers[url]} (${data.tps} TPS)`;
-      console.log(url, ": ", data.tps);
-    });
+const servers = {
+  1: {
+    url: "https://blaster2d.ruiwenge2.repl.co",
+    num: 1
+  },
+  2: {
+    url: "https://blaster2d.herokuapp.com",
+    num: 2
   }
 };
 
+async function showServerData(num){
+  let url = servers[num].url;
+  let data = await fetch(url + "/stats");
+  data = await data.json();
+  document.getElementById("server" + num).innerHTML = `Server ${num} (${data.tps} TPS)`;
+  console.log(url, ": ", data.tps);
+  servers[num].tps = data.tps;
+  return data.tps;
+}
+
+window.getServerData = () => {
+  showServerData(1).then(() => {
+    showServerData(2).then(() => {
+      let keys = Object.values(servers);
+      keys = keys.sort(function(a, b){return b.tps - a.tps});
+      document.getElementById("autoserver").innerHTML = `Auto (Server ${keys[0].num})`;
+      if(document.getElementById("server").value == "auto"){
+        window.chosenServer = keys[0].url;
+      }
+    });
+  });
+};
+
 getServerData();
+
+// document.getElementById("refetch").addEventListener("click", getServerData);
 })();
 
 /******/ })()

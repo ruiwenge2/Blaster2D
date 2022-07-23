@@ -34,7 +34,7 @@ class Game extends Phaser.Scene {
 
   create() {
     this.loaded = false;
-    this.socket = io(window.room ? "https://blaster2d.ruiwenge2.repl.co": document.getElementById("server").value);
+    this.socket = io(window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer);
     this.name = name || localStorage.getItem("name");
     this.coins = {};
     this.trees = this.physics.add.group();
