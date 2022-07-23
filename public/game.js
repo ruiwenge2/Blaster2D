@@ -346,8 +346,10 @@ class Game extends Phaser.Scene {
           this.shots.setText(`${self.shots}/${self.shotsLeft}`);
           if(self.reloading){
             this.reloading.setText("Reloading...");
+            this.gun.visible = false;
           } else {
             this.reloading.setText("");
+            this.gun.visible = true;
           }
   
           if(self.spawned && !this.spawned){
@@ -368,6 +370,12 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].spawned = true;
           }
           this.enemies[enemy.id].health = enemy.health;
+          if(enemy.reloading){
+            this.enemies[enemy.id].gun.visible = false;
+          } else {
+            this.enemies[enemy.id].gun.visible = true;
+          }
+          
           this.tweens.add({
             targets: [this.enemies[enemy.id].player],
             x: enemy.x,
