@@ -23,12 +23,12 @@
         </div>
       </div>
       <% } %>
-      <h1>Join Game</h1>
+      <h1 class="h1">Join Game</h1>
       <label>Choose server: </label>
       <select id="server">
+        <option value="auto" id="autoserver">Auto</option>
         <option value="https://blaster2d.ruiwenge2.repl.co" id="server1">Server 1</option>
         <option value="https://blaster2d.herokuapp.com" id="server2">Server 2</option>
-        <option value="auto" id="autoserver">Auto</option>
       </select><br><br>
       <label>Enter name:</label><br><br>
       <% if(loggedIn){ %>
@@ -41,7 +41,7 @@
       <button id="createbtn" class="button">Create Private Game</button>
       <button id="joinbtn" class="button">Join Private Game</button>
       <br><br>
-<!--       <button id="refetch" class="button">Refetch Server Data</button> -->
+      <button id="howtoplay" class="button">How To play</button>
     </main>
     <div id="chatbox">
       <div id="messages"></div>

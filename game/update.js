@@ -23,11 +23,14 @@ const update = () => {
         }
 
         if(room == "main"){
-          if(!rooms[room].timeleft && Object.keys(rooms[room].players).length < 8){
+          if(Date.now() >= rooms[room].nextBot && Object.keys(rooms[room].players).length < 8){
           var id = generateCode(20, true);
+          while (Object.keys(rooms[room].players).includes(id)){
+            id = generateCode(20, true);
+          }
           rooms[room].players[id] = new BotPlayer(id);
           io.to("main").emit("new player", rooms[room].players[id]);
-          rooms[room].timeleft = 30 * random(1, 2); // bot joins every random amount of seconds
+          rooms[room].nextBot = Date.now() + random(1, 2) * 1000; // bot joins every random amount of seconds
         }
   
           if(rooms[room].timeleft) rooms[room].timeleft--;

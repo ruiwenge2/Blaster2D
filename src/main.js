@@ -4,7 +4,7 @@ import { random } from "./functions.js";
 
 window.room = false;
 window.rejoin = false;
-
+window.started = false;
 
 function startGame(){
   const config = {
@@ -39,6 +39,8 @@ function startGame(){
     window.chosenServer = document.getElementById("server").value;
     localStorage.setItem("server", window.chosenServer);
   }
+  
+  window.started = true;
   const game = new Phaser.Game(config);
   
   game.scene.add("gamescene", Game);
@@ -57,10 +59,7 @@ function startGame(){
 
 if(localStorage.getItem("name") && !loggedIn){
   document.getElementById("input").value = localStorage.getItem("name");
-} 
-// else {
-//   document.getElementById("input").value = "Gamer" + random(1000, 9999);
-// }
+}
 
 if(loggedIn){
   localStorage.setItem("name", "");
@@ -68,9 +67,7 @@ if(loggedIn){
 
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
-}/* else {
-  document.getElementById("server").value = "auto";
-}*/
+}
 
 document.getElementById("playbtn").addEventListener("click", function(){
   if(!window.rejoin){
@@ -118,6 +115,14 @@ document.getElementById("joinbtn").addEventListener("click", function(){
   });
 });
 
+document.getElementById("howtoplay").addEventListener("click", function(){
+  alertmodal("How To Play", `<p style="font-size: 18px">
+  WASD/Arrow keys to move<br>
+  <br>Click to shoot<br>
+  <br>Press R to reload gun<br>
+  <br>Press ENTER to chat</p>`, "OK", true).then(() => {});
+});
+
 if(autojoin){
   document.getElementById("joinbtn").click();
 }
@@ -148,6 +153,7 @@ window.getServerData = () => {
     showServerData(2).then(() => {
       let keys = Object.values(servers);
       keys = keys.sort(function(a, b){return b.tps - a.tps});
+      if(window.started) return;
       document.getElementById("autoserver").innerHTML = `Auto (Server ${keys[0].num})`;
       if(document.getElementById("server").value == "auto"){
         window.chosenServer = keys[0].url;
@@ -157,5 +163,3 @@ window.getServerData = () => {
 };
 
 getServerData();
-
-// document.getElementById("refetch").addEventListener("click", getServerData);

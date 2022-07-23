@@ -501,8 +501,8 @@ class Game extends Phaser.Scene {
             duration: 1000,
             alpha: 0,
             onComplete: function(){
+              if(!game.enemies[id]) return;
               game.enemies[id].player.destroy();
-              game.enemies[id].nametext.destroy();
               delete game.enemies[id];
               game.minimap.removePlayer(id);
             }
