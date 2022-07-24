@@ -170,8 +170,8 @@ class Player {
     this.score++;
     if(powerUps.includes(this.score)){
       this.shield = {
-        end: Date.now() + 15 * 1000,
-        timeleft: 15
+        end: Date.now() + 10 * 1000,
+        timeleft: 10
       }
     }
   }
