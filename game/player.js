@@ -158,7 +158,7 @@ class Player {
               rooms[this.room].timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
             }
           } else {
-            console.log(this.name + " left");
+            console.log(this.name + " left the room " + this.room);
             rooms[this.room].diedPlayers.push(this.id);
           }
         }

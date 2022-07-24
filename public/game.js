@@ -53,7 +53,8 @@ class Game extends Phaser.Scene {
 
   create() {
     this.loaded = false;
-    this.socket = io(window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer);
+    let url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
+    this.socket = io(url);
     this.name = name || localStorage.getItem("name");
     this.coins = {};
     this.trees = this.physics.add.group();
@@ -70,6 +71,9 @@ class Game extends Phaser.Scene {
         game.socket.emit("join", game.name, token, loggedIn, window.room);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
+        if(url != "https://blaster2d.ruiwenge2.repl.co"){
+          io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
+        }
       });
     });
     

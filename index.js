@@ -206,6 +206,10 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+app.get("/*", (req, res) => {
+  res.status(404).send("Page not found");
+});
+
 server.listen(process.env.PORT || 3000, () => {
   console.log("server started");
   console.log(`${db.db_url}/users`);
@@ -214,7 +218,7 @@ server.listen(process.env.PORT || 3000, () => {
 process.on("uncaughtException", (err) => {
   console.error("There was an uncaught error:\n", err)
   fs.writeFileSync("logs.txt", err);
-  process.exit(1) //mandatory (as per the Node docs)
+  process.exit(1);
 })
 
 process.on("SIGTERM", () => {

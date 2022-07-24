@@ -52,6 +52,10 @@ const socketfunc = socket => {
     });
   });
 
+  socket.on("join server 2", name => {
+    console.log(name + " joined server 2");
+  });
+
   socket.on("player angle", (data, room) => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     if(playerDead(socket.id)) return;
@@ -70,7 +74,7 @@ const socketfunc = socket => {
     let name = rooms[room].players[socket.id].name;
     delete rooms[room].players[socket.id];
     io.to(room).emit("left", socket.id);
-    console.log(name + " left");
+    console.log(name + " left the room " + room);
     let sockets = await io.in(room).fetchSockets();
     if(!sockets.length && room != "main"){
       setTimeout(async () => {
