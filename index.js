@@ -53,7 +53,9 @@ global.weapons = {
     reloadTime: 2000,
     coolDown: 500
   }
-}
+};
+
+global.powerUps = [1, 5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
@@ -210,7 +212,8 @@ server.listen(process.env.PORT || 3000, () => {
 });
 
 process.on("uncaughtException", (err) => {
-  console.error("There was an uncaught error", err)
+  console.error("There was an uncaught error:\n", err)
+  fs.writeFileSync("logs.txt", err);
   process.exit(1) //mandatory (as per the Node docs)
 })
 

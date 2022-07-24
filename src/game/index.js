@@ -112,6 +112,7 @@ class Game extends Phaser.Scene {
         
         this.reloading = new Text(this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
         this.shots = new Text(this, window.innerWidth - 300, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
+        this.shield = new Text(this, window.innerWidth / 2, 30, "", { fontSize: 40, fontFamily: "Arial" });
   
         this.playerInfo = {
           x: this.player.x,
@@ -332,6 +333,20 @@ class Game extends Phaser.Scene {
             this.reloading.setText("");
             this.gun.visible = true;
           }
+
+          if(!self.shots && !self.shotsLeft){
+            this.shots.setTint(0x0ff0000);
+          } else {
+            this.shots.setTint(0x0ffffff);
+          }
+
+          if(self.shield){
+            this.shield.setText(self.shield.timeleft);
+            this.player.setTint(0x0ff0000);
+          } else {
+            this.shield.setText("");
+            this.player.setTint(0xffffff);
+          }
   
           if(self.spawned && !this.spawned){
             this.player.setAlpha(1);
@@ -355,6 +370,11 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].gun.visible = false;
           } else {
             this.enemies[enemy.id].gun.visible = true;
+          }
+          if(enemy.shield){
+            this.enemies[enemy.id].player.setTint(0x0ff0000);
+          } else {
+            this.enemies[enemy.id].player.setTint(0xffffff);
           }
           
           this.tweens.add({

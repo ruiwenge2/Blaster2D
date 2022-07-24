@@ -108,6 +108,8 @@ const socketfunc = socket => {
   });
 
   socket.on("reload", room => {
+    if(!checkUser(socket.id)) return socket.emit("leave");
+    if(playerDead(socket.id)) return;
     if(rooms[room].players[socket.id].shots == weapons[rooms[room].players[socket.id].gun].shots) return;
     rooms[room].players[socket.id].reloading = true;
     rooms[room].players[socket.id].reloadTime = Date.now();

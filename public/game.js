@@ -131,6 +131,7 @@ class Game extends Phaser.Scene {
         
         this.reloading = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
         this.shots = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 300, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
+        this.shield = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, 30, "", { fontSize: 40, fontFamily: "Arial" });
   
         this.playerInfo = {
           x: this.player.x,
@@ -351,6 +352,20 @@ class Game extends Phaser.Scene {
             this.reloading.setText("");
             this.gun.visible = true;
           }
+
+          if(!self.shots && !self.shotsLeft){
+            this.shots.setTint(0x0ff0000);
+          } else {
+            this.shots.setTint(0x0ffffff);
+          }
+
+          if(self.shield){
+            this.shield.setText(self.shield.timeleft);
+            this.player.setTint(0x0ff0000);
+          } else {
+            this.shield.setText("");
+            this.player.setTint(0xffffff);
+          }
   
           if(self.spawned && !this.spawned){
             this.player.setAlpha(1);
@@ -374,6 +389,11 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].gun.visible = false;
           } else {
             this.enemies[enemy.id].gun.visible = true;
+          }
+          if(enemy.shield){
+            this.enemies[enemy.id].player.setTint(0x0ff0000);
+          } else {
+            this.enemies[enemy.id].player.setTint(0xffffff);
           }
           
           this.tweens.add({
@@ -1251,10 +1271,13 @@ document.getElementById("joinbtn").addEventListener("click", function(){
 
 document.getElementById("howtoplay").addEventListener("click", function(){
   alertmodal("How To Play", `<p style="font-size: 18px">
-  WASD/Arrow keys to move<br>
-  <br>Click to shoot<br>
-  <br>Press R to reload gun<br>
-  <br>Press ENTER to chat</p>`, "OK", true).then(() => {});
+  - WASD/Arrow keys to move<br>
+  <br>- Click to shoot<br>
+  <br>- Press R to reload gun<br>
+  <br>- Press ENTER to chat<br>
+  <br>- Collect the gold for ammo<br>
+  <br>- Kill as many players as you can<br>
+  <br>Happy playing!</p>`, "OK", true).then(() => {});
 });
 
 if(autojoin){

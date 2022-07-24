@@ -34,6 +34,7 @@ class Player {
     this.room = room;
     this.shots = weapons[this.gun].shots;
     this.shotsLeft = weapons[this.gun].total;
+    this.shield = false;
   }
   
   update(){
@@ -48,6 +49,13 @@ class Player {
       this.shots += shotsAdded;
       this.shotsLeft -= shotsAdded;
       this.reloading = false;
+    }
+    if(this.shield){
+      if(Date.now() >= this.shield.end){
+        this.shield = false;
+      } else {
+        this.shield.timeleft = Math.round((this.shield.end - Date.now()) / 1000);
+      }
     }
     this.checkDiagonal();
     this.checkMovement();
@@ -133,16 +141,17 @@ class Player {
     Object.values(rooms[this.room].bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
-        this.health -= random(weapons[bullet.gun].min, weapons[bullet.gun].max);
         delete rooms[this.room].bullets[bullet.id];
         io.to(this.room).emit("removed bullet", bullet.id);
+        if(this.shield) return;
+        this.health -= random(weapons[bullet.gun].min, weapons[bullet.gun].max);
         this.healTime = Date.now() + 5000;
         if(this.health <= 0){
           this.health = 0;
           this.died = true;
           io.to(this.room).emit("player died", this.id, bullet.shooter, bullet.shooterName);
           if(rooms[this.room].players[bullet.shooter]){
-            rooms[this.room].players[bullet.shooter].score++;
+            rooms[this.room].players[bullet.shooter].addScore();
           }
           if(this.bot){
             if(!rooms[this.room].timeleft){
@@ -155,6 +164,16 @@ class Player {
         }
       }
     });
+  }
+
+  addScore(){
+    this.score++;
+    if(powerUps.includes(this.score)){
+      this.shield = {
+        end: Date.now() + 15 * 1000,
+        timeleft: 15
+      }
+    }
   }
 }
 

@@ -117,10 +117,13 @@ document.getElementById("joinbtn").addEventListener("click", function(){
 
 document.getElementById("howtoplay").addEventListener("click", function(){
   alertmodal("How To Play", `<p style="font-size: 18px">
-  WASD/Arrow keys to move<br>
-  <br>Click to shoot<br>
-  <br>Press R to reload gun<br>
-  <br>Press ENTER to chat</p>`, "OK", true).then(() => {});
+  - WASD/Arrow keys to move<br>
+  <br>- Click to shoot<br>
+  <br>- Press R to reload gun<br>
+  <br>- Press ENTER to chat<br>
+  <br>- Collect the gold for ammo<br>
+  <br>- Kill as many players as you can<br>
+  <br>Happy playing!</p>`, "OK", true).then(() => {});
 });
 
 if(autojoin){
