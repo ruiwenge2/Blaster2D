@@ -47,6 +47,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
+    this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
     this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
@@ -65,6 +66,7 @@ class Game extends Phaser.Scene {
     this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
     this.chatbox = new _chat_js__WEBPACK_IMPORTED_MODULE_4__["default"](this);
     this.spawned = false;
+    // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
@@ -79,7 +81,6 @@ class Game extends Phaser.Scene {
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
-      // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     });
     
     const handle = function(){
@@ -126,15 +127,16 @@ class Game extends Phaser.Scene {
         this.playerstext.scrollFactorY = 0;
         this.scorestext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, 200, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
         
-        this.gold = 0;
-        this.goldtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "Gold: " + this.gold, { fontSize: 25, fontFamily: "copperplate" });
-        
-        this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 80, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
-        this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 110, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
-        this.ping = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 140, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
+        this.fpstext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 50, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
+        this.tps = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
+        this.ping = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 150, 110, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
         
         this.reloading = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
-        this.shots = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 300, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
+        this.shots = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth - 310, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
+        this.bullet_icon = this.add.image(window.innerWidth - 290, window.innerHeight - 90, "bullet_icon").setDepth(100);
+        this.bullet_icon.scrollFactorX = 0;
+        this.bullet_icon.scrollFactorY = 0;
+        
         this.shield = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, 30, "", { fontSize: 40, fontFamily: "Arial" });
   
         this.playerInfo = {
@@ -197,11 +199,7 @@ class Game extends Phaser.Scene {
       try {
         if(!this.verified) return;
         let player;
-        if(playerId == this.socket.id){
-          this.gold++;
-          this.goldtext.setText("Gold: " + this.gold);
-          player = this.player;
-        }
+        if(playerId == this.socket.id) player = this.player;
         else player = this.enemies[playerId].player;
         let coin = this.coins[id];
         this.tweens.add({

@@ -44,7 +44,7 @@ class Player {
       this.healTime = Date.now() + 500;
     }
     if(this.reloading && Date.now() - this.reloadTime >=  weapons[this.gun].reloadTime){
-      var shotsAdded = weapons[this.gun].shots - this.shots;
+      let shotsAdded = weapons[this.gun].shots - this.shots;
       if(shotsAdded > this.shotsLeft) shotsAdded = this.shotsLeft;
       this.shots += shotsAdded;
       this.shotsLeft -= shotsAdded;
@@ -130,13 +130,17 @@ class Player {
   }
 
   checkCollision(){
-    Object.values(rooms[this.room].coins).forEach(coin => {
-      if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
-        delete rooms[this.room].coins[coin.id];
-        io.to(this.room).emit("collected coin", coin.id, this.id);
-        this.shotsLeft += weapons[this.gun].shots;
-      }
-    });
+    if(this.shotsLeft < weapons[this.gun].total){
+      Object.values(rooms[this.room].coins).forEach(coin => {
+        if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
+          delete rooms[this.room].coins[coin.id];
+          io.to(this.room).emit("collected coin", coin.id, this.id);
+          let shotsAdded = weapons[this.gun].shots;
+          if(this.shotsLeft + shotsAdded > weapons[this.gun].total) shotsAdded = weapons[this.gun].total - this.shotsLeft;
+          this.shotsLeft += shotsAdded;
+        }
+      });
+    }
     if(!this.spawned) return;
     Object.values(rooms[this.room].bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;
