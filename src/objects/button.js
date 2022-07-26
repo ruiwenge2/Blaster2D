@@ -2,7 +2,6 @@ import Text from "./text.js";
 
 class Button {
   constructor(scene, x, y, text, onclick, style){
-    // super(scene);
     // default values
     if(!style){
       style = {};
