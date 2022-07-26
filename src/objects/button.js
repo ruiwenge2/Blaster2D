@@ -1,8 +1,8 @@
 import Text from "./text.js";
 
-class Button extends Phaser.GameObjects.Container {
+class Button {
   constructor(scene, x, y, text, onclick, style){
-    super(scene);
+    // super(scene);
     // default values
     if(!style){
       style = {};
@@ -29,6 +29,13 @@ class Button extends Phaser.GameObjects.Container {
     this.button.y = this.text.y - (this.text.height / 2) - 5;
     this.button.setInteractive().on('pointerdown', onclick);
     scene.add.existing(this);
+  }
+
+  setPosition(x, y){
+    this.text.x = x;
+    this.text.y = y;
+    this.button.x = this.text.x - (this.text.width / 2) - 5;
+    this.button.y = this.text.y - (this.text.height / 2) - 5;
   }
 }
 

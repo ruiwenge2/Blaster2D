@@ -62,11 +62,29 @@ class Game extends Phaser.Scene {
     });
     
     window.addEventListener("resize", () => {
-      this.scale.resize(window.innerWidth, window.innerHeight);
-      this.fpstext.x = window.innerWidth - 150;
-      this.tps.x = window.innerWidth - 150;
-      this.ping.x = window.innerWidth - 150;
-      this.minimap.resize();
+      if(this.died){
+        this.deathtext.x = window.innerWidth / 2
+        this.deathtext.y = window.innerHeight / 2 - 200;
+        this.infotext.x = window.innerWidth / 2;
+        this.infotext.y = window.innerHeight / 2 - 100;
+        this.deathRect.x = window.innerWidth / 2;
+        this.deathRect.y = window.innerHeight / 2;
+        this.playAgain.setPosition(window.innerWidth / 2, window.innerHeight / 2 + 100);
+      } else {
+        this.scale.resize(window.innerWidth, window.innerHeight);
+        this.fpstext.x = window.innerWidth - 150;
+        this.tps.x = window.innerWidth - 150;
+        this.ping.x = window.innerWidth - 150;
+        this.shield.x = window.innerWidth / 2;
+        this.shield_icon.x = window.innerWidth / 2 - 50;
+        this.reloading.x = window.innerWidth - 300;
+        this.reloading.y = window.innerHeight - 120;
+        this.shots.x = window.innerWidth - 310;
+        this.shots.y = window.innerHeight - 70;
+        this.bullet_icon.x = window.innerWidth - 290;
+        this.bullet_icon.y = window.innerHeight - 90;
+        this.minimap.resize();
+      }
     });
     
     const handle = function(){
@@ -488,14 +506,14 @@ class Game extends Phaser.Scene {
               game.bullet_icon.destroy();
               game.shield.destroy();
               
-              let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
-              let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
-              let deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);
+              game.deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
+              game.infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
+              game.deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);
               
-              deathRect.scrollFactorX = 0;
-              deathRect.scrollFactorY = 0;
-              deathRect.setStrokeStyle(5, 0x0000000);
-              let playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
+              game.deathRect.scrollFactorX = 0;
+              game.deathRect.scrollFactorY = 0;
+              game.deathRect.setStrokeStyle(5, 0x0000000);
+              game.playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
                 game.sys.game.destroy(true, false);
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
@@ -508,19 +526,19 @@ class Game extends Phaser.Scene {
                   document.getElementById("playbtn").click();
                 }
               }, { background: 0x00374ff });
-              playAgain.text.setDepth(102).setAlpha(0);
-              playAgain.button.setDepth(101).setAlpha(0);
+              game.playAgain.text.setDepth(102).setAlpha(0);
+              game.playAgain.button.setDepth(101).setAlpha(0);
               
               if(game.enemies[shooter]){
                 game.cameras.main.startFollow(game.enemies[shooter].player);
               }
               game.tweens.add({
-                targets: deathRect,
+                targets: game.deathRect,
                 duration: 300,
                 alpha:0.5
               });
               game.tweens.add({
-                targets: [deathtext, infotext, playAgain.text, playAgain.button],
+                targets: [game.deathtext, game.infotext, game.playAgain.text, game.playAgain.button],
                 duration: 300,
                 alpha:1
               });
