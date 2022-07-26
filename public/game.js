@@ -869,7 +869,6 @@ __webpack_require__.r(__webpack_exports__);
 
 class Button {
   constructor(scene, x, y, text, onclick, style){
-    // super(scene);
     // default values
     if(!style){
       style = {};

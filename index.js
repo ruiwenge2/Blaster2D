@@ -9,15 +9,6 @@ const cors = require("cors");
 
 
 global.io = socketio(server, {
-  // cors: {
-  //   origins: [
-  //     "https://blaster2d.ruiwenge2.repl.co",
-  //     "https://blaster2d.herokuapp.com",
-  //     "https://191bb644-256e-48ce-b188-a2dde4c165f4.id.repl.co",
-  //     "https://blaster2d--ruiwenge2.repl.co"
-  //   ],
-  //   methods: ["GET", "POST"]
-  // }
   cors: { origin: "*" }
 });
 global.rooms = {
