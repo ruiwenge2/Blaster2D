@@ -29,6 +29,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
     this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
+    this.load.image("shield_icon", "/img/gameObjects/shield_icon.png");
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
@@ -62,6 +63,10 @@ class Game extends Phaser.Scene {
     
     window.addEventListener("resize", () => {
       this.scale.resize(window.innerWidth, window.innerHeight);
+      this.fpstext.x = window.innerWidth - 150;
+      this.tps.x = window.innerWidth - 150;
+      this.ping.x = window.innerWidth - 150;
+      this.minimap.resize();
     });
     
     const handle = function(){
@@ -118,7 +123,11 @@ class Game extends Phaser.Scene {
         this.bullet_icon.scrollFactorX = 0;
         this.bullet_icon.scrollFactorY = 0;
         
-        this.shield = new Text(this, window.innerWidth / 2, 30, "", { fontSize: 40, fontFamily: "Arial" });
+        this.shield = new Text(this, window.innerWidth / 2, 50, "", { fontSize: 40, fontFamily: "Arial" });
+        this.shield_icon = this.add.image(window.innerWidth / 2 - 50, 50, "shield_icon").setDepth(100).setScale(0.5, 0.5);
+        this.shield_icon.scrollFactorX = 0;
+        this.shield_icon.scrollFactorY = 0;
+        this.shield_icon.visible = false;
   
         this.playerInfo = {
           x: this.player.x,
@@ -345,9 +354,11 @@ class Game extends Phaser.Scene {
           if(self.shield){
             this.shield.setText(self.shield.timeleft);
             this.player.setTint(0x0ff0000);
+            this.shield_icon.visible = true;
           } else {
             this.shield.setText("");
             this.player.setTint(0xffffff);
+            this.shield_icon.visible = false;
           }
   
           if(self.spawned && !this.spawned){
@@ -475,6 +486,7 @@ class Game extends Phaser.Scene {
               game.reloading.destroy();
               game.shots.destroy();
               game.bullet_icon.destroy();
+              game.shield.destroy();
               
               let deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               let infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);

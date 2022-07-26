@@ -37,6 +37,15 @@ class Minimap {
     });
   }
 
+  resize(){
+    this.map.x = window.innerWidth - 220;
+    this.map.y = window.innerHeight - 220;
+    Object.values(this.players).forEach(player => {
+      player.x = this.map.x + player.x / this.scale;
+      player.y = this.map.y + player.y / this.scale;
+    });
+  }
+
   destroy(){
     this.map.destroy();
     Object.values(this.players).forEach(player => {
