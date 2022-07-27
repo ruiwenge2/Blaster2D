@@ -7,7 +7,6 @@ const socketio = require("socket.io");
 const session = require("express-session");
 const cors = require("cors");
 
-
 global.io = socketio(server, {
   cors: { origin: "*" }
 });
