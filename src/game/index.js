@@ -21,6 +21,7 @@ class Game extends Phaser.Scene {
       this.load.image(`skin_${skins[i].id}`, `/img/skins/${skins[i].url}.png`);
     }
     this.load.image("player", "/img/skins/player.png");
+    this.load.image("botplayer", "/img/skins/bot.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");
@@ -593,7 +594,7 @@ class Game extends Phaser.Scene {
       x: player.x,
       y: player.y,
       name: player.name,
-      player: this.add.image(player.x, player.y, "player").setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
+      player: this.add.image(player.x, player.y, player.bot ? "botplayer": "player").setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
       gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1.1),
