@@ -2,7 +2,7 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name, room, isBot, loggedIn){
+  constructor(id, name, room, isBot, loggedIn, angle){
     this.id = id;
     this.name = name;
     this.bot = isBot;
@@ -23,7 +23,7 @@ class Player {
     this.down = false;
     this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
     this.died = false;
-    this.angle2 = 0;
+    this.angle2 = angle;
     this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
     this.score = 0;
     this.joinTime = Date.now();

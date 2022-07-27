@@ -53,7 +53,7 @@ class Game extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, token, loggedIn, window.room);
+        game.socket.emit("join", game.name, token, loggedIn, window.room, window.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
@@ -327,7 +327,9 @@ class Game extends Phaser.Scene {
   
     this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(2);
 
-    this.gun.angle2 = 0;
+    this.gun.angle2 = window.angle || 0;
+    this.gun.angle = ((this.gun.angle2 * 180 / Math.PI) + 360) % 360;
+    this.player.angle = this.gun.angle;
 
     this.health = 100;
 

@@ -6,6 +6,10 @@ window.room = false;
 window.rejoin = false;
 window.started = false;
 
+document.addEventListener("click", function(e){
+  window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+});
+
 function startGame(){
   const config = {
     type: Phaser.AUTO,
