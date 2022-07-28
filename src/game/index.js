@@ -37,6 +37,7 @@ class Game extends Phaser.Scene {
 
   create() {
     this.loaded = false;
+    this.full_screen = false;
     let url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
     this.socket = io(url);
     this.name = name || localStorage.getItem("name");
@@ -312,13 +313,28 @@ class Game extends Phaser.Scene {
     });
 
     f.on("down", function(){
-      if(this.scale.isFullscreen){
-        this.scale.stopFullscreen();
+      if(this.full_screen){
+        if(document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if(document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if(document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        this.full_screen = false;
       }
       else {
-        this.scale.startFullscreen();
+        let body = document.body;
+        if(body.requestFullscreen){
+          body.requestFullscreen();
+        } else if(body.webkitRequestFullscreen){
+          body.webkitRequestFullscreen();
+        } else if(body.msRequestFullscreen) {
+          body.msRequestFullscreen();
+        }
+        this.full_screen = true;
       }
-    }, this);
+    });
     
 
     // for(let i = size / (ratio * 2); i < size; i += size / ratio){

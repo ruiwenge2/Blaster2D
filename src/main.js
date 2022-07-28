@@ -15,6 +15,7 @@ function startGame(){
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
+    parent: "game",
     backgroundColor: "#000000",
     physics: {
       default: "arcade",
