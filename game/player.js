@@ -104,13 +104,13 @@ class Player {
 
   shoot(angle){
   // if(!this.spawned) return;
-    if(Date.now() < this.shootTime || this.reloading) return;
     if(!this.shots){
       if(!this.shotsLeft) return;
       this.reloading = true;
       this.reloadTime = Date.now();
       return;
     }
+    if(Date.now() < this.shootTime) return;
     rooms[this.room].bullets[rooms[this.room].new_bullet_id] = {
       shooter: this.id,
       x: this.x + Math.cos(angle) * (radius + 40), 

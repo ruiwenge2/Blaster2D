@@ -76,9 +76,6 @@ class Game extends Phaser.Scene {
         game.socket.emit("join", game.name, document.getElementById("gun").value, token, loggedIn, window.room, window.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
-        if(url != "https://blaster2d.ruiwenge2.repl.co"){
-          io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
-        }
       });
     });
     
@@ -144,6 +141,9 @@ class Game extends Phaser.Scene {
         this.loaded = true;
         this.room = room;
         this.loadingtext.destroy();
+        if(url != "https://blaster2d.ruiwenge2.repl.co"){
+          io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
+        }
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
         this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
