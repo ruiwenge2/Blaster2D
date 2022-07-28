@@ -88,7 +88,6 @@ class Player {
     if(this.up && this.y - radius - speed < 0) this.upspeed = this.y - radius;
     if(this.down && this.y + radius + speed > size) this.downspeed = size - this.y - radius;
 
-
     let players = {...rooms[this.room].players};
     delete players[this.id];
     Object.values(players).forEach(player => {

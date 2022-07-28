@@ -228,7 +228,7 @@ class Game extends Phaser.Scene {
     this.socket.on("new coin", data => {
       try {
         let coin = {
-          coin: this.add.image(data.x, data.y, "coin").setScale(0.75, 0.75).setDepth(1),
+          coin: this.add.image(data.x, data.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
           id: data.id
         }
         this.coins[data.id] = coin;

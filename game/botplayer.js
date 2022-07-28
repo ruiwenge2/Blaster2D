@@ -47,8 +47,7 @@ class BotPlayer extends Player {
       }
       
       if(this.finishedMovement){
-        this.movementTime = Date.now() + random(0, 10) * 1000; // random amount of seconds until the bot moves again
-        this.finishedMovement = true;
+        this.movementTime = Date.now() + random(0, 5) * 1000; // random amount of seconds until the bot moves again
       }
     } else {
       this.left = false;
@@ -61,19 +60,32 @@ class BotPlayer extends Player {
           y: random(playersize, size - playersize)
         }
         this.finishedMovement = false;
+        if(this.shotsLeft <= weapons[this.gun].shots){ // bots gotta collect ammo as well
+          let coin = rooms[this.room].coins[this.closestCoin()];
+          this.target = {
+            x: coin.x,
+            y: coin.y,
+          }
+        }
       }
     }
 
     var id = this.closestPlayer();
-    if(!id) return;
-    var player = rooms[this.room].players[id];
-    var angle = Math.atan2(player.y - this.y, player.x - this.x);
-    this.angle2 = angle;
-    this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
-    if(!random(0, this.shootrate) && Math.abs(this.x - player.x) < 500 && Math.abs(this.y - player.y) < 300){ // if player within range
-      this.shoot(angle);
+    if(id){
+      var player = rooms[this.room].players[id];
+      var angle = Math.atan2(player.y - this.y, player.x - this.x);
+      this.angle2 = angle;
+      this.angle = ((this.angle2 * 180 / Math.PI) + 360) % 360;
+      if(!random(0, this.shootrate) && Math.abs(this.x - player.x) < 500 && Math.abs(this.y - player.y) < 500 && !this.reloading){ // if player within range
+        this.shoot(angle);
+        if(!this.shots){ // bot reloading
+          setTimeout(() => {
+            this.reloading = true;
+            this.reloadTime = Date.now();
+          }, 300);
+        }
+      }
     }
-    
     this.update();
   }
 
