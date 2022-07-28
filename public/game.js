@@ -330,7 +330,7 @@ class Game extends Phaser.Scene {
       game.socket.emit("reload", game.room);
     });
 
-    f.on("down", function (){
+    f.on("down", function(){
       if(this.scale.isFullscreen){
         this.scale.stopFullscreen();
       }
@@ -1339,6 +1339,7 @@ document.getElementById("howtoplay").addEventListener("click", function(){
   <br>- Click to shoot<br>
   <br>- Press R to reload gun<br>
   <br>- Press ENTER to chat<br>
+  <br>- Press F for fullscreen, and L to leave game<br>
   <br>- Collect the gold for ammo<br>
   <br>- Kill as many players as you can<br>
   <br>Happy playing!</p>`, "OK", true).then(() => {});
