@@ -283,6 +283,7 @@ class Game extends Phaser.Scene {
     var spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false);
     var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER, false);
     var r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R, false);
+    var f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F, false);
 
     var game = this;
     l.on("down", function(){
@@ -309,6 +310,15 @@ class Game extends Phaser.Scene {
     r.on("down", function(){
       game.socket.emit("reload", game.room);
     });
+
+    f.on("down", function(){
+      if(this.scale.isFullscreen){
+        this.scale.stopFullscreen();
+      }
+      else {
+        this.scale.startFullscreen();
+      }
+    }, this);
     
 
     // for(let i = size / (ratio * 2); i < size; i += size / ratio){
