@@ -15,7 +15,6 @@ function startGame(){
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    parent: "game",
     backgroundColor: "#000000",
     physics: {
       default: "arcade",
@@ -44,6 +43,8 @@ function startGame(){
     window.chosenServer = document.getElementById("server").value;
     localStorage.setItem("server", window.chosenServer);
   }
+
+  localStorage.setItem("gun", document.getElementById("gun").value);
   
   window.started = true;
   const game = new Phaser.Game(config);
@@ -72,6 +73,9 @@ if(loggedIn){
 
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
+}
+if(localStorage.getItem("gun")){
+  document.getElementById("gun").value = localStorage.getItem("gun");
 }
 
 document.getElementById("playbtn").addEventListener("click", function(){

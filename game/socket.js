@@ -10,7 +10,7 @@ const opposites = {
 
 const socketfunc = socket => {
   // console.log(socket.handshake.headers["x-forwarded-for"]);
-  socket.on("join", (name, token, loggedIn, room, angle) => {
+  socket.on("join", (name, gun, token, loggedIn, room, angle) => {
     verify(token, process.env.recaptcha_secret).then(verified => {
       if(!verified){
         console.log(name + " is a bot");
@@ -46,7 +46,7 @@ const socketfunc = socket => {
         code = "main";
       }
       console.log(name + " joined the room " + code);
-      rooms[code].players[socket.id] = new Player(socket.id, name, code, false, loggedIn, angle || 0);
+      rooms[code].players[socket.id] = new Player(socket.id, name, gun, code, false, loggedIn, angle || 0);
       socket.emit("gamedata", rooms[code], code);
       socket.join(code);
       socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);

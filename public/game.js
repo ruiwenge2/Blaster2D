@@ -73,7 +73,7 @@ class Game extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, token, loggedIn, window.room, window.angle);
+        game.socket.emit("join", game.name, document.getElementById("gun").value, token, loggedIn, window.room, window.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
@@ -1245,7 +1245,6 @@ function startGame(){
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    parent: "game",
     backgroundColor: "#000000",
     physics: {
       default: "arcade",
@@ -1274,6 +1273,8 @@ function startGame(){
     window.chosenServer = document.getElementById("server").value;
     localStorage.setItem("server", window.chosenServer);
   }
+
+  localStorage.setItem("gun", document.getElementById("gun").value);
   
   window.started = true;
   const game = new Phaser.Game(config);
@@ -1302,6 +1303,9 @@ if(loggedIn){
 
 if(localStorage.getItem("server")){
   document.getElementById("server").value = localStorage.getItem("server");
+}
+if(localStorage.getItem("gun")){
+  document.getElementById("gun").value = localStorage.getItem("gun");
 }
 
 document.getElementById("playbtn").addEventListener("click", function(){

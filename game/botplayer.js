@@ -5,7 +5,8 @@ const Player = require("./player.js");
 
 class BotPlayer extends Player {
   constructor(id){
-    super(id, humanNames.allRandom(), "main", true, false, 0);
+    var gun = Object.keys(weapons)[random(0, Object.keys(weapons).length - 1)];
+    super(id, humanNames.allRandom(), gun, "main", true, false, 0);
     this.movementTime = Date.now();
     this.target = {
       x: random(playersize, size - playersize),
@@ -47,7 +48,9 @@ class BotPlayer extends Player {
       }
       
       if(this.finishedMovement){
-        this.movementTime = Date.now() + random(0, 5) * 1000; // random amount of seconds until the bot moves again
+        var seconds = random(0, 5);
+        if(this.target.coin) seconds = random(0, 1);
+        this.movementTime = Date.now() + seconds * 1000; // random amount of seconds until the bot moves again
       }
     } else {
       this.left = false;
@@ -65,6 +68,7 @@ class BotPlayer extends Player {
           this.target = {
             x: coin.x,
             y: coin.y,
+            coin: true
           }
         }
       }

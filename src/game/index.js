@@ -54,7 +54,7 @@ class Game extends Phaser.Scene {
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, token, loggedIn, window.room, window.angle);
+        game.socket.emit("join", game.name, document.getElementById("gun").value, token, loggedIn, window.room, window.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
         if(url != "https://blaster2d.ruiwenge2.repl.co"){

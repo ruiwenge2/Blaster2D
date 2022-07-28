@@ -32,6 +32,11 @@
         <option value="https://blaster2d.ruiwenge2.repl.co" id="server1">Server 1</option>
         <option value="https://blaster2d.herokuapp.com" id="server2">Server 2</option>
       </select><br><br>
+      <label>Choose a gun: </label>
+      <select id="gun">
+        <option value="pistol">Pistol</option>
+        <option value="sniper">Sniper</option>
+      </select><br><br>
       <label>Enter name:</label><br><br>
       <% if(loggedIn){ %>
       <input id="input" value="<%- username %>" maxlength="15" disabled style="cursor:no-drop">
@@ -45,11 +50,9 @@
       <br><br>
       <button id="howtoplay" class="button">How To play</button>
     </main>
-    <div id="game">
-      <div id="chatbox">
-        <div id="messages"></div>
-        <input id="chat-input" placeholder="Click here or press ENTER to chat" maxlength="100">
-      </div>
+    <div id="chatbox">
+      <div id="messages"></div>
+      <input id="chat-input" placeholder="Click here or press ENTER to chat" maxlength="100">
     </div>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script>

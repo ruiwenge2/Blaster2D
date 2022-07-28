@@ -36,12 +36,20 @@ global.time = Date.now();
 global.damage = 50;
 global.weapons = {
   pistol: {
-    min: 40,
-    max: 60,
+    min: 20,
+    max: 30,
     shots: 5,
     total: 20,
     reloadTime: 2000,
     coolDown: 500
+  },
+  sniper: {
+    min: 50,
+    max: 100,
+    shots: 2,
+    total: 16,
+    reloadTime: 1500,
+    coolDown: 1000
   }
 };
 
