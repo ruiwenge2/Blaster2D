@@ -3,7 +3,7 @@ module.exports = {
     min: 20,
     max: 30,
     shots: 5,
-    total: 20,
+    total: 30,
     reloadTime: 2000,
     coolDown: 500,
     useRate: 5

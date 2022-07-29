@@ -102,7 +102,7 @@ class Player {
     this.left = this.right = this.up = this.down = false;
   }
 
-  shoot(angle){
+  shoot(angle, x, y){
   // if(!this.spawned) return;
     if(!this.shots){
       if(!this.shotsLeft) return;

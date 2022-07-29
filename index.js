@@ -197,8 +197,7 @@ server.listen(process.env.PORT || 3000, () => {
 });
 
 process.on("uncaughtException", (err) => {
-  console.error("There was an uncaught error:\n", err)
-  fs.writeFileSync("logs.txt", err);
+  console.error("There was an uncaught error:\n", err);
   process.exit(1);
 })
 
