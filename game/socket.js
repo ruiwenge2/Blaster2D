@@ -106,6 +106,10 @@ const socketfunc = socket => {
     rooms[room].players[socket.id].shoot(angle);
   });
 
+  socket.on("shootend", room => {
+    // rooms[room].players[socket.id].shooting = false;
+  });
+
   socket.on("chat message", (name, message, room) => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     if(playerDead(socket.id)) return;

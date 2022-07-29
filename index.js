@@ -34,24 +34,7 @@ global.tps = 0;
 global.TPS = 0;
 global.time = Date.now();
 global.damage = 50;
-global.weapons = {
-  pistol: {
-    min: 20,
-    max: 30,
-    shots: 5,
-    total: 20,
-    reloadTime: 2000,
-    coolDown: 500
-  },
-  sniper: {
-    min: 50,
-    max: 100,
-    shots: 2,
-    total: 16,
-    reloadTime: 1500,
-    coolDown: 1000
-  }
-};
+global.weapons = require("./game/weapons.js");
 
 global.powerUps = [1, 5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
 

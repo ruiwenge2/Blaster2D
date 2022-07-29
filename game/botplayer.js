@@ -13,7 +13,7 @@ class BotPlayer extends Player {
       y: random(playersize, size - playersize)
     }
     this.finishedMovement = false;
-    this.shootrate = random(3, 10);
+    this.shootrate = random(1, weapons[this.gun].useRate);
   }
   
   botUpdate(){

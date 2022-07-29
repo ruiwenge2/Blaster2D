@@ -68,18 +68,20 @@ class Game extends Phaser.Scene {
     this.verified = false;
     this.minimap = new _minimap_js__WEBPACK_IMPORTED_MODULE_5__["default"](this);
     this.chatbox = new _chat_js__WEBPACK_IMPORTED_MODULE_4__["default"](this);
+    this.gunType = document.getElementById("gun").value;
     this.spawned = false;
     // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, document.getElementById("gun").value, token, loggedIn, window.room, window.angle);
+        game.socket.emit("join", game.name, game.gunType, token, loggedIn, window.room, window.angle, { width: window.innerWidth, height: window.innerHeight });
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
     });
     
     window.addEventListener("resize", () => {
+      if(!this.loaded) return;
       if(this.died){
         this.deathtext.x = window.innerWidth / 2
         this.deathtext.y = window.innerHeight / 2 - 200;
@@ -89,6 +91,7 @@ class Game extends Phaser.Scene {
         this.deathRect.y = window.innerHeight / 2;
         this.playAgain.setPosition(window.innerWidth / 2, window.innerHeight / 2 + 100);
       } else {
+        this.socket.emit("resize", { width: window.innerWidth, height: window.innerHeight }, this.room);
         this.scale.resize(window.innerWidth, window.innerHeight);
         this.fpstext.x = window.innerWidth - 150;
         this.tps.x = window.innerWidth - 150;
@@ -656,15 +659,9 @@ class Game extends Phaser.Scene {
   }
 
   addWeaponActions(){
-    this.input.on("pointerdown", e => {
+    this.input.on("pointerup", () => {
       if(this.died) return;
-      if(!this.chatbox.focus){
-        var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
-        this.socket.emit("shoot", angle, this.room);
-        this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-        this.gun.angle2 = angle;
-      }
-      document.getElementById("chat-input").blur();
+      this.shooting = false;
     });
     
     this.input.on("pointermove", e => {
@@ -728,6 +725,15 @@ class Game extends Phaser.Scene {
     }
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
+
+    var pointer = this.input.activePointer;
+    if(pointer.isDown && !this.chatbox.focus && !this.died && (!this.shooting || this.gunType == "machineGun")) {
+      var angle = Math.atan2(pointer.y - (window.innerHeight / 2), pointer.x - (window.innerWidth / 2));
+      this.socket.emit("shoot", angle, this.room);
+      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      this.gun.angle2 = angle;
+      this.shooting = true;
+    }
     let cursors = this.input.keyboard.createCursorKeys();
     if(!this.chatbox.focus){
       if(cursors.left.isDown || this.a.isDown){
