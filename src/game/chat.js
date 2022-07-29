@@ -36,7 +36,7 @@ class Chatbox {
     }
 
     this.input.onblur = () => {
-      this.input.placeholder = "Click here or press ENTER to chat";
+      this.input.placeholder = "Press ENTER to chat";
       this.focus = false;
     }
   }

@@ -104,6 +104,7 @@ class Player {
 
   shoot(angle){
   // if(!this.spawned) return;
+    if(this.reloading) return;
     if(!this.shots){
       if(!this.shotsLeft) return;
       this.reloading = true;

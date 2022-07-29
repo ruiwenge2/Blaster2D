@@ -5,8 +5,15 @@ import { random } from "./functions.js";
 window.room = false;
 window.rejoin = false;
 window.started = false;
+window.mouseData = {
+  x: window.innerWidth / 2,
+  y: window.innerHeight / 2,
+  angle: 0
+};
 
 document.addEventListener("click", function(e){
+  window.mouseData.x = e.clientX;
+  window.mouseData.y = e.clientY;
   window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
 });
 
@@ -53,7 +60,7 @@ function startGame(){
   game.scene.add("disconnect_scene", disconnect_scene);
   
   game.scene.start("gamescene");
-  document.querySelector("canvas").style.cursor = "crosshair";
+  document.body.style.cursor = "crosshair";
   
   window.addEventListener("resize", () => {
     game.scale.resize(window.innerWidth, window.innerHeight);

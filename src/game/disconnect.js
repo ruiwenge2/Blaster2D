@@ -18,6 +18,7 @@ class disconnect_scene extends Phaser.Scene {
         this.sys.game.destroy(true, false);
         document.querySelector("main").style.display = "block";
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+        document.body.style.cursor = "auto";
       }
     });
     

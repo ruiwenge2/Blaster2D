@@ -70,11 +70,15 @@ class Game extends Phaser.Scene {
     this.chatbox = new _chat_js__WEBPACK_IMPORTED_MODULE_4__["default"](this);
     this.gunType = document.getElementById("gun").value;
     this.spawned = false;
+    this.pointerX = window.mouseData.x;
+    this.pointerY = window.mouseData.y;
+    this.shooting = false;
+    this.shotBefore = false;
     // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
-        game.socket.emit("join", game.name, game.gunType, token, loggedIn, window.room, window.angle, { width: window.innerWidth, height: window.innerHeight });
+        game.socket.emit("join", game.name, game.gunType, token, loggedIn, window.room, window.mouseData.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";
       });
@@ -319,6 +323,7 @@ class Game extends Phaser.Scene {
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
         getServerData();
         window.rejoin = false;
+        document.body.style.cursor = "auto";
       });
     });
 
@@ -570,6 +575,7 @@ class Game extends Phaser.Scene {
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                 game.socket.disconnect();
                 getServerData();
+                document.body.style.cursor = "auto";
                 if(game.room == "main"){
                   window.rejoin = false;
                 } else {
@@ -659,17 +665,31 @@ class Game extends Phaser.Scene {
   }
 
   addWeaponActions(){
-    this.input.on("pointerup", () => {
+    const shoot = () => {
+      if(this.died) return;
+      this.shooting = true;
+    };
+    const shootEnd = () => {
       if(this.died) return;
       this.shooting = false;
-    });
-    
-    this.input.on("pointermove", e => {
+      this.shotBefore = false;
+    };
+
+    const pointerMove = (e) => {
       if(this.died || this.socket.disconnected) return;
-      var angle = Math.atan2(e.y - (window.innerHeight / 2), e.x - (window.innerWidth / 2));
+      var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
-    });
+      this.pointerX = e.clientX;
+      this.pointerY = e.clientY;
+    }
+    
+    window.addEventListener("mousedown", shoot);
+    window.addEventListener("touchstart", shoot);
+    window.addEventListener("mouseup", shootEnd);
+    window.addEventListener("touchend", shoot);
+    window.addEventListener("mousemove", pointerMove);
+    window.addEventListener("touchmove", pointerMove);
   }
 
   update() {
@@ -726,13 +746,12 @@ class Game extends Phaser.Scene {
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
 
-    var pointer = this.input.activePointer;
-    if(pointer.isDown && !this.chatbox.focus && !this.died && (!this.shooting || this.gunType == "machineGun")) {
-      var angle = Math.atan2(pointer.y - (window.innerHeight / 2), pointer.x - (window.innerWidth / 2));
+    if(this.shooting && !this.chatbox.focus && !this.died && (!this.shotBefore || this.gunType == "machineGun")) {
+      var angle = Math.atan2(this.pointerY - (window.innerHeight / 2), this.pointerX - (window.innerWidth / 2));
       this.socket.emit("shoot", angle, this.room);
-      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      this.gun.angle2 = angle;
-      this.shooting = true;
+      this.shotBefore = true;
+      // this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      // this.gun.angle2 = angle;
     }
     let cursors = this.input.keyboard.createCursorKeys();
     if(!this.chatbox.focus){
@@ -1020,7 +1039,7 @@ class Chatbox {
     }
 
     this.input.onblur = () => {
-      this.input.placeholder = "Click here or press ENTER to chat";
+      this.input.placeholder = "Press ENTER to chat";
       this.focus = false;
     }
   }
@@ -1158,6 +1177,7 @@ class disconnect_scene extends Phaser.Scene {
         this.sys.game.destroy(true, false);
         document.querySelector("main").style.display = "block";
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+        document.body.style.cursor = "auto";
       }
     });
     
@@ -1241,8 +1261,15 @@ __webpack_require__.r(__webpack_exports__);
 window.room = false;
 window.rejoin = false;
 window.started = false;
+window.mouseData = {
+  x: window.innerWidth / 2,
+  y: window.innerHeight / 2,
+  angle: 0
+};
 
 document.addEventListener("click", function(e){
+  window.mouseData.x = e.clientX;
+  window.mouseData.y = e.clientY;
   window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
 });
 
@@ -1289,7 +1316,7 @@ function startGame(){
   game.scene.add("disconnect_scene", _game_disconnect_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
   
   game.scene.start("gamescene");
-  document.querySelector("canvas").style.cursor = "crosshair";
+  document.body.style.cursor = "crosshair";
   
   window.addEventListener("resize", () => {
     game.scale.resize(window.innerWidth, window.innerHeight);
