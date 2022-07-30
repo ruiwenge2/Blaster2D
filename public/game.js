@@ -77,7 +77,7 @@ class Game extends Phaser.Scene {
     // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     let game = this;
     grecaptcha.ready(function() {
-      grecaptcha.execute("6Lcm-s0gAAAAAEeQqYid3ppPGWgZuGKxXHKLyO77", {action: "submit"}).then(function(token) {
+      grecaptcha.execute("6LerbDQhAAAAAFyt22lecnaCm6UmDmRsytTDtD1k", {action: "submit"}).then(function(token) {
         game.socket.emit("join", game.name, game.gunType, token, loggedIn, window.room, window.mouseData.angle);
         game.verified = true;
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "none";

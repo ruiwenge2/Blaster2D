@@ -36,7 +36,7 @@ global.time = Date.now();
 global.damage = 50;
 global.weapons = require("./game/weapons.js");
 
-global.powerUps = [1, 5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
+global.powerUps = [5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
