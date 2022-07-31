@@ -1,0 +1,4 @@
+There was an uncaught error:
+ TypeError: Cannot read properties of undefined (reading 'cost')
+    at /home/runner/Blaster2D/api.js:21:34
+repl process died unexpectedly: exit status 1

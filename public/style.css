@@ -43,6 +43,17 @@ input {
   background:blue;
   color:white;
 }
+.button:disabled {
+  background:lightgray;
+  cursor:no-drop;
+  color: white;
+  border:none;
+}
+
+.button:disabled:hover {
+  background:lightgray;
+  color:white;
+}
 
 .modal-content {
   color:black;
@@ -176,3 +187,4 @@ p {
 ::-ms-input-placeholder { /* Microsoft Edge */
   color: white;
 }
+

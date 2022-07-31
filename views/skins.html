@@ -12,38 +12,29 @@
         <a href="/">Home</a>
       </div>
       <h1 class="h1">Skins</h1>
-      <% if(!loggedIn){ %>
+      <% if(loggedIn){ %>
+      <h2>My gold: <span id="balance"><%= balance %></span></h2>
+      <% } else { %>
       <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to access skins.</p>
-        <% } %>
+      <% } %>
       <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
-          <button class="button">Buy</button>
-        </div>
-      <% } %>
-        <% for(i of skins){ %>
-        <div class="skin" data-id="<%= i.id %>">
-          <img src="/img/skins/<%= i.url %>.png">
-          <h3>Cost: <%= i.cost %></h3>
-          <button class="button">Buy</button>
-        </div>
-      <% } %>
-        <% for(i of skins){ %>
-        <div class="skin" data-id="<%= i.id %>">
-          <img src="/img/skins/<%= i.url %>.png">
-          <h3>Cost: <%= i.cost %></h3>
-          <button class="button">Buy</button>
-        </div>
-      <% } %>
-        <% for(i of skins){ %>
-        <div class="skin" data-id="<%= i.id %>">
-          <img src="/img/skins/<%= i.url %>.png">
-          <h3>Cost: <%= i.cost %></h3>
-          <button class="button">Buy</button>
+          <button class="button buy" id="buybtn<%= i.id %>">Buy</button><br>
+<!--           <button class="button sell" id="sellbtn<%= i.id %>">Sell</button> -->
         </div>
       <% } %>
     </main>
+    <script>
+      const homepage = false;
+      const loggedIn = <%- loggedIn %>;
+      <% if(loggedIn){ %>
+      const skins = <%- JSON.stringify(skinsList) %>;
+      var current = <%- current %>;
+      var previous = <%- current %>;
+      <% } %>
+    </script>
     <script src="https://modal.ruiwenge2.repl.co/min.js"></script>
     <script src="/script.js"></script>
     <script src="/skins.js"></script>

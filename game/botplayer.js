@@ -6,7 +6,7 @@ const Player = require("./player.js");
 class BotPlayer extends Player {
   constructor(id){
     var gun = Object.keys(weapons)[random(0, Object.keys(weapons).length - 1)];
-    super(id, humanNames.allRandom(), gun, "main", true, false, 0);
+    super(id, humanNames.allRandom(), gun, "main", true, false, 0, "botplayer");
     this.movementTime = Date.now();
     this.target = {
       x: random(playersize, size - playersize),

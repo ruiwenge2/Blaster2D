@@ -37,7 +37,7 @@ class Game extends Phaser.Scene {
   
   preload() {
     for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_7__)){
-      this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].id}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].url}.png`);
+      this.load.image(_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].url, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_7__[i].url}.png`);
     }
     this.load.image("player", "/img/skins/player.png");
     this.load.image("botplayer", "/img/skins/bot.png");
@@ -151,7 +151,7 @@ class Game extends Phaser.Scene {
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
         }
-        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
+        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, data.players[this.socket.id].skin).setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, this.player.x, this.player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 2);
         this.nametext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, this.player.x, this.player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
         this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
@@ -650,7 +650,7 @@ class Game extends Phaser.Scene {
       x: player.x,
       y: player.y,
       name: player.name,
-      player: this.add.image(player.x, player.y, player.bot ? "botplayer": "player").setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1).setAlpha(alpha),
+      player: this.add.image(player.x, player.y, player.skin).setScale(_functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100, _functions_js__WEBPACK_IMPORTED_MODULE_0__.playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, player.x, player.y + _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new _objects_bar_js__WEBPACK_IMPORTED_MODULE_3__["default"](this, player.x, player.y - _functions_js__WEBPACK_IMPORTED_MODULE_0__.radius - 20, 100, 1),
       gun: this.add.image(player.x + Math.cos(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), player.y + Math.sin(player.angle2) * (_functions_js__WEBPACK_IMPORTED_MODULE_0__.radius + 29), "pistol").setDepth(1.1),
@@ -1145,7 +1145,7 @@ module.exports = JSON.parse('{"trees":[{"id":0,"size":576,"x":3985,"y":1126,"ang
 /* 9 */
 /***/ ((module) => {
 
-module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":200},{"id":2,"url":"smileyface","cost":100},{"id":3,"url":"target","cost":100},{"id":4,"url":"basketball","cost":250}]');
+module.exports = JSON.parse('[{"id":0,"url":"player","cost":0},{"id":1,"url":"skull","cost":500},{"id":2,"url":"smileyface","cost":200},{"id":3,"url":"target","cost":100},{"id":4,"url":"basketball","cost":400},{"id":5,"url":"pistol","cost":400}]');
 
 /***/ }),
 /* 10 */

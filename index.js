@@ -47,7 +47,7 @@ app.use(session({secret: process.env["secret"]}));
 const { random, generateCode, loggedIn, getUser, deleteUser, verify, setUpRoom } = require("./game/functions.js");
 const api = require("./api.js");
 const socketfunc = require("./game/socket.js");
-const skins = require("./game/skins.js");
+global.skins = require("./game/skins.js");
 const update = require("./game/update.js");
 const Database = require("./db.js");
 
@@ -100,8 +100,15 @@ app.get("/signup", (req, res) => {
   res.render("signup.html", {error: false});
 });
 
-app.get("/skins", (req, res) => {
-  res.render("skins.html", {skins: skins, loggedIn: loggedIn(req)});
+app.get("/skins", async (req, res) => {
+  var balance, skinsList, current;
+  if(loggedIn(req)){
+    var users = await db.get("users");
+    balance = users[req.session.username].b;
+    skinsList = users[req.session.username].s;
+    current = users[req.session.username].c;
+  }
+  res.render("skins.html", {skins, loggedIn: loggedIn(req), balance, skinsList, current });
 });
 
 app.post("/login", (req, res) => {
@@ -124,6 +131,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/signup", (req, res) => {
+  let time = Date.now();
   var newusername = req.body.newusername;
   var newpassword = req.body.newpassword;
   let secret = process.env["recaptcha_signup_secret"];
@@ -147,7 +155,7 @@ app.post("/signup", (req, res) => {
         }
         console.log(newusername);
         bcrypt.hash(newpassword, saltRounds, function(err, hash){
-          users[newusername] = {
+          var data = {
             p: hash,
             s: [0],
             c: 0,
@@ -163,10 +171,12 @@ app.post("/signup", (req, res) => {
           g = gun,
           b = balance (how much gold a player owns)
           */
-          db.set("users", users);
-          console.log("new account created");
-          req.session.username = newusername;
-          res.redirect("/");
+          db.player(newusername, data).then(() => {
+            console.log("new account created");
+            req.session.username = newusername;
+            res.redirect("/");
+            console.log(Date.now() - time + " ms");
+          });
         });
       });
     } else {

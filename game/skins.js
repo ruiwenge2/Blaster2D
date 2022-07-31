@@ -9,12 +9,12 @@ const skins = [
   {
     id: 1,
     url: "skull",
-    cost: 200
+    cost: 500
   },
   {
     id: 2,
     url: "smileyface",
-    cost: 100
+    cost: 200
   },
   {
     id: 3,
@@ -24,7 +24,12 @@ const skins = [
   {
     id: 4,
     url: "basketball",
-    cost: 250
+    cost: 400
+  },
+  {
+    id: 5,
+    url: "pistol",
+    cost: 400
   }
 ];
 

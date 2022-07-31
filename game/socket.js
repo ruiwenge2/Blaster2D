@@ -10,47 +10,52 @@ const opposites = {
 
 const socketfunc = socket => {
   // console.log(socket.handshake.headers["x-forwarded-for"]);
-  socket.on("join", (name, gun, token, loggedIn, room, angle) => {
-    verify(token, process.env.recaptcha_secret).then(verified => {
-      if(!verified){
-        console.log(name + " is a bot");
-        socket.emit("kick", "Invalid reCAPTCHA token, please try again.", true);
-        socket.disconnect();
-        return;
-      }
-      if(room.mode == "join" && !Object.keys(rooms).includes(room.code)){
-        socket.emit("kick", "Invalid room code.");
-        socket.disconnect();
-        return;
-      }
-      if(Object.keys(rooms.main.players).includes(socket.id)){
-        socket.emit("kick", "Same ID as another player.\n\nPlease try again", false);
-        socket.disconnect();
-        return;
-      }
-      var code;
-      if(room.code) code = room.code;
-      else if(room.mode == "create"){
-        code = generateCode(10);
-        rooms[code] = {
-          players: {},
-          bullets: {},
-          coins: {},
-          new_bullet_id: 0,
-          new_coin_id: 0,
-          diedPlayers: []
-        };
-        setUpRoom(code);
-        socket.emit("roomdata", code);
-      } else {
-        code = "main";
-      }
-      console.log(name + " joined the room " + code);
-      rooms[code].players[socket.id] = new Player(socket.id, name, gun, code, false, loggedIn, angle || 0);
-      socket.emit("gamedata", rooms[code], code);
-      socket.join(code);
-      socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);
-    });
+  socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
+  let verified = await verify(token, process.env.recaptcha_secret);
+    if(!verified){
+      console.log(name + " is a bot");
+      socket.emit("kick", "Invalid reCAPTCHA token, please try again.", true);
+      socket.disconnect();
+      return;
+    }
+    if(room.mode == "join" && !Object.keys(rooms).includes(room.code)){
+      socket.emit("kick", "Invalid room code.");
+      socket.disconnect();
+      return;
+    }
+    if(Object.keys(rooms.main.players).includes(socket.id)){
+      socket.emit("kick", "Same ID as another player.\n\nPlease try again", false);
+      socket.disconnect();
+      return;
+    }
+    var code;
+    if(room.code) code = room.code;
+    else if(room.mode == "create"){
+      code = generateCode(10);
+      rooms[code] = {
+        players: {},
+        bullets: {},
+        coins: {},
+        new_bullet_id: 0,
+        new_coin_id: 0,
+        diedPlayers: []
+      };
+      setUpRoom(code);
+      socket.emit("roomdata", code);
+    } else {
+      code = "main";
+    }
+    let skin = "player";
+    if(loggedIn){
+      var users = await db.get("users");
+      let num = users[name].c;
+      skin = skins.filter(e => e.id == num)[0].url;
+    }
+    console.log(name + " joined the room " + code);
+    rooms[code].players[socket.id] = new Player(socket.id, name, gun, code, false, loggedIn, angle || 0, skin);
+    socket.emit("gamedata", rooms[code], code);
+    socket.join(code);
+    socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);
   });
 
   socket.on("join server 2", name => {

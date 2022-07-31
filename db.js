@@ -13,7 +13,7 @@ class db {
         try {
           value = JSON.parse(str);
         } catch(err){
-          
+          console.log(err)
         }
         if(!value) return null;
         return value;
@@ -34,6 +34,25 @@ class db {
 
   async delete(key){
     await fetch(`${this.db_url}/${key}`, { method: "DELETE" });
+    return this;
+  }
+
+  async player(name, data){
+    data = JSON.stringify(data);
+    await fetch(`${this.db_url}/player`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, data })
+    });
+    return this;
+  }
+
+  async score(name){
+    await fetch(`${this.db_url}/player/score`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ "name": name })
+    });
     return this;
   }
 }

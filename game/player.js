@@ -2,7 +2,7 @@ const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
 
 class Player {
-  constructor(id, name, gun, room, isBot, loggedIn, angle){
+  constructor(id, name, gun, room, isBot, loggedIn, angle, skin){
     this.id = id;
     this.name = name;
     this.bot = isBot;
@@ -35,6 +35,7 @@ class Player {
     this.shots = weapons[this.gun].shots;
     this.shotsLeft = weapons[this.gun].total;
     this.shield = false;
+    this.skin = skin;
   }
   
   update(){
@@ -177,6 +178,12 @@ class Player {
         end: Date.now() + 10 * 1000,
         timeleft: 10
       }
+    }
+    if(this.account){
+      let time = Date.now();
+      db.score(this.name).then(() => {
+        console.log(Date.now() - time + " ms");
+      });
     }
   }
 }
