@@ -55,6 +55,7 @@ class Game extends Phaser.Scene {
     this.pointerY = window.mouseData.y;
     this.shooting = false;
     this.shotBefore = false;
+    this.focus = true;
     // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
     let game = this;
     grecaptcha.ready(function() {
@@ -75,6 +76,11 @@ class Game extends Phaser.Scene {
         this.deathRect.x = window.innerWidth / 2;
         this.deathRect.y = window.innerHeight / 2;
         this.playAgain.setPosition(window.innerWidth / 2, window.innerHeight / 2 + 100);
+
+        if(this.room != "main"){
+          this.switchWeapon.setPosition(window.innerWidth - 150, 50);
+          this.leaveBtn.setPosition(window.innerWidth - 150, 110);
+        }
       } else {
         this.socket.emit("resize", { width: window.innerWidth, height: window.innerHeight }, this.room);
         this.scale.resize(window.innerWidth, window.innerHeight);
@@ -119,8 +125,10 @@ class Game extends Phaser.Scene {
     });
 
     this.socket.on("roomdata", room => {
+      this.focus = false;
       promptmodal("", "Copy the link and share with your friends to play!", "Copy", true, `https://${location.host}/?code=${room}`, true).then((e) => {
         navigator.clipboard.writeText(e);
+        this.focus = true;
       });
     });
     
@@ -566,6 +574,34 @@ class Game extends Phaser.Scene {
               }, { background: 0x00374ff });
               game.playAgain.text.setDepth(102).setAlpha(0);
               game.playAgain.button.setDepth(101).setAlpha(0);
+
+              if(game.room != "main"){
+                game.switchWeapon = new Button(game, window.innerWidth - 150, 50, "Switch Weapon", function(){
+                  selectmodal("Switch Weapon", "Choose a weapon: ", {
+                    "pistol": "Pistol",
+                    "sniper": "Sniper",
+                    "machineGun": "Machine Gun"
+                  }, document.getElementById("gun").value).then(gun => {
+                    document.getElementById("gun").value = gun;
+                  });
+                }, { fontSize: 30 });
+                
+                game.switchWeapon.text.setDepth(102).setAlpha(0);
+                game.switchWeapon.button.setDepth(101).setAlpha(0);
+
+                game.leaveBtn = new Button(game, window.innerWidth - 150, 110, "Leave", function(){
+                  game.sys.game.destroy(true, false);
+                  document.querySelector("main").style.display = "block";
+                  document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+                  game.socket.disconnect();
+                  getServerData();
+                  document.body.style.cursor = "auto";
+                  window.rejoin = false;
+                }, { fontSize: 30 });
+                
+                game.leaveBtn.text.setDepth(102).setAlpha(0);
+                game.leaveBtn.button.setDepth(101).setAlpha(0);
+              }
               
               if(game.enemies[shooter]){
                 game.cameras.main.startFollow(game.enemies[shooter].player);
@@ -575,11 +611,20 @@ class Game extends Phaser.Scene {
                 duration: 300,
                 alpha:0.5
               });
+              
               game.tweens.add({
                 targets: [game.deathtext, game.infotext, game.playAgain.text, game.playAgain.button],
                 duration: 300,
                 alpha:1
               });
+              
+              if(game.room != "main"){
+                game.tweens.add({
+                  targets: [game.switchWeapon.text, game.switchWeapon.button, game.leaveBtn.text, game.leaveBtn.button],
+                  duration: 300,
+                  alpha: 1
+                });
+              }
             }
           });
         } else {
@@ -728,7 +773,7 @@ class Game extends Phaser.Scene {
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
 
-    if(this.shooting && !this.chatbox.focus && !this.died && (!this.shotBefore || this.gunType == "machineGun")) {
+    if(this.shooting && !this.chatbox.focus && !this.died && (!this.shotBefore || this.gunType == "machineGun") && this.focus) {
       var angle = Math.atan2(this.pointerY - (window.innerHeight / 2), this.pointerX - (window.innerWidth / 2));
       this.socket.emit("shoot", angle, this.room);
       this.shotBefore = true;
