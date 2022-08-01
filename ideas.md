@@ -20,3 +20,4 @@
 - feat: use `Date.now()` instead of counting down in update function (because of potential lag)
 - use `extends` for the bot class, using the player class
 - create a bot skin?
+- skin ideas: 

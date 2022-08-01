@@ -101,14 +101,18 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/skins", async (req, res) => {
-  var balance, skinsList, current;
-  if(loggedIn(req)){
-    var users = await db.get("users");
-    balance = users[req.session.username].b;
-    skinsList = users[req.session.username].s;
-    current = users[req.session.username].c;
+  try {
+    var balance, skinsList, current;
+    if(loggedIn(req)){
+      var users = await db.get("users");
+      balance = users[req.session.username].b;
+      skinsList = users[req.session.username].s;
+      current = users[req.session.username].c;
+    }
+    res.render("skins.html", {skins, loggedIn: loggedIn(req), balance, skinsList, current });
+  } catch(e){
+    console.log(e);
   }
-  res.render("skins.html", {skins, loggedIn: loggedIn(req), balance, skinsList, current });
 });
 
 app.post("/login", (req, res) => {

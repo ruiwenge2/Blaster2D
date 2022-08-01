@@ -55,6 +55,11 @@ const skins = [
     id: 10,
     url: "crown",
     cost: 3000
+  },
+  {
+    id: 11,
+    url: "cap",
+    cost: 900
   }
 ];
 
