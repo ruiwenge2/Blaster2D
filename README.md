@@ -1,2 +1,11 @@
 # Blaster2D
-A multiplayer game where you kill as many players as you can! I spent a long time working on this, and it's finally done!
+A multiplayer game where you kill as many players as you can!
+
+- WASD/Arrow keys to move
+- Click to shoot
+- Press R to reload gun
+- Collect the gold for ammo
+
+To buy skins, you have to sign up for an account.
+
+Hope you have lots of fun playing this!
