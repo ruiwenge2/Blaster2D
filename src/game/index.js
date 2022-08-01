@@ -25,7 +25,7 @@ class Game extends Phaser.Scene {
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");
-    this.load.image("pistol", "/img/guns/pistol.png");
+    this.load.image("gun", "/img/gameObjects/gun.png");
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
@@ -367,7 +367,7 @@ class Game extends Phaser.Scene {
     this.obstacle4 = this.physics.add.staticSprite(size / 2 + 750, size / 2, "obstacle2").setDepth(0);
 
   
-    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "pistol").setDepth(2);
+    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "gun").setDepth(2);
 
     this.gun.angle2 = window.angle || 0;
     this.gun.angle = ((this.gun.angle2 * 180 / Math.PI) + 360) % 360;
@@ -679,7 +679,7 @@ class Game extends Phaser.Scene {
       player: this.add.image(player.x, player.y, `skin_${player.skin}`).setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
-      gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1.1),
+      gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "gun").setDepth(1.1),
       angle: null,
       health: 100,
       score: player.score,
