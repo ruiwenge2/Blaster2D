@@ -8,4 +8,4 @@ A multiplayer game where you kill as many players as you can!
 
 To buy skins, you have to sign up for an account.
 
-Hope you have lots of fun playing this!
+Have fun!!!
