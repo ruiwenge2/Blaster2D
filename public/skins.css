@@ -1,3 +1,8 @@
+#skins {
+  width:80%;
+  margin:0 auto;
+}
+
 .skin {
   display: inline-block;
   border:2px solid white;

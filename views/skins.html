@@ -17,14 +17,16 @@
       <% } else { %>
       <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to access skins.</p>
       <% } %>
-      <% for(i of skins){ %>
+      <div id="skins">
+        <% for(i of skins){ %>
         <div class="skin" data-id="<%= i.id %>">
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
           <button class="button buy" id="buybtn<%= i.id %>">Buy</button><br>
 <!--           <button class="button sell" id="sellbtn<%= i.id %>">Sell</button> -->
         </div>
-      <% } %>
+        <% } %>
+      </div>
     </main>
     <script>
       const homepage = false;

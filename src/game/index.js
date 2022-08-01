@@ -18,10 +18,10 @@ class Game extends Phaser.Scene {
   
   preload() {
     for(let i of Object.keys(skins)){
-      this.load.image(skins[i].url, `/img/skins/${skins[i].url}.png`);
+      this.load.image(`skin_${skins[i].url}`, `/img/skins/${skins[i].url}.png`);
     }
-    this.load.image("player", "/img/skins/player.png");
-    this.load.image("botplayer", "/img/skins/bot.png");
+    // this.load.image("skin_player", "/img/skins/player.png");
+    this.load.image("skin_botplayer", "/img/skins/bot.png");
     this.load.image("coin", "/img/gameObjects/coin.png");
     this.load.image("grass", "/img/gameObjects/tile.png");
     this.load.image("bullet", "/img/gameObjects/bullet.png");
@@ -132,7 +132,7 @@ class Game extends Phaser.Scene {
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
         }
-        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, data.players[this.socket.id].skin).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
+        this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, `skin_${data.players[this.socket.id].skin}`).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
         this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
         this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
@@ -631,7 +631,7 @@ class Game extends Phaser.Scene {
       x: player.x,
       y: player.y,
       name: player.name,
-      player: this.add.image(player.x, player.y, player.skin).setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
+      player: this.add.image(player.x, player.y, `skin_${player.skin}`).setScale(playersize / 100, playersize / 100).setDepth(1).setAlpha(alpha),
       nametext: new Text(this, player.x, player.y + radius + 20, player.name, { fontSize: 20, fontFamily: "sans-serif", color: player.bot ? "red": (player.account ? "blue": "white") }, 1, true),
       healthbar: new Bar(this, player.x, player.y - radius - 20, 100, 1),
       gun: this.add.image(player.x + Math.cos(player.angle2) * (radius + 29), player.y + Math.sin(player.angle2) * (radius + 29), "pistol").setDepth(1.1),
@@ -663,6 +663,7 @@ class Game extends Phaser.Scene {
       this.gun.angle2 = angle;
       this.pointerX = e.clientX;
       this.pointerY = e.clientY;
+      e.preventDefault();
     }
     
     window.addEventListener("mousedown", shoot);
