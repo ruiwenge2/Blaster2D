@@ -58,8 +58,4 @@ router.get("/useskin", async (req, res) => {
   }
 });
 
-router.get("/sell", (req, res) => {
-  res.send("");
-});
-
 module.exports = router;

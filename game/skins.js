@@ -29,7 +29,7 @@ const skins = [
   {
     id: 5,
     url: "sunglasses",
-    cost: 1500
+    cost: 2000
   },
   {
     id: 6,

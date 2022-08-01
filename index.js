@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
-const hcaptcha = require("hcaptcha");
 const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");

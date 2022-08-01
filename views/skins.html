@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>Skins - Blaster2D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/img/logo.png" rel="icon">
     <link href="/style.css" rel="stylesheet">
     <link href="/skins.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <main>
@@ -23,7 +24,6 @@
           <img src="/img/skins/<%= i.url %>.png">
           <h3>Cost: <%= i.cost %></h3>
           <button class="button buy" id="buybtn<%= i.id %>">Buy</button><br>
-<!--           <button class="button sell" id="sellbtn<%= i.id %>">Sell</button> -->
         </div>
         <% } %>
       </div>

@@ -67,8 +67,8 @@ module.exports.deleteUser = function(user){
 };
 
 module.exports.verify = async function(token, secret){
-  let result = await require('axios')({
-    method:"POST",
+  let result = await require("axios")({
+    method: "POST",
     url: "https://www.google.com/recaptcha/api/siteverify",
     params: {
       response: token,
