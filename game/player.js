@@ -181,9 +181,7 @@ class Player {
     }
     if(this.account){
       let time = Date.now();
-      db.score(this.name).then(() => {
-        console.log(Date.now() - time + " ms");
-      });
+      db.score(this.name).then(() => {});
     }
   }
 }
