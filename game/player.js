@@ -7,13 +7,8 @@ class Player {
     this.name = name;
     this.bot = isBot;
     this.account = loggedIn;
-    if(this.bot){
-      this.x = random(playersize, size - playersize);
-      this.y = random(playersize, size - playersize);
-    } else {
-      this.x = random(playersize, 400 - playersize); // testing purposes
-      this.y = random(playersize, 400 - playersize);
-    }
+    this.x = random(playersize, size - playersize);
+    this.y = random(playersize, size - playersize);
     this.gun = gun;
     this.health = 100;
     this.ammo = 10;

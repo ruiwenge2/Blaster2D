@@ -14,6 +14,10 @@ class Game extends Phaser.Scene {
     this.right = false;
     this.up = false;
     this.down = false;
+    this.leftDown = false;
+    this.rightDown = false;
+    this.upDown = false;
+    this.downDown = false;
   }
   
   preload() {
@@ -31,6 +35,7 @@ class Game extends Phaser.Scene {
     this.load.image("tree", "/img/gameObjects/tree.png");
     this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
     this.load.image("shield_icon", "/img/gameObjects/shield_icon.png");
+    this.load.image("arrow", "/img/gameObjects/arrow.png");
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
@@ -361,11 +366,46 @@ class Game extends Phaser.Scene {
 
     this.background = this.add.tileSprite(0, 0, size, size, "grass").setOrigin(0).setDepth(0);
     
-    this.obstacle1 = this.physics.add.staticSprite(size / 2, size / 2 - 750, "obstacle").setDepth(0);
-    this.obstacle2 = this.physics.add.staticSprite(size / 2, size / 2 + 750, "obstacle").setDepth(0);
-    this.obstacle3 = this.physics.add.staticSprite(size / 2 - 750, size / 2, "obstacle2").setDepth(0);
-    this.obstacle4 = this.physics.add.staticSprite(size / 2 + 750, size / 2, "obstacle2").setDepth(0);
+    // this.obstacle1 = this.physics.add.staticSprite(size / 2, size / 2 - 750, "obstacle").setDepth(0);
+    // this.obstacle2 = this.physics.add.staticSprite(size / 2, size / 2 + 750, "obstacle").setDepth(0);
+    // this.obstacle3 = this.physics.add.staticSprite(size / 2 - 750, size / 2, "obstacle2").setDepth(0);
+    // this.obstacle4 = this.physics.add.staticSprite(size / 2 + 750, size / 2, "obstacle2").setDepth(0);
 
+    const isMobile = () => {
+      try {
+        document.createEvent("TouchEvent");
+        return true; 
+      }
+      catch(e){
+        return false;
+      }
+    }
+    if(isMobile()){
+
+      this.arrowLeft = this.add.image(window.innerWidth - 150, window.innerHeight - 400, "arrow").setAngle(270).setInteractive().on("pointerdown", () => {
+        this.leftDown = true;
+      }).on("pointerup", () => {
+        this.leftDown = false;
+      }).setScrollFactor(0, 0).setDepth(100).setScale(0.7);
+  
+      this.arrowRight = this.add.image(window.innerWidth - 50, window.innerHeight - 400, "arrow").setAngle(90).setInteractive().on("pointerdown", () => {
+        this.rightDown = true;
+      }).on("pointerup", () => {
+        this.rightDown = false;
+      }).setScrollFactor(0, 0).setDepth(100).setScale(0.7);
+  
+      this.arrowUp = this.add.image(window.innerWidth - 100, window.innerHeight - 450, "arrow").setAngle(0).setInteractive().on("pointerdown", () => {
+        this.upDown = true;
+      }).on("pointerup", () => {
+        this.upDown = false;
+      }).setScrollFactor(0, 0).setDepth(100).setScale(0.7);
+  
+      this.arrowDown = this.add.image(window.innerWidth - 100, window.innerHeight - 350, "arrow").setAngle(180).setInteractive().on("pointerdown", () => {
+        this.downDown = true;
+      }).on("pointerup", () => {
+        this.downDown = false;
+      }).setScrollFactor(0, 0).setDepth(100).setScale(0.7);
+    }
   
     this.gun = this.physics.add.sprite(this.player.x, this.player.y, "gun").setDepth(2);
 
@@ -691,30 +731,45 @@ class Game extends Phaser.Scene {
   }
 
   addWeaponActions(){
-    const shoot = () => {
+    const shoot = (e) => {
       if(this.died) return;
+      let x = e.clientX || e.touches[0].clientX;
+      let y = e.clientY || e.touches[0].clientY;
       this.shooting = true;
+      var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
+      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+      this.gun.angle2 = angle;
+      this.pointerX = x;
+      this.pointerY = y;
     };
     const shootEnd = () => {
       if(this.died) return;
       this.shooting = false;
       this.shotBefore = false;
+      if(this.arrowLeft){
+        this.leftDown = false;
+        this.rightDown = false;
+        this.upDown = false;
+        this.downDown = false;
+      }
     };
 
     const pointerMove = (e) => {
+      let x = e.clientX || e.touches[0].clientX;
+      let y = e.clientY || e.touches[0].clientY;
       if(this.died || this.socket.disconnected) return;
-      var angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+      var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
       this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
       this.gun.angle2 = angle;
-      this.pointerX = e.clientX;
-      this.pointerY = e.clientY;
-      e.preventDefault();
+      this.pointerX = x;
+      this.pointerY = y;
     }
     
     window.addEventListener("mousedown", shoot);
     window.addEventListener("touchstart", shoot);
     window.addEventListener("mouseup", shootEnd);
-    window.addEventListener("touchend", shoot);
+    window.addEventListener("touchend", shootEnd);
+    window.addEventListener("touchcancel", shootEnd);
     window.addEventListener("mousemove", pointerMove);
     window.addEventListener("touchmove", pointerMove);
   }
@@ -773,16 +828,15 @@ class Game extends Phaser.Scene {
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
 
-    if(this.shooting && !this.chatbox.focus && !this.died && (!this.shotBefore || this.gunType == "machineGun") && this.focus) {
+    if(this.shooting && !this.chatbox.focus && !this.died && (!this.shotBefore || this.gunType == "machineGun") && this.focus && !this.leftDown && !this.rightDown && !this.upDown && !this.downDown) {
       var angle = Math.atan2(this.pointerY - (window.innerHeight / 2), this.pointerX - (window.innerWidth / 2));
       this.socket.emit("shoot", angle, this.room);
       this.shotBefore = true;
-      // this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      // this.gun.angle2 = angle;
     }
+
     let cursors = this.input.keyboard.createCursorKeys();
     if(!this.chatbox.focus){
-      if(cursors.left.isDown || this.a.isDown){
+      if(cursors.left.isDown || this.a.isDown || this.leftDown){
         if(!this.left){
           this.socket.emit("movement", "left", this.room);
           this.left = true;
@@ -795,7 +849,7 @@ class Game extends Phaser.Scene {
         }
       }
       
-      if(cursors.right.isDown || this.d.isDown){
+      if(cursors.right.isDown || this.d.isDown || this.rightDown){
         if(!this.right){
           this.socket.emit("movement", "right", this.room);
           this.right = true;
@@ -808,7 +862,7 @@ class Game extends Phaser.Scene {
         }
       }
       
-      if(cursors.up.isDown || this.w.isDown){
+      if(cursors.up.isDown || this.w.isDown || this.upDown){
         if(!this.up){
           this.socket.emit("movement", "up", this.room);
           this.up = true;
@@ -821,7 +875,7 @@ class Game extends Phaser.Scene {
         }
       }
       
-      if(cursors.down.isDown || this.s.isDown){
+      if(cursors.down.isDown || this.s.isDown || this.downDown){
         if(!this.down){
           this.socket.emit("movement", "down", this.room);
           this.down = true;
