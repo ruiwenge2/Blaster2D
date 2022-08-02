@@ -167,16 +167,20 @@ class Player {
   }
 
   addScore(){
-    this.score++;
-    if(powerUps.includes(this.score)){
-      this.shield = {
-        end: Date.now() + 10 * 1000,
-        timeleft: 10
+    try {
+      this.score++;
+      if(powerUps.includes(this.score)){
+        this.shield = {
+          end: Date.now() + 10 * 1000,
+          timeleft: 10
+        }
       }
-    }
-    if(this.account){
-      let time = Date.now();
-      db.score(this.name).then(() => {});
+      if(this.account){
+        let time = Date.now();
+        db.score(this.name).then(() => {});
+      }
+    } catch(e){
+      console.log(e);
     }
   }
 }
