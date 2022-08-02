@@ -8,11 +8,12 @@ const opposites = {
   "down": "up"
 }
 
-const banned = ["24.6.134.221"];
+const banned = ["24.6.134.221", "54.37.7.108"];
 const possible = [];
 
 const socketfunc = socket => {
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
+    console.log(socket.handshake.headers["x-forwarded-for"]);
   if(banned.includes(socket.handshake.headers["x-forwarded-for"])){
     console.log(socket.handshake.headers["x-forwarded-for"]);
     socket.emit("kick", "You are banned.");
