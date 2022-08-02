@@ -8,7 +8,7 @@ const opposites = {
   "down": "up"
 }
 
-const banned = ["24.6.134.221", "54.37.7.108", "51.15.63.79", "51.159.163.125"];
+const banned = ["24.6.134.221"];
 const possible = [];
 
 const socketfunc = socket => {
