@@ -102,6 +102,13 @@ class Game extends Phaser.Scene {
         this.bullet_icon.y = window.innerHeight - 90;
         this.minimap.resize();
       }
+
+      if(this.arrowLeft){
+        this.arrowLeft.setPosition(window.innerWidth - 150, window.innerHeight - 400);
+        this.arrowRight.setPosition(window.innerWidth - 50, window.innerHeight - 400);
+        this.arrowUp.setPosition(window.innerWidth - 100, window.innerHeight - 450);
+        this.arrowDown.setPosition(window.innerWidth - 100, window.innerHeight - 350);
+      }
     });
     
     const handle = function(){
