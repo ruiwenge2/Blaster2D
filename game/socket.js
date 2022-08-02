@@ -8,9 +8,15 @@ const opposites = {
   "down": "up"
 }
 
+const banned = ["24.6.134.221"];
+
 const socketfunc = socket => {
-  // console.log(socket.handshake.headers["x-forwarded-for"]);
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
+  if(banned.includes(socket.handshake.headers["x-forwarded-for"])){
+    console.log(socket.handshake.headers["x-forwarded-for"]);
+    socket.emit("kick", "You are banned.");
+    return;
+  }
   let verified = await verify(token, process.env.recaptcha_secret);
     if(!verified){
       console.log(name + " is a bot");
