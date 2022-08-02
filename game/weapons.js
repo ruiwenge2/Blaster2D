@@ -15,7 +15,7 @@ module.exports = {
     total: 16,
     reloadTime: 1500,
     coolDown: 1000,
-    useRate: 10
+    useRate: 12
   },
   machineGun: {
     min: 10,

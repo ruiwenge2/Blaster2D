@@ -8,14 +8,15 @@ const opposites = {
   "down": "up"
 }
 
-const banned = [];
+const banned = ["184.103.221.193", "68.225.240.203"];
 const possible = ["24.6.134.221"];
 
 const socketfunc = socket => {
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
     try {
-      if(banned.includes(socket.handshake.headers["x-forwarded-for"])){
-        console.log(socket.handshake.headers["x-forwarded-for"]);
+      let ip = socket.handshake.headers["x-forwarded-for"].split(",")[0] // because of vpn
+      if(banned.includes(ip)){
+        console.log(ip);
         socket.emit("kick", "You are banned.");
         return;
       }
@@ -63,14 +64,14 @@ const socketfunc = socket => {
       socket.emit("gamedata", rooms[code], code);
       socket.join(code);
       socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);
-      console.log(rooms[code].players[socket.id].name + " joined the room " + code + ": " + socket.handshake.headers["x-forwarded-for"]);
+      console.log(rooms[code].players[socket.id].name + " joined the room " + code + ": " + ip);
     } catch(e){
       console.log(e);
     }
   });
 
   socket.on("join server 2", name => {
-    console.log(name + " joined server 2: " + socket.handshake.headers["x-forwarded-for"]);
+    console.log(name + " joined server 2: " + socket.handshake.headers["x-forwarded-for"].split(",")[0]);
   });
 
   socket.on("player angle", (data, room) => {
