@@ -8,8 +8,8 @@ const opposites = {
   "down": "up"
 }
 
-const banned = ["24.6.134.221"];
-const possible = [];
+const banned = [];
+const possible = ["24.6.134.221"];
 
 const socketfunc = socket => {
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
@@ -58,7 +58,7 @@ const socketfunc = socket => {
       let num = users[name].c;
       skin = skins.filter(e => e.id == num)[0].url;
     }
-    console.log(name + " joined the room " + code + ":" + socket.handshake.headers["x-forwarded-for"]);
+    console.log(name + " joined the room " + code + ": " + socket.handshake.headers["x-forwarded-for"]);
     rooms[code].players[socket.id] = new Player(socket.id, name, gun, code, false, loggedIn, angle || 0, skin);
     socket.emit("gamedata", rooms[code], code);
     socket.join(code);
@@ -66,7 +66,7 @@ const socketfunc = socket => {
   });
 
   socket.on("join server 2", name => {
-    console.log(name + " joined server 2:" + socket.handshake.headers["x-forwarded-for"]);
+    console.log(name + " joined server 2: " + socket.handshake.headers["x-forwarded-for"]);
   });
 
   socket.on("player angle", (data, room) => {
