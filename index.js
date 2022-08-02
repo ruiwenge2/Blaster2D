@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const socketio = require("socket.io");
 const session = require("express-session");
 const cors = require("cors");
+const Filter = require("bad-words");
 
 global.io = socketio(server, {
   cors: { origin: "*" }
@@ -34,6 +35,7 @@ global.TPS = 0;
 global.time = Date.now();
 global.damage = 50;
 global.weapons = require("./game/weapons.js");
+global.filter = new Filter();
 
 global.powerUps = [5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
 

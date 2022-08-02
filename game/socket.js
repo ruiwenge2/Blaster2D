@@ -58,11 +58,11 @@ const socketfunc = socket => {
       let num = users[name].c;
       skin = skins.filter(e => e.id == num)[0].url;
     }
-    console.log(name + " joined the room " + code + ": " + socket.handshake.headers["x-forwarded-for"]);
     rooms[code].players[socket.id] = new Player(socket.id, name, gun, code, false, loggedIn, angle || 0, skin);
     socket.emit("gamedata", rooms[code], code);
     socket.join(code);
     socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);
+    console.log(rooms[code].players[socket.id].name + " joined the room " + code + ": " + socket.handshake.headers["x-forwarded-for"]);
   });
 
   socket.on("join server 2", name => {
@@ -121,7 +121,7 @@ const socketfunc = socket => {
   socket.on("chat message", (name, message, room) => {
     if(!checkUser(socket.id)) return socket.emit("leave");
     if(playerDead(socket.id)) return;
-    io.to(room).emit("chat message", `${name}: ${message}`);
+    io.to(room).emit("chat message", `${name}: ${filter.clean(message)}`);
   });
 
   socket.on("reload", room => {

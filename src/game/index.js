@@ -152,6 +152,7 @@ class Game extends Phaser.Scene {
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", game.name);
         }
+        this.name = data.players[this.socket.id].name;
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, `skin_${data.players[this.socket.id].skin}`).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
         this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
@@ -341,6 +342,7 @@ class Game extends Phaser.Scene {
     });
 
     f.on("down", function(){
+      if(game.chatbox.focus) return;
       if(this.full_screen){
         if(document.exitFullscreen) {
           document.exitFullscreen();
