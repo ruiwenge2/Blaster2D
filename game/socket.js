@@ -8,13 +8,13 @@ const opposites = {
   "down": "up"
 }
 
-const banned = ["184.103.221.193", "68.225.240.203"];
-const possible = ["24.6.134.221"];
+const banned = ["73.231.9.39"];
+const possible = ["24.6.134.221", "184.103.221.193", "68.225.240.203"];
 
 const socketfunc = socket => {
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
     try {
-      let ip = socket.handshake.headers["x-forwarded-for"].split(",")[0] // because of vpn
+      let ip = socket.handshake.headers["x-forwarded-for"];
       if(banned.includes(ip)){
         console.log(ip);
         socket.emit("kick", "You are banned.");
