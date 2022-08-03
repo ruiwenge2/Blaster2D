@@ -147,7 +147,10 @@ const socketfunc = socket => {
     try {
       if(!checkUser(socket.id)) return socket.emit("leave");
       if(playerDead(socket.id)) return;
-      io.to(room).emit("chat message", `${name}: ${filter.clean(message)}`);
+      try {
+        message = filter.clean(message);
+      } catch(e){}
+      io.to(room).emit("chat message", `${name}: ${message}`);
     } catch(e){
       console.log(e);
     }
