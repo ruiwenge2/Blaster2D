@@ -42,9 +42,9 @@
       </select><br><br>
       <label>Enter name:</label><br><br>
       <% if(loggedIn){ %>
-      <input id="input" value="<%- username %>" maxlength="15" disabled style="cursor:no-drop">
+      <input id="input" value="<%- username %>" maxlength="12" disabled style="cursor:no-drop">
       <% } else { %>
-      <input id="input" maxlength="15">
+      <input id="input" maxlength="12">
       <% } %>
       <p style="color:red; display:none">Please enter a name.</p><br><br>
       <button id="playbtn" class="button">Play</button><br><br>

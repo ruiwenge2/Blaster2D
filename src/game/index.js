@@ -159,7 +159,7 @@ class Game extends Phaser.Scene {
         this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
         this.playerstext.scrollFactorX = 0;
         this.playerstext.scrollFactorY = 0;
-        this.scorestext = new Text(this, 200, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
+        this.scorestext = new Text(this, 240, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
         
         this.fpstext = new Text(this, window.innerWidth - 150, 50, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
         this.tps = new Text(this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });

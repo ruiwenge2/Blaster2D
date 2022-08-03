@@ -4,7 +4,7 @@ const collide = require("line-circle-collision");
 class Player {
   constructor(id, name, gun, room, isBot, loggedIn, angle, skin){
     this.id = id;
-    let str = name.substr(0, 14);
+    let str = name.substr(0, 11);
     try {
       this.name = filter.clean(str);
     } catch(e){
