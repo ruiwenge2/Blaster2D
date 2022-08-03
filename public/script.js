@@ -23,8 +23,16 @@ try {
   }
 } catch(e){}
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js');
+if("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/sw.js");
   });
 }
+
+window.addEventListener("offline", function(e){
+  document.body.innerHTML = "<br><br><h1>You're offline, try refreshing the page or check your Wi-Fi.</h1>";
+});
+
+window.addEventListener("online", function(e){
+  location.reload();
+});
