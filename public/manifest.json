@@ -1,0 +1,21 @@
+{
+  "short_name": "Blaster2D",
+  "name": "Blaster2D",
+  "icons": [
+    {
+      "src": "/img/logo_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/img/logo_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "display": "minimal-ui",
+  "scope": "/",
+  "theme_color": "#000000"
+}
