@@ -89,14 +89,7 @@ class Player {
     if(this.y - radius < 0) this.y = radius;
     if(this.y + radius > size) this.y = size - radius;
 
-    let players = {...rooms[this.room].players};
-    delete players[this.id];
-    // Object.values(players).forEach(player => {
-    //   if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-    //     (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-    //     (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-    //     (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.75, player.x, player.y, radius * 0.75))) this.stop();
-    // });
+    
   }
 
   stop(){
@@ -144,14 +137,26 @@ class Player {
     }
 
     rocks.forEach(rock => {
-      // if((this.left && circleCol(this.x - this.leftspeed, this.y, radius, rock.x, rock.y, rock.size / 2)) || 
-      //   (this.right && circleCol(this.x + this.rightspeed, this.y, radius, rock.x, rock.y, rock.size / 2)) || 
-      //   (this.up && circleCol(this.x, this.y - this.upspeed, radius, rock.x, rock.y, rock.size / 2)) || 
-      //   (this.down && circleCol(this.x, this.y + this.downspeed, radius, rock.x, rock.y, rock.size / 2))){
       if(circleCol(this.x, this.y, radius, rock.x, rock.y, rock.size / 2)){
         let angle = Math.atan2(this.y - rock.y, this.x - rock.x);
         this.x = rock.x + Math.cos(angle) * (radius + rock.size / 2);
         this.y = rock.y + Math.sin(angle) * (radius + rock.size / 2);
+        if(this.bot){
+          this.target = {
+            x: random(playersize, size - playersize),
+            y: random(playersize, size - playersize)
+          }
+        }
+      }
+    });
+
+    let players = {...rooms[this.room].players};
+    delete players[this.id];
+    Object.values(players).forEach(player => {
+      if(circleCol(this.x, this.y, radius, player.x, player.y, radius)){
+        let angle = Math.atan2(this.y - player.y, this.x - player.x);
+        this.x = player.x + Math.cos(angle) * (radius * 2);
+        this.y = player.y + Math.sin(angle) * (radius * 2);
         if(this.bot){
           this.target = {
             x: random(playersize, size - playersize),
