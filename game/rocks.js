@@ -6,7 +6,7 @@ const rocksize = 100;
 
 var rocks = [];
 
-for(let i = 0; i < random(20, 25); i++){
+for(let i = 0; i < random(30, 40); i++){
   var percent = random(50, 200);
   var realsize = rocksize * percent / 100;
   rocks.push({

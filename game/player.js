@@ -84,7 +84,7 @@ class Player {
   }
 
   checkMovement(){
-    if(this.x - radius < 0) this.x = -radius;
+    if(this.x - radius < 0) this.x = radius;
     if(this.x + radius > size) this.x = size - radius;
     if(this.y - radius < 0) this.y = radius;
     if(this.y + radius > size) this.y = size - radius;

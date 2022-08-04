@@ -6,7 +6,7 @@ const treesize = 300;
 
 var trees = [];
 
-for(let i = 0; i < random(50, 75); i++){
+for(let i = 0; i < random(30, 40); i++){
   var percent = random(50, 200);
   var realsize = treesize * percent / 100;
   trees.push({
