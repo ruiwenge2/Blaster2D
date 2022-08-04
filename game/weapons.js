@@ -2,8 +2,8 @@ module.exports = {
   pistol: {
     min: 20,
     max: 30,
-    shots: 8,
-    total: 40,
+    shots: 10,
+    total: 50,
     reloadTime: 2000,
     coolDown: 500,
     useRate: 5
