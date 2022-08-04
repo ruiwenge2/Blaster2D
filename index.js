@@ -6,6 +6,7 @@ const socketio = require("socket.io");
 const session = require("express-session");
 const cors = require("cors");
 const Filter = require("bad-words");
+const fs = require("fs");
 
 global.io = socketio(server, {
   cors: { origin: "*" }
@@ -38,6 +39,9 @@ global.weapons = require("./game/weapons.js");
 global.filter = new Filter();
 
 global.powerUps = [5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
+
+global.rocks = JSON.parse(fs.readFileSync("src/rocks.json")).rocks;
+console.log(rocks);
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);

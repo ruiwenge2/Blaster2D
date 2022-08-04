@@ -59,12 +59,12 @@ class Player {
       }
     }
     this.checkDiagonal();
-    this.checkMovement();
-    this.checkCollision();
     if(this.left) this.x -= this.leftspeed;
     if(this.right) this.x += this.rightspeed;
     if(this.up) this.y -= this.upspeed;
     if(this.down) this.y += this.downspeed;
+    this.checkCollision();
+    this.checkMovement();
     this.leftspeed = this.rightspeed = this.upspeed = this.downspeed = speed;
   }
 
@@ -84,19 +84,19 @@ class Player {
   }
 
   checkMovement(){
-    if(this.left && this.x - radius - speed < 0) this.leftspeed = this.x - radius;
-    if(this.right && this.x + radius + speed > size) this.rightspeed = size - this.x - radius;
-    if(this.up && this.y - radius - speed < 0) this.upspeed = this.y - radius;
-    if(this.down && this.y + radius + speed > size) this.downspeed = size - this.y - radius;
+    if(this.x - radius < 0) this.x = -radius;
+    if(this.x + radius > size) this.x = size - radius;
+    if(this.y - radius < 0) this.y = radius;
+    if(this.y + radius > size) this.y = size - radius;
 
     let players = {...rooms[this.room].players};
     delete players[this.id];
-    Object.values(players).forEach(player => {
-      if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-        (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-        (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.75, player.x, player.y, radius * 0.75)) || 
-        (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.75, player.x, player.y, radius * 0.75))) this.stop();
-    });
+    // Object.values(players).forEach(player => {
+    //   if((this.left && circleCol(this.x - this.leftspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+    //     (this.right && circleCol(this.x + this.rightspeed, this.y, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+    //     (this.up && circleCol(this.x, this.y - this.upspeed, radius * 0.75, player.x, player.y, radius * 0.75)) || 
+    //     (this.down && circleCol(this.x, this.y + this.downspeed, radius * 0.75, player.x, player.y, radius * 0.75))) this.stop();
+    // });
   }
 
   stop(){
@@ -142,6 +142,25 @@ class Player {
         }
       });
     }
+
+    rocks.forEach(rock => {
+      // if((this.left && circleCol(this.x - this.leftspeed, this.y, radius, rock.x, rock.y, rock.size / 2)) || 
+      //   (this.right && circleCol(this.x + this.rightspeed, this.y, radius, rock.x, rock.y, rock.size / 2)) || 
+      //   (this.up && circleCol(this.x, this.y - this.upspeed, radius, rock.x, rock.y, rock.size / 2)) || 
+      //   (this.down && circleCol(this.x, this.y + this.downspeed, radius, rock.x, rock.y, rock.size / 2))){
+      if(circleCol(this.x, this.y, radius, rock.x, rock.y, rock.size / 2)){
+        let angle = Math.atan2(this.y - rock.y, this.x - rock.x);
+        this.x = rock.x + Math.cos(angle) * (radius + rock.size / 2);
+        this.y = rock.y + Math.sin(angle) * (radius + rock.size / 2);
+        if(this.bot){
+          this.target = {
+            x: random(playersize, size - playersize),
+            y: random(playersize, size - playersize)
+          }
+        }
+      }
+    });
+    
     if(!this.spawned) return;
     Object.values(rooms[this.room].bullets).forEach(bullet => {
       if(bullet.shooter == this.id) return;

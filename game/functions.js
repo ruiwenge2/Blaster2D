@@ -79,8 +79,8 @@ module.exports.verify = async function(token, secret){
 }
 
 module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
-  var dx = (x1 + r1) - (x2 + r2);
-  var dy = (y1 + r1) - (y2 + r2);
+  var dx = x1 - x2;
+  var dy = y1 - y2;
   var distance = Math.sqrt(dx * dx + dy * dy);
   if (distance < r1 + r2) return true;
   return false;

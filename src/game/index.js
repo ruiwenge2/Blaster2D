@@ -5,6 +5,7 @@ import Bar from "../objects/bar.js";
 import Chatbox from "./chat.js";
 import Minimap from "./minimap.js";
 import trees from "../trees.json";
+import rocks from "../rocks.json";
 import skins from "../skins.json";
 
 class Game extends Phaser.Scene {
@@ -33,6 +34,7 @@ class Game extends Phaser.Scene {
     this.load.image("obstacle", "/img/gameObjects/obstacle.png");
     this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
     this.load.image("tree", "/img/gameObjects/tree.png");
+    this.load.image("rock", "/img/gameObjects/rock.png");
     this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
     this.load.image("shield_icon", "/img/gameObjects/shield_icon.png");
     this.load.image("arrow", "/img/gameObjects/arrow.png");
@@ -47,8 +49,6 @@ class Game extends Phaser.Scene {
     this.socket = io(url);
     this.name = name || localStorage.getItem("name");
     this.coins = {};
-    this.trees = this.physics.add.group();
-    this.bulletsGroup = this.physics.add.group();
     this.enemies = {};
     this.bullets = {};
     this.verified = false;
@@ -159,7 +159,7 @@ class Game extends Phaser.Scene {
         this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
         this.playerstext.scrollFactorX = 0;
         this.playerstext.scrollFactorY = 0;
-        this.scorestext = new Text(this, 240, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
+        this.scorestext = new Text(this, 250, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
         
         this.fpstext = new Text(this, window.innerWidth - 150, 50, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
         this.tps = new Text(this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
@@ -201,9 +201,15 @@ class Game extends Phaser.Scene {
           this.coins[i.id] = coin;
         }
         for(let i of trees.trees){
-          let tree = this.trees.create(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
+          let tree = this.add.image(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
           tree.id = i.id;
           tree.angle = i.angle;
+        }
+
+        for(let i of rocks.rocks){
+          let rock = this.add.image(i.x, i.y, "rock").setScale(i.size / 100).setDepth(0.5);
+          rock.id = i.id;
+          rock.angle = i.angle;
         }
         
         for(let oplayer of Object.keys(data.players)){
@@ -214,7 +220,7 @@ class Game extends Phaser.Scene {
         }
   
         Object.values(data.bullets).forEach(bullet => {
-          let bullet_image = this.bulletsGroup.create(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.999);
+          let bullet_image = this.add.image(bullet.x, bullet.y, "bullet").setScale(0.5, 2).setDepth(0.999);
           bullet_image.angle = bullet.angle;
           bullet_image.shooter = bullet.shooter;
           bullet_image.id = bullet.id;
@@ -550,7 +556,7 @@ class Game extends Phaser.Scene {
     this.socket.on("new bullet", (id, data) => {
       try {
         if(!this.verified) return;
-        let bullet_image = this.bulletsGroup.create(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.999);
+        let bullet_image = this.add.image(data.x, data.y, "bullet").setScale(0.5, 2).setDepth(0.999);
         bullet_image.angle = data.angle;
         bullet_image.shooter = data.shooter;
         bullet_image.id = id;

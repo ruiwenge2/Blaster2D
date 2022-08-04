@@ -1,5 +1,6 @@
 const { random, generateCode } = require("./functions");
 const BotPlayer = require("./botplayer");
+const collide = require("line-circle-collision");
 
 const update = () => {
   setInterval(function(){
@@ -52,9 +53,18 @@ const update = () => {
             io.to(room).emit("removed bullet", id);
             return;
           }
+          rocks.forEach(rock => {
+            if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [rock.x, rock.y], rock.size / 2)){
+              let id = bullet.id;
+              delete rooms[room].bullets[id];
+              io.to(room).emit("removed bullet", id);
+              return;
+            }
+          })
           bullet.x += Math.cos(bullet.angle2) * bullet_speed;
           bullet.y += Math.sin(bullet.angle2) * bullet_speed;
         });
+        
   
         if(Object.keys(rooms[room].coins).length <= 10){
           for(let i = 0; i < 10; i++){
