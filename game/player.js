@@ -141,12 +141,11 @@ class Player {
         let angle = Math.atan2(this.y - rock.y, this.x - rock.x);
         this.x = rock.x + Math.cos(angle) * (radius + rock.size / 2);
         this.y = rock.y + Math.sin(angle) * (radius + rock.size / 2);
-        // if(this.bot){
-        //   this.target = {
-        //     x: random(playersize, size - playersize),
-        //     y: random(playersize, size - playersize)
-        //   }
-        // }
+        if(this.bot && !this.finishedMovement){
+          this.finishedMovement = true;
+          var seconds = random(0, 5);
+          this.movementTime = Date.now() + seconds * 1000;
+        }
       }
     });
 
@@ -158,10 +157,10 @@ class Player {
         this.x = player.x + Math.cos(angle) * (radius * 2);
         this.y = player.y + Math.sin(angle) * (radius * 2);
         // if(this.bot){
-        //   this.target = {
-        //     x: random(playersize, size - playersize),
-        //     y: random(playersize, size - playersize)
-        //   }
+        //   this.finishedMovement = true;
+        //   var seconds = random(0, 5);
+        //   if(this.target.coin) seconds = random(0, 1);
+        //   this.movementTime = Date.now() + seconds * 1000;
         // }
       }
     });

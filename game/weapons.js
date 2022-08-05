@@ -9,8 +9,8 @@ module.exports = {
     useRate: 5
   },
   sniper: {
-    min: 50,
-    max: 100,
+    min: 75,
+    max: 125,
     shots: 2,
     total: 16,
     reloadTime: 1500,
