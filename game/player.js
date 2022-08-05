@@ -8,7 +8,7 @@ class Player {
     try {
       this.name = filter.clean(str);
     } catch(e){
-      this.name =  str;
+      this.name = str;
     }
     this.bot = isBot;
     this.account = loggedIn;
@@ -141,12 +141,12 @@ class Player {
         let angle = Math.atan2(this.y - rock.y, this.x - rock.x);
         this.x = rock.x + Math.cos(angle) * (radius + rock.size / 2);
         this.y = rock.y + Math.sin(angle) * (radius + rock.size / 2);
-        if(this.bot){
-          this.target = {
-            x: random(playersize, size - playersize),
-            y: random(playersize, size - playersize)
-          }
-        }
+        // if(this.bot){
+        //   this.target = {
+        //     x: random(playersize, size - playersize),
+        //     y: random(playersize, size - playersize)
+        //   }
+        // }
       }
     });
 
@@ -157,12 +157,12 @@ class Player {
         let angle = Math.atan2(this.y - player.y, this.x - player.x);
         this.x = player.x + Math.cos(angle) * (radius * 2);
         this.y = player.y + Math.sin(angle) * (radius * 2);
-        if(this.bot){
-          this.target = {
-            x: random(playersize, size - playersize),
-            y: random(playersize, size - playersize)
-          }
-        }
+        // if(this.bot){
+        //   this.target = {
+        //     x: random(playersize, size - playersize),
+        //     y: random(playersize, size - playersize)
+        //   }
+        // }
       }
     });
     
