@@ -41,7 +41,6 @@ global.filter = new Filter();
 global.powerUps = [5, 10, 20, 30, 40, 50, 75, 100]; // number 1 for testing purposes
 
 global.rocks = JSON.parse(fs.readFileSync("src/rocks.json")).rocks;
-console.log(rocks);
 
 app.use(express.static("public"));
 app.engine("html", require("ejs").renderFile);
