@@ -141,10 +141,12 @@ class Player {
         let angle = Math.atan2(this.y - rock.y, this.x - rock.x);
         this.x = rock.x + Math.cos(angle) * (radius + rock.size / 2);
         this.y = rock.y + Math.sin(angle) * (radius + rock.size / 2);
-        if(this.bot && !this.finishedMovement){
-          this.finishedMovement = true;
-          var seconds = random(0, 5);
-          this.movementTime = Date.now() + seconds * 1000;
+        
+        if(this.bot){
+          this.target = {
+            x: random(playersize, size - playersize),
+            y: random(playersize, size - playersize)
+          }
         }
       }
     });

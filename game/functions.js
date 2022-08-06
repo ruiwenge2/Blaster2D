@@ -1,3 +1,4 @@
+
 module.exports.loggedIn = function(req){
   return (req.session.username ? true: false);
 };
@@ -40,10 +41,16 @@ module.exports.setUpRoom = function(room){
   if(Object.keys(rooms[room].players).length == 0){
     rooms[room].coins = {};
     for(let i = 0; i < maxCoins; i++){
+      let x = module.exports.random(coinsize / 2, size - coinsize / 2);
+      let y = module.exports.random(coinsize / 2, size - coinsize / 2);
+      while(module.exports.goldRockCol(x, y)){
+        x = module.exports.random(coinsize / 2, size - coinsize / 2);
+        y = module.exports.random(coinsize / 2, size - coinsize / 2);
+      }
       rooms[room].coins[rooms[room].new_coin_id] = {
         id: rooms[room].new_coin_id,
-        x: module.exports.random(coinsize / 2, size - coinsize / 2),
-        y: module.exports.random(coinsize / 2, size - coinsize / 2)
+        x,
+        y
       };
       rooms[room].new_coin_id++;
     }
@@ -84,4 +91,14 @@ module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
   var distance = Math.sqrt(dx * dx + dy * dy);
   if (distance < r1 + r2) return true;
   return false;
+}
+
+module.exports.goldRockCol = (x, y) => {
+  let col = false;
+  rocks.forEach(rock => {
+    if(module.exports.circleCol(x, y, coinsize / 2, rock.x, rock.y, rock.size / 2)){
+      col = true;
+    }
+  });
+  return col;
 }

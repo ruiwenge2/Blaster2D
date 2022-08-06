@@ -1,4 +1,4 @@
-const { random, generateCode } = require("./functions");
+const { random, generateCode, goldRockCol } = require("./functions");
 const BotPlayer = require("./botplayer");
 const collide = require("line-circle-collision");
 
@@ -14,10 +14,16 @@ const update = () => {
       tps++;
       Object.keys(rooms).forEach(room => {
         if(Object.keys(rooms[room].coins).length < maxCoins){
+          let x = random(coinsize / 2, size - coinsize / 2);
+          let y = random(coinsize / 2, size - coinsize / 2);
+          while(goldRockCol(x, y)){
+            x = random(coinsize / 2, size - coinsize / 2);
+            y = random(coinsize / 2, size - coinsize / 2);
+          }
           rooms[room].coins[rooms[room].new_coin_id] = {
             id: rooms[room].new_coin_id,
-            x: random(coinsize / 2, size - coinsize / 2),
-            y: random(coinsize / 2, size - coinsize / 2)
+            x,
+            y
           };
           io.to(room).emit("new coin", rooms[room].coins[rooms[room].new_coin_id]);
           rooms[room].new_coin_id++;
@@ -64,19 +70,6 @@ const update = () => {
           bullet.x += Math.cos(bullet.angle2) * bullet_speed;
           bullet.y += Math.sin(bullet.angle2) * bullet_speed;
         });
-        
-  
-        if(Object.keys(rooms[room].coins).length <= 10){
-          for(let i = 0; i < 10; i++){
-            rooms[room].coins[rooms[room].new_coin_id] = {
-              id: rooms[room].new_coin_id,
-              x: random(coinsize / 2, size - coinsize / 2),
-              y: random(coinsize / 2, size - coinsize / 2)
-            };
-            io.to(room).emit("new coin", rooms[room].coins[rooms[room].new_coin_id]);
-            rooms[room].new_coin_id++;
-          }
-        }
         
         io.to(room).emit("gamestate", rooms[room]);
       });
