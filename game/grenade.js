@@ -34,11 +34,11 @@ class Grenade {
       if(player.shield) return;
       let damage = 0;
       let distance = Math.hypot(this.x - player.x, this.y - player.y);
-      if(distance <= 100){
+      if(distance <= 150){
         damage = 100;
-      } else if(distance <= 150){
-        damage = random(50, 75);
       } else if(distance <= 200){
+        damage = random(50, 75);
+      } else if(distance <= 250){
         damage = random(20, 30);
       }
 

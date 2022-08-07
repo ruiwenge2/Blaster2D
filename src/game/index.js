@@ -242,7 +242,7 @@ class Game extends Phaser.Scene {
         });
 
         Object.values(data.grenades).forEach(grenade => {
-          let grenade_image = this.add.image(grenade.x, grenade.y, "grenade").setDepth(0.6).setScale(0.75, 0.75);
+          let grenade_image = this.add.image(grenade.x, grenade.y, "grenade").setDepth(1).setScale(0.75, 0.75);
           grenade_image.thrower = grenade.throwerId;
           grenade_image.id = grenade.id;
           this.grenades[grenade.id] = grenade_image;
@@ -648,7 +648,7 @@ class Game extends Phaser.Scene {
     this.socket.on("new grenade", (id, data) => {
       try {
         if(!this.verified) return;
-        let grenade_image = this.add.image(data.x, data.y, "grenade").setDepth(0.6).setScale(0.75, 0.75);
+        let grenade_image = this.add.image(data.x, data.y, "grenade").setDepth(1).setScale(0.75, 0.75);
         grenade_image.thrower = data.throwerId;
         grenade_image.id = data.id;
         this.grenades[data.id] = grenade_image;
