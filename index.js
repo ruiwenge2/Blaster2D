@@ -15,8 +15,10 @@ global.rooms = {
   main: {
     players: {},
     bullets: {},
+    grenades: {},
     coins: {},
     new_bullet_id: 0,
+    new_grenade_id: 0,
     new_coin_id: 0,
     nextBot: Date.now(),
     diedPlayers: []
@@ -29,6 +31,7 @@ global.treesize = 300;
 global.coinsize = 37.5;
 global.speed = 10;
 global.bullet_speed = 45;
+global.grenade_speed = 20;
 global.spawntime = 3;
 global.maxCoins = 50;
 global.tps = 0;

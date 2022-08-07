@@ -21,9 +21,15 @@ const socketfunc = socket => {
         return;
       }
       let verified = await verify(token, process.env.recaptcha_secret);
-      if(!verified){
+      if(!verified.success){
         console.log(name + " is a bot");
         socket.emit("kick", "Invalid reCAPTCHA token, please try again.", true);
+        socket.disconnect();
+        return;
+      }
+      if(verified.score <= 0.2){
+        console.log(name + " has a low captcha score");
+        socket.emit("kick", "Low captcha score, please try again.");
         socket.disconnect();
         return;
       }
@@ -44,8 +50,10 @@ const socketfunc = socket => {
         rooms[code] = {
           players: {},
           bullets: {},
+          grenades: {},
           coins: {},
           new_bullet_id: 0,
+          new_grenade_id: 0,
           new_coin_id: 0,
           diedPlayers: []
         };
@@ -138,6 +146,16 @@ const socketfunc = socket => {
       if(!checkUser(socket.id)) return socket.emit("leave");
       if(playerDead(socket.id)) return;
       rooms[room].players[socket.id].shoot(angle);
+    } catch(e){
+      console.log(e);
+    }
+  });
+
+  socket.on("throw", (angle, room) => {
+    try {
+      if(!checkUser(socket.id)) return socket.emit("leave");
+      if(playerDead(socket.id)) return;
+      rooms[room].players[socket.id].throwGrenade(angle);
     } catch(e){
       console.log(e);
     }

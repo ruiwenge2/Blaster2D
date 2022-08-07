@@ -82,7 +82,7 @@ module.exports.verify = async function(token, secret){
       secret: secret
     }
   });
-  return result.data.success;
+  return result.data;
 }
 
 module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){

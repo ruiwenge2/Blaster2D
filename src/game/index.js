@@ -37,7 +37,10 @@ class Game extends Phaser.Scene {
     this.load.image("rock", "/img/gameObjects/rock.png");
     this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
     this.load.image("shield_icon", "/img/gameObjects/shield_icon.png");
+    this.load.image("grenade_icon", "/img/gameObjects/grenade_icon.png");
     this.load.image("arrow", "/img/gameObjects/arrow.png");
+    this.load.image("grenade", "/img/gameObjects/grenade.png");
+    this.load.image("explosion", "/img/gameObjects/explosion.png");
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
@@ -51,6 +54,7 @@ class Game extends Phaser.Scene {
     this.coins = {};
     this.enemies = {};
     this.bullets = {};
+    this.grenades = {};
     this.verified = false;
     this.minimap = new Minimap(this);
     this.chatbox = new Chatbox(this);
@@ -61,7 +65,7 @@ class Game extends Phaser.Scene {
     this.shooting = false;
     this.shotBefore = false;
     this.focus = true;
-    // this.cameras.main.setZoom((window.innerWidth * window.innerHeight) / (1300 * 730));
+    // this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6LerbDQhAAAAAFyt22lecnaCm6UmDmRsytTDtD1k", {action: "submit"}).then(function(token) {
@@ -73,6 +77,7 @@ class Game extends Phaser.Scene {
     
     window.addEventListener("resize", () => {
       if(!this.loaded) return;
+      // this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
       if(this.died){
         this.deathtext.x = window.innerWidth / 2
         this.deathtext.y = window.innerHeight / 2 - 200;
@@ -97,9 +102,13 @@ class Game extends Phaser.Scene {
         this.reloading.x = window.innerWidth - 300;
         this.reloading.y = window.innerHeight - 120;
         this.shots.x = window.innerWidth - 310;
-        this.shots.y = window.innerHeight - 70;
-        this.bullet_icon.x = window.innerWidth - 290;
-        this.bullet_icon.y = window.innerHeight - 90;
+        this.shots.y = window.innerHeight - 80;
+        this.bullet_icon.x = window.innerWidth - 295;
+        this.bullet_icon.y = window.innerHeight - 95;
+        this.grenadesText.x = window.innerWidth - 320;
+        this.grenadesText.y = window.innerHeight - 40;
+        this.grenade_icon.x = window.innerWidth - 295;
+        this.grenade_icon.y = window.innerHeight - 55;
         this.minimap.resize();
       }
 
@@ -165,11 +174,16 @@ class Game extends Phaser.Scene {
         this.tps = new Text(this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
         this.ping = new Text(this, window.innerWidth - 150, 110, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
         
-        this.reloading = new Text(this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
-        this.shots = new Text(this, window.innerWidth - 310, window.innerHeight - 70, "", { fontSize: 40, fontFamily: "Arial" }).setOrigin(1);
-        this.bullet_icon = this.add.image(window.innerWidth - 290, window.innerHeight - 90, "bullet_icon").setDepth(100);
+        this.reloading = new Text(this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 30, fontFamily: "Arial" }).setOrigin(1);
+        this.shots = new Text(this, window.innerWidth - 310, window.innerHeight - 80, "", { fontSize: 30, fontFamily: "Arial" }).setOrigin(1);
+        this.bullet_icon = this.add.image(window.innerWidth - 295, window.innerHeight - 95, "bullet_icon").setDepth(100).setScale(0.75, 0.75);
         this.bullet_icon.scrollFactorX = 0;
         this.bullet_icon.scrollFactorY = 0;
+
+        this.grenadesText = new Text(this, window.innerWidth - 320, window.innerHeight - 40, "", { fontSize: 30, fontFamily: "Arial" }).setOrigin(1);
+        this.grenade_icon = this.add.image(window.innerWidth - 295, window.innerHeight - 55, "grenade_icon").setDepth(100).setScale(0.75, 0.75);
+        this.grenade_icon.scrollFactorX = 0;
+        this.grenade_icon.scrollFactorY = 0;
         
         this.shield = new Text(this, window.innerWidth / 2, 50, "", { fontSize: 40, fontFamily: "Arial" });
         this.shield_icon = this.add.image(window.innerWidth / 2 - 50, 50, "shield_icon").setDepth(100).setScale(0.5, 0.5);
@@ -190,7 +204,7 @@ class Game extends Phaser.Scene {
           x: data.players[this.socket.id].x,
           y: data.players[this.socket.id].y,
           angle: 0,
-          angle2:0
+          angle2: 0
         };
     
         for(let i of Object.values(data.coins)){
@@ -225,6 +239,13 @@ class Game extends Phaser.Scene {
           bullet_image.shooter = bullet.shooter;
           bullet_image.id = bullet.id;
           this.bullets[bullet.id] = bullet_image;
+        });
+
+        Object.values(data.grenades).forEach(grenade => {
+          let grenade_image = this.add.image(grenade.x, grenade.y, "grenade").setDepth(0.6).setScale(0.75, 0.75);
+          grenade_image.thrower = grenade.throwerId;
+          grenade_image.id = grenade.id;
+          this.grenades[grenade.id] = grenade_image;
         });
         
         this.main();
@@ -319,6 +340,7 @@ class Game extends Phaser.Scene {
     var enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER, false);
     var r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R, false);
     var f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F, false);
+    var g = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G, false);
 
     var game = this;
     l.on("down", function(){
@@ -344,6 +366,7 @@ class Game extends Phaser.Scene {
     });
 
     r.on("down", function(){
+      if(game.chatbox.focus) return;
       game.socket.emit("reload", game.room);
     });
 
@@ -370,6 +393,12 @@ class Game extends Phaser.Scene {
         }
         this.full_screen = true;
       }
+    });
+
+    g.on("down", function(){
+      if(game.chatbox.focus) return;
+      let angle = Math.atan2(game.pointerY - (window.innerHeight / 2), game.pointerX - (window.innerWidth / 2));
+      game.socket.emit("throw", angle, game.room);
     });
     
 
@@ -453,8 +482,8 @@ class Game extends Phaser.Scene {
           let self = data.players[this.socket.id];
           this.playerInfo.x = self.x;
           this.playerInfo.y = self.y;
-          this.health = self.health;
           this.shots.setText(`${self.shots}/${self.shotsLeft}`);
+          this.grenadesText.setText(self.grenades);
           if(self.reloading){
             this.reloading.setText("Reloading...");
             this.gun.visible = false;
@@ -467,6 +496,12 @@ class Game extends Phaser.Scene {
             this.shots.setTint(0x0ff0000);
           } else {
             this.shots.setTint(0x0ffffff);
+          }
+
+          if(!self.grenades){
+            this.grenadesText.setTint(0x0ff0000);
+          } else {
+            this.grenadesText.setTint(0x0ffffff);
           }
 
           if(self.shield){
@@ -488,6 +523,19 @@ class Game extends Phaser.Scene {
             y: this.playerInfo.y,
             duration: 100
           });
+
+          this.tweens.addCounter({
+            from: this.health,
+            to: self.health,
+            duration: 1000 / 30,
+            onUpdate: function(tween){
+              try {
+                game.health = tween.getValue();
+              } catch(e){
+                console.log(e);
+              }
+            }
+          });
         }
   
         Object.values(data.players).forEach(enemy => {
@@ -496,7 +544,6 @@ class Game extends Phaser.Scene {
             this.enemies[enemy.id].player.setAlpha(1);
             this.enemies[enemy.id].spawned = true;
           }
-          this.enemies[enemy.id].health = enemy.health;
           if(enemy.reloading){
             this.enemies[enemy.id].gun.visible = false;
           } else {
@@ -522,6 +569,19 @@ class Game extends Phaser.Scene {
               player.player.angle = enemy.angle;
             } 
           });
+
+          this.tweens.addCounter({
+            from: this.enemies[enemy.id].health,
+            to: enemy.health,
+            duration: 1000 / 30,
+            onUpdate: function(tween){
+              try {
+                game.enemies[enemy.id].health = tween.getValue();
+              } catch(e){
+                console.log(e);
+              }
+            }
+          })
         });
   
         Object.values(data.bullets).forEach(bullet => {
@@ -529,6 +589,15 @@ class Game extends Phaser.Scene {
             targets: [this.bullets[bullet.id]],
             x: data.bullets[bullet.id].x,
             y: data.bullets[bullet.id].y,
+            duration: 1000 / 30
+          });
+        });
+
+        Object.values(data.grenades).forEach(grenade => {
+          this.tweens.add({
+            targets: [this.grenades[grenade.id]],
+            x: data.grenades[grenade.id].x,
+            y: data.grenades[grenade.id].y,
             duration: 1000 / 30
           });
         });
@@ -576,6 +645,47 @@ class Game extends Phaser.Scene {
       }
     });
 
+    this.socket.on("new grenade", (id, data) => {
+      try {
+        if(!this.verified) return;
+        let grenade_image = this.add.image(data.x, data.y, "grenade").setDepth(0.6).setScale(0.75, 0.75);
+        grenade_image.thrower = data.throwerId;
+        grenade_image.id = data.id;
+        this.grenades[data.id] = grenade_image;
+      } catch(e){
+        console.log(e);
+      }
+    });
+
+    this.socket.on("explosion", id => {
+      try {
+        let game = this;
+        if(!this.verified) return;
+        var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0);
+        this.tweens.add({
+          targets: explosion,
+          duration: 500,
+          alpha: 0.7,
+          onComplete: function(){
+            setTimeout(() => {
+              game.tweens.add({
+                targets: explosion,
+                duration: 750,
+                alpha: 0,
+                onComplete: function(){
+                  explosion.destroy();
+                }
+              });
+            }, 2000);
+          }
+        });
+        this.grenades[id].destroy();
+        delete this.grenades[id];
+      } catch(e){
+        console.log(e);
+      }
+    });
+
     this.socket.on("player died", (id, shooter, shooterName) => {   
       try {
         if(!this.verified) return;
@@ -604,6 +714,8 @@ class Game extends Phaser.Scene {
               game.reloading.destroy();
               game.shots.destroy();
               game.bullet_icon.destroy();
+              game.grenadesText.destroy();
+              game.grenade_icon.destroy();
               game.shield.destroy();
               
               game.deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
@@ -701,9 +813,9 @@ class Game extends Phaser.Scene {
         if(shooter == this.socket.id){
           this.score++;
           if(this.killText){
-            this.killText.setText(`You killed ${playerName}\n\nKill Streak: ${this.score}`);
+            this.killText.setText(`You killed ${playerName || this.name}\n\nKill Streak: ${this.score}`);
           } else {
-            this.killText = new Text(this, window.innerWidth / 2, window.innerHeight - 90, `You killed ${playerName}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
+            this.killText = new Text(this, window.innerWidth / 2, window.innerHeight - 90, `You killed ${playerName || this.name}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
           }
           setTimeout(() => {
             this.killText.destroy();

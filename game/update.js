@@ -70,6 +70,16 @@ const update = () => {
           bullet.x += Math.cos(bullet.angle2) * bullet_speed;
           bullet.y += Math.sin(bullet.angle2) * bullet_speed;
         });
+
+        Object.values(rooms[room].grenades).forEach(grenade => {
+          grenade.update();
+          if(grenade.exploded){
+            let id = grenade.id;
+            delete rooms[room].grenades[id];
+            io.to(room).emit("removed grenade", id);
+            return;
+          }
+        })
         
         io.to(room).emit("gamestate", rooms[room]);
       });

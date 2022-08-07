@@ -1,5 +1,6 @@
 const { random, circleCol } = require("./functions.js");
 const collide = require("line-circle-collision");
+const Grenade = require("./grenade");
 
 class Player {
   constructor(id, name, gun, room, isBot, loggedIn, angle, skin){
@@ -36,6 +37,7 @@ class Player {
     this.shotsLeft = weapons[this.gun].total;
     this.shield = false;
     this.skin = skin;
+    this.grenades = 3;
   }
   
   update(){
@@ -121,6 +123,14 @@ class Player {
     rooms[this.room].new_bullet_id++;
     this.shootTime = Date.now() + weapons[this.gun].coolDown;
     this.shots--;
+  }
+
+  throwGrenade(angle){
+    if(!this.grenades) return;
+    rooms[this.room].grenades[rooms[this.room].new_grenade_id] = new Grenade(this.x + Math.cos(angle) * (radius + 40), this.y + Math.sin(angle) * (radius + 40), angle, rooms[this.room].new_grenade_id, this.room, this.id, this.name);
+    io.to(this.room).emit("new grenade", rooms[this.room].new_grenade_id, rooms[this.room].grenades[rooms[this.room].new_grenade_id]);
+    rooms[this.room].new_grenade_id++;
+    this.grenades--;
   }
 
   checkCollision(){
