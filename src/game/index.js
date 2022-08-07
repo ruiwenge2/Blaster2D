@@ -661,7 +661,7 @@ class Game extends Phaser.Scene {
       try {
         let game = this;
         if(!this.verified) return;
-        var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0).setDepth(15);
+        var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0).setDepth(15).setScale(1.5, 1.5);
         this.tweens.add({
           targets: explosion,
           duration: 500,
