@@ -38,6 +38,7 @@ class Player {
     this.shield = false;
     this.skin = skin;
     this.grenades = 3;
+    this.grenadeTime = Date.now();
   }
   
   update(){
@@ -126,11 +127,12 @@ class Player {
   }
 
   throwGrenade(angle){
-    if(!this.grenades) return;
+    if(!this.grenades || Date.now() < this.grenadeTime) return;
     rooms[this.room].grenades[rooms[this.room].new_grenade_id] = new Grenade(this.x + Math.cos(angle) * (radius + 40), this.y + Math.sin(angle) * (radius + 40), angle, rooms[this.room].new_grenade_id, this.room, this.id, this.name);
     io.to(this.room).emit("new grenade", rooms[this.room].new_grenade_id, rooms[this.room].grenades[rooms[this.room].new_grenade_id]);
     rooms[this.room].new_grenade_id++;
     this.grenades--;
+    this.grenadeTime = Date.now() + 1000;
   }
 
   checkCollision(){
