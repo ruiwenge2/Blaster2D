@@ -9,7 +9,7 @@ class Grenade {
     this.room = room;
     this.throwerId = throwerId;
     this.name = name;
-    this.movementEnd = Date.now() + random(5, 7) * 100;
+    this.movementEnd = Date.now() + 500;
     this.explosion = undefined;
     this.exploded = false;
   }
@@ -19,7 +19,7 @@ class Grenade {
       this.x += Math.cos(this.angle) * grenade_speed;
       this.y += Math.sin(this.angle) * grenade_speed;
     } else {
-      if(!this.explosion) this.explosion = Date.now() + random(15, 20) * 100;
+      if(!this.explosion) this.explosion = Date.now() + 2000;
       if(Date.now() >= this.explosion){
         this.explode();
       }

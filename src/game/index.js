@@ -112,6 +112,11 @@ class Game extends Phaser.Scene {
         this.minimap.resize();
       }
 
+      if(this.killText){
+        this.killText.x = window.innerWidth / 2;
+        this.killText.y = window.innerHeight - 90;
+      }
+
       if(this.arrowLeft){
         this.arrowLeft.setPosition(window.innerWidth - 150, window.innerHeight - 400);
         this.arrowRight.setPosition(window.innerWidth - 50, window.innerHeight - 400);
@@ -661,11 +666,13 @@ class Game extends Phaser.Scene {
       try {
         let game = this;
         if(!this.verified) return;
-        var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0).setDepth(15).setScale(1.5, 1.5);
+        var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0).setDepth(15).setScale(0, 0);
         this.tweens.add({
           targets: explosion,
           duration: 500,
           alpha: 0.7,
+          scaleX: 1.5,
+          scaleY: 1.5,
           onComplete: function(){
             setTimeout(() => {
               game.tweens.add({

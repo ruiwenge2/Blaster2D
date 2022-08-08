@@ -134,14 +134,20 @@ class Player {
   }
 
   checkCollision(){
-    if(this.shotsLeft < weapons[this.gun].total){
+    if(this.shotsLeft < weapons[this.gun].total || this.grenades < 3){
       Object.values(rooms[this.room].coins).forEach(coin => {
         if(circleCol(coin.x, coin.y, coinsize * 1.25, this.x, this.y, radius)){
-          delete rooms[this.room].coins[coin.id];
-          io.to(this.room).emit("collected coin", coin.id, this.id);
-          let shotsAdded = weapons[this.gun].shots;
-          if(this.shotsLeft + shotsAdded > weapons[this.gun].total) shotsAdded = weapons[this.gun].total - this.shotsLeft;
-          this.shotsLeft += shotsAdded;
+          if(this.grenades == 3 || (this.grenades < 3 && random(0, 100) < 75 && this.shotsLeft < weapons[this.gun].total)){
+            delete rooms[this.room].coins[coin.id];
+            let shotsAdded = weapons[this.gun].shots;
+            if(this.shotsLeft + shotsAdded > weapons[this.gun].total) shotsAdded = weapons[this.gun].total - this.shotsLeft;
+            this.shotsLeft += shotsAdded;
+            io.to(this.room).emit("collected coin", coin.id, this.id);
+          } else {
+            delete rooms[this.room].coins[coin.id];
+            this.grenades++;
+            io.to(this.room).emit("collected coin", coin.id, this.id);
+          }
         }
       });
     }
