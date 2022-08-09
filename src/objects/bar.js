@@ -4,6 +4,7 @@ class Bar {
     this.inside = scene.add.rectangle(x, y, health / 100 * 100, 20, 0x00084ff).setDepth(depth);
     scene.add.existing(this.bar);
     scene.add.existing(this.inside);
+    scene.cam.ignore([this.bar, this.inside]);
   }
   
   setData(x, y, health){

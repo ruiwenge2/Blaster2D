@@ -56,6 +56,7 @@ class Game extends Phaser.Scene {
     this.bullets = {};
     this.grenades = {};
     this.verified = false;
+    this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.minimap = new Minimap(this);
     this.chatbox = new Chatbox(this);
     this.gunType = document.getElementById("gun").value;
@@ -65,7 +66,7 @@ class Game extends Phaser.Scene {
     this.shooting = false;
     this.shotBefore = false;
     this.focus = true;
-    // this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
+    this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6LerbDQhAAAAAFyt22lecnaCm6UmDmRsytTDtD1k", {action: "submit"}).then(function(token) {
@@ -77,7 +78,7 @@ class Game extends Phaser.Scene {
     
     window.addEventListener("resize", () => {
       if(!this.loaded) return;
-      // this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
+      this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
       if(this.died){
         this.deathtext.x = window.innerWidth / 2
         this.deathtext.y = window.innerHeight / 2 - 200;
@@ -167,6 +168,8 @@ class Game extends Phaser.Scene {
         if(url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", this.name);
         }
+
+        
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, `skin_${data.players[this.socket.id].skin}`).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
         this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
@@ -195,6 +198,10 @@ class Game extends Phaser.Scene {
         this.shield_icon.scrollFactorX = 0;
         this.shield_icon.scrollFactorY = 0;
         this.shield_icon.visible = false;
+
+        this.cameras.main.ignore([this.playerstext, this.scorestext, this.fpstext, this.tps, this.ping, this.reloading, this.shots, this.bullet_icon, this.grenadesText, this.grenade_icon, this.shield, this.shield_icon]);
+        
+        this.cam.ignore([this.player, this.nametext]);
   
         this.playerInfo = {
           x: this.player.x,
@@ -217,18 +224,21 @@ class Game extends Phaser.Scene {
             coin: this.add.image(i.x, i.y, "coin").setScale(0.75, 0.75).setDepth(0.99),
             id: i.id
           }
+          this.cam.ignore(coin.coin);
           this.coins[i.id] = coin;
         }
         for(let i of trees.trees){
           let tree = this.add.image(i.x, i.y, "tree").setScale(i.size / treesize).setDepth(10).setAlpha(0.7);
           tree.id = i.id;
           tree.angle = i.angle;
+          this.cam.ignore(tree);
         }
 
         for(let i of rocks.rocks){
           let rock = this.add.image(i.x, i.y, "rock").setScale(i.size / 100).setDepth(0.5);
           rock.id = i.id;
           rock.angle = i.angle;
+          this.cam.ignore(rock);
         }
         
         for(let oplayer of Object.keys(data.players)){
@@ -293,6 +303,7 @@ class Game extends Phaser.Scene {
           id: data.id
         }
         this.coins[data.id] = coin;
+        this.cam.ignore(coin.coin);
       } catch(e){
         console.log(e);
       }
@@ -414,6 +425,7 @@ class Game extends Phaser.Scene {
     // }
 
     this.background = this.add.tileSprite(0, 0, size, size, "grass").setOrigin(0).setDepth(0);
+    this.cam.ignore(this.background);
     
     // this.obstacle1 = this.physics.add.staticSprite(size / 2, size / 2 - 750, "obstacle").setDepth(0);
     // this.obstacle2 = this.physics.add.staticSprite(size / 2, size / 2 + 750, "obstacle").setDepth(0);
@@ -454,6 +466,7 @@ class Game extends Phaser.Scene {
       }).on("pointerup", () => {
         this.downDown = false;
       }).setScrollFactor(0, 0).setDepth(100).setScale(0.7);
+       this.cameras.main.ignore([this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown]);
     }
   
     this.gun = this.physics.add.sprite(this.player.x, this.player.y, "gun").setDepth(2);
@@ -461,6 +474,8 @@ class Game extends Phaser.Scene {
     this.gun.angle2 = window.angle || 0;
     this.gun.angle = ((this.gun.angle2 * 180 / Math.PI) + 360) % 360;
     this.player.angle = this.gun.angle;
+
+    this.cam.ignore(this.gun);
 
     this.health = 100;
 
@@ -862,6 +877,8 @@ class Game extends Phaser.Scene {
       account: player.account
     }
     this.enemies[player.id] = playerObj;
+
+    this.cam.ignore([playerObj.player, playerObj.nametext, playerObj.gun]);
   }
 
   addWeaponActions(){

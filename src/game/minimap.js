@@ -7,6 +7,7 @@ class Minimap {
     this.map.scrollFactorY = 0;
     this.players = {};
     this.scale = size / this.map.width;
+    scene.cameras.main.ignore(this.map);
   }
 
   show(scene){
@@ -22,6 +23,7 @@ class Minimap {
     player.scrollFactorY = 0;
     scene.add.existing(player);
     this.players[id] = player;
+    scene.cameras.main.ignore(player);
   }
 
   removePlayer(id){
