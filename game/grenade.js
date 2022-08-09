@@ -29,37 +29,38 @@ class Grenade {
   explode(){
     this.exploded = true;
     io.to(this.room).emit("explosion", this.id);
-
-    Object.values(rooms[this.room].players).forEach(player => {
-      if(player.shield) return;
-      let damage = 0;
-      let distance = Math.hypot(this.x - player.x, this.y - player.y);
-      if(distance <= 150){
-        damage = 100;
-      } else if(distance <= 200){
-        damage = random(50, 75);
-      } else if(distance <= 250){
-        damage = random(20, 30);
-      }
-
-      player.health -= damage;
-      if(player.health <= 0){
-        player.health = 0;
-        player.died = true;
-        io.to(player.room).emit("player died", player.id, this.throwerId, this.name);
-        if(rooms[player.room].players[this.throwerId]){
-          rooms[this.room].players[this.throwerId].addScore();
+    setTimeout(() => {
+      Object.values(rooms[this.room].players).forEach(player => {
+        if(player.shield) return;
+        let damage = 0;
+        let distance = Math.hypot(this.x - player.x, this.y - player.y);
+        if(distance <= 150){
+          damage = 100;
+        } else if(distance <= 200){
+          damage = random(50, 75);
+        } else if(distance <= 250){
+          damage = random(20, 30);
         }
-        if(this.bot){
-          if(!rooms[player.room].timeleft){
-            rooms[player.room].timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
+  
+        player.health -= damage;
+        if(player.health <= 0){
+          player.health = 0;
+          player.died = true;
+          io.to(player.room).emit("player died", player.id, this.throwerId, this.name);
+          if(rooms[player.room].players[this.throwerId]){
+            rooms[this.room].players[this.throwerId].addScore();
           }
-        } else {
-          console.log(player.name + " left the room " + player.room);
-          rooms[player.room].diedPlayers.push(player.id);
+          if(this.bot){
+            if(!rooms[player.room].timeleft){
+              rooms[player.room].timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
+            }
+          } else {
+            console.log(player.name + " left the room " + player.room);
+            rooms[player.room].diedPlayers.push(player.id);
+          }
         }
-      }
-    });
+      });
+    }, 200);
   }
 }
 

@@ -690,7 +690,7 @@ class Game extends Phaser.Scene {
         this.cam.ignore(explosion);
         this.tweens.add({
           targets: explosion,
-          duration: 500,
+          duration: 300,
           alpha: 0.7,
           scaleX: 1.5,
           scaleY: 1.5,
