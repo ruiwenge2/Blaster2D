@@ -62,6 +62,7 @@ class Player {
       }
     }
     this.checkDiagonal();
+    if(this.x )
     if(this.left) this.x -= this.leftspeed;
     if(this.right) this.x += this.rightspeed;
     if(this.up) this.y -= this.upspeed;
@@ -72,6 +73,11 @@ class Player {
   }
 
   checkDiagonal(){
+
+    if(this.x - radius == 0) this.left = false;
+    if(this.x + radius == size) this.right = false;
+    if(this.y - radius == 0) this.up = false;
+    if(this.y + radius == size) this.down = false;
     if(this.left && this.up){
       this.leftspeed = this.upspeed = Math.sqrt(speed * speed / 2);
     }
