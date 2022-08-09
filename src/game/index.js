@@ -41,7 +41,9 @@ class Game extends Phaser.Scene {
     this.load.image("arrow", "/img/gameObjects/arrow.png");
     this.load.image("grenade", "/img/gameObjects/grenade.png");
     this.load.image("explosion", "/img/gameObjects/explosion.png");
+    this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
+    this.cameras.main.ignore(this.loadingtext);
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
 
@@ -56,7 +58,6 @@ class Game extends Phaser.Scene {
     this.bullets = {};
     this.grenades = {};
     this.verified = false;
-    this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.minimap = new Minimap(this);
     this.chatbox = new Chatbox(this);
     this.gunType = document.getElementById("gun").value;
@@ -66,7 +67,7 @@ class Game extends Phaser.Scene {
     this.shooting = false;
     this.shotBefore = false;
     this.focus = true;
-    this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
+    this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / 2200);
     let game = this;
     grecaptcha.ready(function() {
       grecaptcha.execute("6LerbDQhAAAAAFyt22lecnaCm6UmDmRsytTDtD1k", {action: "submit"}).then(function(token) {
@@ -78,7 +79,7 @@ class Game extends Phaser.Scene {
     
     window.addEventListener("resize", () => {
       if(!this.loaded) return;
-      this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / (1300 + 730));
+      this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / 2200);
       if(this.died){
         this.deathtext.x = window.innerWidth / 2
         this.deathtext.y = window.innerHeight / 2 - 200;
@@ -254,6 +255,7 @@ class Game extends Phaser.Scene {
           bullet_image.shooter = bullet.shooter;
           bullet_image.id = bullet.id;
           this.bullets[bullet.id] = bullet_image;
+          this.cam.ignore(bullet_image);
         });
 
         Object.values(data.grenades).forEach(grenade => {
@@ -261,6 +263,7 @@ class Game extends Phaser.Scene {
           grenade_image.thrower = grenade.throwerId;
           grenade_image.id = grenade.id;
           this.grenades[grenade.id] = grenade_image;
+          this.cam.ignore(grenade_image);
         });
         
         this.main();
@@ -650,6 +653,7 @@ class Game extends Phaser.Scene {
         bullet_image.shooter = data.shooter;
         bullet_image.id = id;
         this.bullets[id] = bullet_image;
+        this.cam.ignore(bullet_image);
       } catch(e){
         console.log(e);
       }
@@ -672,6 +676,7 @@ class Game extends Phaser.Scene {
         grenade_image.thrower = data.throwerId;
         grenade_image.id = data.id;
         this.grenades[data.id] = grenade_image;
+        this.cam.ignore(grenade_image);
       } catch(e){
         console.log(e);
       }
@@ -682,6 +687,7 @@ class Game extends Phaser.Scene {
         let game = this;
         if(!this.verified) return;
         var explosion = this.add.image(this.grenades[id].x, this.grenades[id].y, "explosion").setAlpha(0).setDepth(15).setScale(0, 0);
+        this.cam.ignore(explosion);
         this.tweens.add({
           targets: explosion,
           duration: 500,
@@ -763,7 +769,7 @@ class Game extends Phaser.Scene {
               }, { background: 0x00374ff });
               game.playAgain.text.setDepth(102).setAlpha(0);
               game.playAgain.button.setDepth(101).setAlpha(0);
-
+              game.cameras.main.ignore([game.deathtext, game.infotext, game.deathRect, game.playAgain.text, game.playAgain.button]);
               if(game.room != "main"){
                 game.switchWeapon = new Button(game, window.innerWidth - 150, 50, "Switch Weapon", function(){
                   selectmodal("Switch Weapon", "Choose a weapon: ", {
@@ -790,6 +796,7 @@ class Game extends Phaser.Scene {
                 
                 game.leaveBtn.text.setDepth(102).setAlpha(0);
                 game.leaveBtn.button.setDepth(101).setAlpha(0);
+                game.cameras.main.ignore([game.switchWeapon.text, game.switchWeapon.button, game.leaveBtn.text, game.leaveBtn.button]);
               }
               
               if(game.enemies[shooter]){
@@ -838,6 +845,7 @@ class Game extends Phaser.Scene {
             this.killText.setText(`You killed ${playerName || this.name}\n\nKill Streak: ${this.score}`);
           } else {
             this.killText = new Text(this, window.innerWidth / 2, window.innerHeight - 90, `You killed ${playerName || this.name}\n\nKill Streak: ${this.score}`, { fontSize: 30 });
+            this.cameras.main.ignore(this.killText);
           }
           setTimeout(() => {
             this.killText.destroy();
