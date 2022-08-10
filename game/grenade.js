@@ -48,6 +48,7 @@ class Grenade {
           player.died = true;
           io.to(player.room).emit("player died", player.id, this.throwerId, this.name);
           if(rooms[player.room].players[this.throwerId]){
+            if(this.throwerId == player.id) return;
             rooms[this.room].players[this.throwerId].addScore();
           }
           if(this.bot){
