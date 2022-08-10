@@ -220,7 +220,7 @@ class Player {
     });
   }
 
-  addScore(){
+  addScore(id){
     try {
       this.score++;
       if(powerUps.includes(this.score)){
@@ -229,7 +229,7 @@ class Player {
           timeleft: 10
         }
       }
-      if(this.account){
+      if(this.account && this.id != id){
         let time = Date.now();
         db.score(this.name).then(() => {});
       }
