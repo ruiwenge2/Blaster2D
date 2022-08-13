@@ -745,6 +745,12 @@ class Game extends Phaser.Scene {
               game.grenadesText.destroy();
               game.grenade_icon.destroy();
               game.shield.destroy();
+              if(game.arrowLeft){
+                game.arrowLeft.destroy();
+                game.arrowRight.destroy();
+                game.arrowUp.destroy();
+                game.arrowDown.destroy();
+              }
               
               game.deathtext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               game.infotext = new Text(game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
