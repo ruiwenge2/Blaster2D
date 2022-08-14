@@ -193,6 +193,7 @@ class Player {
     
     if(!this.spawned) return;
     Object.values(rooms[this.room].bullets).forEach(bullet => {
+      if(this.died) return;
       if(bullet.shooter == this.id) return;
       if(collide([bullet.x, bullet.y], [bullet.x, bullet.y], [this.x, this.y], radius)){
         delete rooms[this.room].bullets[bullet.id];
