@@ -1,4 +1,5 @@
 import Game from "./game";
+import Load from "./game/load.js";
 import disconnect_scene from "./game/disconnect.js";
 import { random } from "./functions.js";
 
@@ -17,8 +18,7 @@ document.addEventListener("click", function(e){
   window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
 });
 
-function startGame(){
-  const config = {
+const config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
@@ -33,6 +33,16 @@ function startGame(){
       }
     }
   };
+const game = new Phaser.Game(config);
+game.scene.add("load", Load);
+game.scene.add("gamescene", Game);
+game.scene.add("disconnect_scene", disconnect_scene);
+game.scene.start("load");
+
+
+function startGame(){
+  game.scene.start("gamescene");
+  document.querySelector("canvas").style.display = "block";
   let name = document.getElementById("input").value;
   if(!name.replace(/\s/g, "")){
     document.querySelector("p").style.display = "block";
@@ -54,12 +64,7 @@ function startGame(){
   localStorage.setItem("gun", document.getElementById("gun").value);
   
   window.started = true;
-  const game = new Phaser.Game(config);
   
-  game.scene.add("gamescene", Game);
-  game.scene.add("disconnect_scene", disconnect_scene);
-  
-  game.scene.start("gamescene");
   document.body.style.cursor = "crosshair";
   
   window.addEventListener("resize", () => {

@@ -22,29 +22,10 @@ class Game extends Phaser.Scene {
   }
   
   preload() {
-    for(let i of Object.keys(skins)){
-      this.load.image(`skin_${skins[i].url}`, `/img/skins/${skins[i].url}.png`);
-    }
-    // this.load.image("skin_player", "/img/skins/player.png");
-    this.load.image("skin_botplayer", "/img/skins/bot.png");
-    this.load.image("coin", "/img/gameObjects/coin.png");
-    this.load.image("grass", "/img/gameObjects/tile.png");
-    this.load.image("bullet", "/img/gameObjects/bullet.png");
-    this.load.image("gun", "/img/gameObjects/gun.png");
-    this.load.image("obstacle", "/img/gameObjects/obstacle.png");
-    this.load.image("obstacle2", "/img/gameObjects/obstacle2.png");
-    this.load.image("tree", "/img/gameObjects/tree.png");
-    this.load.image("rock", "/img/gameObjects/rock.png");
-    this.load.image("bullet_icon", "/img/gameObjects/bullet_icon.png");
-    this.load.image("shield_icon", "/img/gameObjects/shield_icon.png");
-    this.load.image("grenade_icon", "/img/gameObjects/grenade_icon.png");
-    this.load.image("arrow", "/img/gameObjects/arrow.png");
-    this.load.image("grenade", "/img/gameObjects/grenade.png");
-    this.load.image("explosion", "/img/gameObjects/explosion.png");
+    
     this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.cameras.main.ignore(this.loadingtext);
-    this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
 
   create() {
@@ -365,7 +346,8 @@ class Game extends Phaser.Scene {
     l.on("down", function(){
       if(game.chatbox.focus) return;
       confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
-        game.sys.game.destroy(true, false);
+        game.scene.start("load");
+        document.querySelector("canvas").style.display = "none";
         game.chatbox.destroy();
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
@@ -760,7 +742,9 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               game.playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-                game.sys.game.destroy(true, false);
+                
+                game.scene.start("load");
+                document.querySelector("canvas").style.display = "none";
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                 game.socket.disconnect();
@@ -791,7 +775,8 @@ class Game extends Phaser.Scene {
                 game.switchWeapon.button.setDepth(101).setAlpha(0);
 
                 game.leaveBtn = new Button(game, window.innerWidth - 150, 110, "Leave", function(){
-                  game.sys.game.destroy(true, false);
+                  game.scene.start("load");
+                  document.querySelector("canvas").style.display = "none";
                   document.querySelector("main").style.display = "block";
                   document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
                   game.socket.disconnect();

@@ -188,3 +188,6 @@ p {
   color: white;
 }
 
+canvas {
+  display: none;
+}
