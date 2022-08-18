@@ -769,7 +769,6 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               game.playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-                game.scene.start("load");
     window.removeEventListener("mousedown", game.shoot);
     window.removeEventListener("touchstart", game.shoot);
     window.removeEventListener("mouseup", game.shootEnd);
@@ -787,6 +786,7 @@ class Game extends Phaser.Scene {
                 document.body.style.cursor = "auto";
                 if(game.room == "main"){
                   window.rejoin = false;
+                game.scene.start("load");
                 } else {
                   window.rejoin = game.room;
                   document.getElementById("playbtn").click();
