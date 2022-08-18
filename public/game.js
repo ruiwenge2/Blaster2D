@@ -40,7 +40,6 @@ class Game extends Phaser.Scene {
     this.upDown = false;
     this.downDown = false;
     this.died = false;
-    
   }
   
   preload() {
@@ -372,7 +371,7 @@ class Game extends Phaser.Scene {
     l.on("down", function(){
       if(game.chatbox.focus) return;
       confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
-        game.scene.start("load");
+        game.scene.start("blank");
         document.querySelector("canvas").style.display = "none";
         game.chatbox.destroy();
         document.querySelector("main").style.display = "block";
@@ -769,13 +768,13 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               game.playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-    window.removeEventListener("mousedown", game.shoot);
-    window.removeEventListener("touchstart", game.shoot);
-    window.removeEventListener("mouseup", game.shootEnd);
-    window.removeEventListener("touchend", game.shootEnd);
-    window.removeEventListener("touchcancel", game.shootEnd);
-    window.removeEventListener("mousemove", game.pointerMove);
-    window.removeEventListener("touchmove", game.pointerMove);
+                window.removeEventListener("mousedown", game.shoot);
+                window.removeEventListener("touchstart", game.shoot);
+                window.removeEventListener("mouseup", game.shootEnd);
+                window.removeEventListener("touchend", game.shootEnd);
+                window.removeEventListener("touchcancel", game.shootEnd);
+                window.removeEventListener("mousemove", game.pointerMove);
+                window.removeEventListener("touchmove", game.pointerMove);
                 document.querySelector("canvas").style.display = "none";
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
@@ -786,13 +785,12 @@ class Game extends Phaser.Scene {
                 document.body.style.cursor = "auto";
                 if(game.room == "main"){
                   window.rejoin = false;
-                game.scene.start("load");
+                  game.scene.start("blank");
                 } else {
                   window.rejoin = game.room;
                   document.getElementById("playbtn").click();
                 }
 
-                
     
               }, { background: 0x00374ff });
               
@@ -814,7 +812,7 @@ class Game extends Phaser.Scene {
                 game.switchWeapon.button.setDepth(101).setAlpha(0);
 
                 game.leaveBtn = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth - 150, 110, "Leave", function(){
-                  game.scene.start("load");
+                  game.scene.start("blank");
                   document.querySelector("canvas").style.display = "none";
                   document.querySelector("main").style.display = "block";
                   document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
@@ -1451,6 +1449,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Load extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
   preload(){
     for(let i of Object.keys(_skins_json__WEBPACK_IMPORTED_MODULE_0__)){
       this.load.image(`skin_${_skins_json__WEBPACK_IMPORTED_MODULE_0__[i].url}`, `/img/skins/${_skins_json__WEBPACK_IMPORTED_MODULE_0__[i].url}.png`);
@@ -1472,12 +1474,48 @@ class Load extends Phaser.Scene {
     this.load.image("explosion", "/img/gameObjects/explosion.png");
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
+
+  create(){
+    
+  }
+
+  update(){
+    
+  }
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Load);
 
 /***/ }),
 /* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+class Blank extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
+  preload(){
+    
+  }
+
+  create(){
+    
+  }
+
+  update(){
+    
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Blank);
+
+/***/ }),
+/* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -1583,8 +1621,10 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _game_load_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _game_disconnect_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
-/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
+/* harmony import */ var _game_blank_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(12);
+/* harmony import */ var _game_disconnect_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
+/* harmony import */ var _functions_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
+
 
 
 
@@ -1622,8 +1662,9 @@ const config = {
 };
 const game = new Phaser.Game(config);
 game.scene.add("load", _game_load_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
+game.scene.add("blank", _game_blank_js__WEBPACK_IMPORTED_MODULE_2__["default"]);
 game.scene.add("gamescene", _game__WEBPACK_IMPORTED_MODULE_0__["default"]);
-game.scene.add("disconnect_scene", _game_disconnect_js__WEBPACK_IMPORTED_MODULE_2__["default"]);
+game.scene.add("disconnect_scene", _game_disconnect_js__WEBPACK_IMPORTED_MODULE_3__["default"]);
 game.scene.start("load");
 
 window.addEventListener("resize", function(){

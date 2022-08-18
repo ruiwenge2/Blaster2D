@@ -20,7 +20,6 @@ class Game extends Phaser.Scene {
     this.upDown = false;
     this.downDown = false;
     this.died = false;
-    
   }
   
   preload() {
@@ -352,7 +351,7 @@ class Game extends Phaser.Scene {
     l.on("down", function(){
       if(game.chatbox.focus) return;
       confirmmodal("", "Are you sure you want to exit the game?", "Exit").then(() => {
-        game.scene.start("load");
+        game.scene.start("blank");
         document.querySelector("canvas").style.display = "none";
         game.chatbox.destroy();
         document.querySelector("main").style.display = "block";
@@ -766,13 +765,12 @@ class Game extends Phaser.Scene {
                 document.body.style.cursor = "auto";
                 if(game.room == "main"){
                   window.rejoin = false;
-                game.scene.start("load");
+                  game.scene.start("blank");
                 } else {
                   window.rejoin = game.room;
                   document.getElementById("playbtn").click();
                 }
 
-                
     
               }, { background: 0x00374ff });
               
@@ -794,7 +792,7 @@ class Game extends Phaser.Scene {
                 game.switchWeapon.button.setDepth(101).setAlpha(0);
 
                 game.leaveBtn = new Button(game, window.innerWidth - 150, 110, "Leave", function(){
-                  game.scene.start("load");
+                  game.scene.start("blank");
                   document.querySelector("canvas").style.display = "none";
                   document.querySelector("main").style.display = "block";
                   document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";

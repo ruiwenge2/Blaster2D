@@ -1,6 +1,10 @@
 import skins from "../skins.json";
 
 class Load extends Phaser.Scene {
+  constructor(){
+    super();
+  }
+  
   preload(){
     for(let i of Object.keys(skins)){
       this.load.image(`skin_${skins[i].url}`, `/img/skins/${skins[i].url}.png`);
@@ -21,6 +25,14 @@ class Load extends Phaser.Scene {
     this.load.image("grenade", "/img/gameObjects/grenade.png");
     this.load.image("explosion", "/img/gameObjects/explosion.png");
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
+  }
+
+  create(){
+    
+  }
+
+  update(){
+    
   }
 }
 

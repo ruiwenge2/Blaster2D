@@ -1,5 +1,6 @@
 import Game from "./game";
 import Load from "./game/load.js";
+import Blank from "./game/blank.js";
 import disconnect_scene from "./game/disconnect.js";
 import { random } from "./functions.js";
 
@@ -35,6 +36,7 @@ const config = {
 };
 const game = new Phaser.Game(config);
 game.scene.add("load", Load);
+game.scene.add("blank", Blank);
 game.scene.add("gamescene", Game);
 game.scene.add("disconnect_scene", disconnect_scene);
 game.scene.start("load");
