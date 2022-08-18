@@ -749,13 +749,13 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               game.playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-    window.removeEventListener("mousedown", game.shoot);
-    window.removeEventListener("touchstart", game.shoot);
-    window.removeEventListener("mouseup", game.shootEnd);
-    window.removeEventListener("touchend", game.shootEnd);
-    window.removeEventListener("touchcancel", game.shootEnd);
-    window.removeEventListener("mousemove", game.pointerMove);
-    window.removeEventListener("touchmove", game.pointerMove);
+                window.removeEventListener("mousedown", game.shoot);
+                window.removeEventListener("touchstart", game.shoot);
+                window.removeEventListener("mouseup", game.shootEnd);
+                window.removeEventListener("touchend", game.shootEnd);
+                window.removeEventListener("touchcancel", game.shootEnd);
+                window.removeEventListener("mousemove", game.pointerMove);
+                window.removeEventListener("touchmove", game.pointerMove);
                 document.querySelector("canvas").style.display = "none";
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
