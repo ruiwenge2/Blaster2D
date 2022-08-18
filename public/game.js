@@ -39,10 +39,11 @@ class Game extends Phaser.Scene {
     this.rightDown = false;
     this.upDown = false;
     this.downDown = false;
+    this.died = false;
+    
   }
   
   preload() {
-    
     this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.loadingtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.cameras.main.ignore(this.loadingtext);
@@ -79,52 +80,56 @@ class Game extends Phaser.Scene {
     });
     
     window.addEventListener("resize", () => {
-      if(!this.loaded) return;
-      this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / 2200);
-      if(this.died){
-        this.deathtext.x = window.innerWidth / 2
-        this.deathtext.y = window.innerHeight / 2 - 200;
-        this.infotext.x = window.innerWidth / 2;
-        this.infotext.y = window.innerHeight / 2 - 100;
-        this.deathRect.x = window.innerWidth / 2;
-        this.deathRect.y = window.innerHeight / 2;
-        this.playAgain.setPosition(window.innerWidth / 2, window.innerHeight / 2 + 100);
-
-        if(this.room != "main"){
-          this.switchWeapon.setPosition(window.innerWidth - 150, 50);
-          this.leaveBtn.setPosition(window.innerWidth - 150, 110);
+      try {
+        if(!this.loaded) return;
+        this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / 2200);
+        if(this.died){
+          this.deathtext.x = window.innerWidth / 2
+          this.deathtext.y = window.innerHeight / 2 - 200;
+          this.infotext.x = window.innerWidth / 2;
+          this.infotext.y = window.innerHeight / 2 - 100;
+          this.deathRect.x = window.innerWidth / 2;
+          this.deathRect.y = window.innerHeight / 2;
+          this.playAgain.setPosition(window.innerWidth / 2, window.innerHeight / 2 + 100);
+  
+          if(this.room != "main"){
+            this.switchWeapon.setPosition(window.innerWidth - 150, 50);
+            this.leaveBtn.setPosition(window.innerWidth - 150, 110);
+          }
+        } else {
+          this.socket.emit("resize", { width: window.innerWidth, height: window.innerHeight }, this.room);
+          this.scale.resize(window.innerWidth, window.innerHeight);
+          this.fpstext.x = window.innerWidth - 150;
+          this.tps.x = window.innerWidth - 150;
+          this.ping.x = window.innerWidth - 150;
+          this.shield.x = window.innerWidth / 2;
+          this.shield_icon.x = window.innerWidth / 2 - 50;
+          this.reloading.x = window.innerWidth - 300;
+          this.reloading.y = window.innerHeight - 120;
+          this.shots.x = window.innerWidth - 310;
+          this.shots.y = window.innerHeight - 80;
+          this.bullet_icon.x = window.innerWidth - 295;
+          this.bullet_icon.y = window.innerHeight - 95;
+          this.grenadesText.x = window.innerWidth - 320;
+          this.grenadesText.y = window.innerHeight - 40;
+          this.grenade_icon.x = window.innerWidth - 295;
+          this.grenade_icon.y = window.innerHeight - 55;
+          this.minimap.resize();
         }
-      } else {
-        this.socket.emit("resize", { width: window.innerWidth, height: window.innerHeight }, this.room);
-        this.scale.resize(window.innerWidth, window.innerHeight);
-        this.fpstext.x = window.innerWidth - 150;
-        this.tps.x = window.innerWidth - 150;
-        this.ping.x = window.innerWidth - 150;
-        this.shield.x = window.innerWidth / 2;
-        this.shield_icon.x = window.innerWidth / 2 - 50;
-        this.reloading.x = window.innerWidth - 300;
-        this.reloading.y = window.innerHeight - 120;
-        this.shots.x = window.innerWidth - 310;
-        this.shots.y = window.innerHeight - 80;
-        this.bullet_icon.x = window.innerWidth - 295;
-        this.bullet_icon.y = window.innerHeight - 95;
-        this.grenadesText.x = window.innerWidth - 320;
-        this.grenadesText.y = window.innerHeight - 40;
-        this.grenade_icon.x = window.innerWidth - 295;
-        this.grenade_icon.y = window.innerHeight - 55;
-        this.minimap.resize();
-      }
-
-      if(this.killText){
-        this.killText.x = window.innerWidth / 2;
-        this.killText.y = window.innerHeight - 90;
-      }
-
-      if(this.arrowLeft){
-        this.arrowLeft.setPosition(window.innerWidth - 150, window.innerHeight - 400);
-        this.arrowRight.setPosition(window.innerWidth - 50, window.innerHeight - 400);
-        this.arrowUp.setPosition(window.innerWidth - 100, window.innerHeight - 450);
-        this.arrowDown.setPosition(window.innerWidth - 100, window.innerHeight - 350);
+  
+        if(this.killText){
+          this.killText.x = window.innerWidth / 2;
+          this.killText.y = window.innerHeight - 90;
+        }
+  
+        if(this.arrowLeft){
+          this.arrowLeft.setPosition(window.innerWidth - 150, window.innerHeight - 400);
+          this.arrowRight.setPosition(window.innerWidth - 50, window.innerHeight - 400);
+          this.arrowUp.setPosition(window.innerWidth - 100, window.innerHeight - 450);
+          this.arrowDown.setPosition(window.innerWidth - 100, window.innerHeight - 350);
+        }
+      } catch(e){
+        console.log(e);
       }
     });
     
@@ -314,6 +319,7 @@ class Game extends Phaser.Scene {
     });
 
     this.socket.on("tps", tps => {
+      if(this.died) return;
       try {
         // this.tps.setText(`Tick speed: ${Math.round(tps / 30 * 100)}%`);
         this.tps.setText("TPS: " + tps);
@@ -372,6 +378,7 @@ class Game extends Phaser.Scene {
         document.querySelector("main").style.display = "block";
         game.socket.emit("leaveGame");
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+        game.died = false;
         getServerData();
         window.rejoin = false;
         document.body.style.cursor = "auto";
@@ -753,7 +760,7 @@ class Game extends Phaser.Scene {
                 game.arrowUp.destroy();
                 game.arrowDown.destroy();
               }
-              
+
               game.deathtext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 200, "You died", { fontSize: 50 }).setDepth(101).setAlpha(0);
               game.infotext = new _objects_text_js__WEBPACK_IMPORTED_MODULE_1__["default"](game, window.innerWidth / 2, window.innerHeight / 2 - 100, `Killed By: ${shooterName}\n\nKill Streak: ${game.score}`, { fontSize: 30 }).setDepth(101).setAlpha(0);
               game.deathRect = game.add.rectangle(window.innerWidth / 2, window.innerHeight / 2, 600, 500, 0x039e50).setOrigin(0.5).setAlpha(0).setDepth(100);
@@ -762,11 +769,19 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               game.playAgain = new _objects_button_js__WEBPACK_IMPORTED_MODULE_2__["default"](game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
-                
                 game.scene.start("load");
+    window.removeEventListener("mousedown", game.shoot);
+    window.removeEventListener("touchstart", game.shoot);
+    window.removeEventListener("mouseup", game.shootEnd);
+    window.removeEventListener("touchend", game.shootEnd);
+    window.removeEventListener("touchcancel", game.shootEnd);
+    window.removeEventListener("mousemove", game.pointerMove);
+    window.removeEventListener("touchmove", game.pointerMove);
                 document.querySelector("canvas").style.display = "none";
                 document.querySelector("main").style.display = "block";
                 document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
+                
+                game.died = false;
                 game.socket.disconnect();
                 getServerData();
                 document.body.style.cursor = "auto";
@@ -776,7 +791,11 @@ class Game extends Phaser.Scene {
                   window.rejoin = game.room;
                   document.getElementById("playbtn").click();
                 }
+
+                
+    
               }, { background: 0x00374ff });
+              
               game.playAgain.text.setDepth(102).setAlpha(0);
               game.playAgain.button.setDepth(101).setAlpha(0);
               game.cameras.main.ignore([game.deathtext, game.infotext, game.deathRect, game.playAgain.text, game.playAgain.button]);
@@ -803,6 +822,7 @@ class Game extends Phaser.Scene {
                   getServerData();
                   document.body.style.cursor = "auto";
                   window.rejoin = false;
+                  game.died = false;
                 }, { fontSize: 30 });
                 
                 game.leaveBtn.text.setDepth(102).setAlpha(0);
@@ -901,47 +921,59 @@ class Game extends Phaser.Scene {
   }
 
   addWeaponActions(){
-    const shoot = (e) => {
-      if(this.died) return;
-      let x = e.clientX || e.touches[0].clientX;
-      let y = e.clientY || e.touches[0].clientY;
-      this.shooting = true;
-      var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
-      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      this.gun.angle2 = angle;
-      this.pointerX = x;
-      this.pointerY = y;
+    this.shoot = (e) => {
+      try {
+        if(this.died || this.socket.disconnected) return;
+        let x = e.clientX || e.touches[0].clientX;
+        let y = e.clientY || e.touches[0].clientY;
+        this.shooting = true;
+        var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
+        this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+        this.gun.angle2 = angle;
+        this.pointerX = x;
+        this.pointerY = y;
+      } catch(e){
+        console.log(e);
+      }
     };
-    const shootEnd = () => {
-      if(this.died) return;
-      this.shooting = false;
-      this.shotBefore = false;
-      if(this.arrowLeft){
-        this.leftDown = false;
-        this.rightDown = false;
-        this.upDown = false;
-        this.downDown = false;
+    this.shootEnd = () => {
+      try {
+        if(this.died || this.socket.disconnected) return;
+        this.shooting = false;
+        this.shotBefore = false;
+        if(this.arrowLeft){
+          this.leftDown = false;
+          this.rightDown = false;
+          this.upDown = false;
+          this.downDown = false;
+        }
+      } catch(e){
+        console.log(e);
       }
     };
 
-    const pointerMove = (e) => {
-      let x = e.clientX || e.touches[0].clientX;
-      let y = e.clientY || e.touches[0].clientY;
-      if(this.died || this.socket.disconnected) return;
-      var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
-      this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
-      this.gun.angle2 = angle;
-      this.pointerX = x;
-      this.pointerY = y;
+    this.pointerMove = (e) => {
+      try {
+        if(this.died || this.socket.disconnected) return;
+        let x = e.clientX || e.touches[0].clientX;
+        let y = e.clientY || e.touches[0].clientY;
+        var angle = Math.atan2(y - (window.innerHeight / 2), x - (window.innerWidth / 2));
+        this.gun.angle = ((angle * 180 / Math.PI) + 360) % 360;
+        this.gun.angle2 = angle;
+        this.pointerX = x;
+        this.pointerY = y;
+      } catch(e){
+        console.log(e);
+      }
     }
     
-    window.addEventListener("mousedown", shoot);
-    window.addEventListener("touchstart", shoot);
-    window.addEventListener("mouseup", shootEnd);
-    window.addEventListener("touchend", shootEnd);
-    window.addEventListener("touchcancel", shootEnd);
-    window.addEventListener("mousemove", pointerMove);
-    window.addEventListener("touchmove", pointerMove);
+    window.addEventListener("mousedown", this.shoot);
+    window.addEventListener("touchstart", this.shoot);
+    window.addEventListener("mouseup", this.shootEnd);
+    window.addEventListener("touchend", this.shootEnd);
+    window.addEventListener("touchcancel", this.shootEnd);
+    window.addEventListener("mousemove", this.pointerMove);
+    window.addEventListener("touchmove", this.pointerMove);
   }
 
   update() {
@@ -1471,8 +1503,9 @@ class disconnect_scene extends Phaser.Scene {
     this.button = new _objects_button_js__WEBPACK_IMPORTED_MODULE_1__["default"](this, window.innerWidth / 2, window.innerHeight / 2, window.error.reload ? "Reload": "OK", () => {
       if(window.error.reload) location.reload();
       else {
-        this.sys.game.destroy(true, false);
+        this.scene.start("load");
         document.querySelector("main").style.display = "block";
+        document.querySelector("canvas").style.display = "none";
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
         document.body.style.cursor = "auto";
       }
@@ -1573,26 +1606,30 @@ document.addEventListener("click", function(e){
 });
 
 const config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    backgroundColor: "#000000",
-    physics: {
-      default: "arcade",
-      arcade: {
-        gravity: {
-          y: 0
-        },
-        debug: false
-      }
+  type: Phaser.AUTO,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: "#000000",
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: {
+        y: 0
+      },
+      debug: false
     }
-  };
+  }
+};
 const game = new Phaser.Game(config);
 game.scene.add("load", _game_load_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 game.scene.add("gamescene", _game__WEBPACK_IMPORTED_MODULE_0__["default"]);
 game.scene.add("disconnect_scene", _game_disconnect_js__WEBPACK_IMPORTED_MODULE_2__["default"]);
 game.scene.start("load");
 
+window.addEventListener("resize", function(){
+  config.width = window.innerWidth;
+  config.height = window.innerHeight;
+});
 
 function startGame(){
   game.scene.start("gamescene");
@@ -1748,6 +1785,12 @@ window.getServerData = () => {
 };
 
 getServerData();
+
+// window.onerror = function(msg, url, line) {
+//     document.write("Error : " + msg + "<br><br>");
+//     document.write("Line number : " + line + "<br><br>");
+//     document.write("File : " + url);
+// };
 })();
 
 /******/ })()

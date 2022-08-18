@@ -19,26 +19,30 @@ document.addEventListener("click", function(e){
 });
 
 const config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    backgroundColor: "#000000",
-    physics: {
-      default: "arcade",
-      arcade: {
-        gravity: {
-          y: 0
-        },
-        debug: false
-      }
+  type: Phaser.AUTO,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  backgroundColor: "#000000",
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: {
+        y: 0
+      },
+      debug: false
     }
-  };
+  }
+};
 const game = new Phaser.Game(config);
 game.scene.add("load", Load);
 game.scene.add("gamescene", Game);
 game.scene.add("disconnect_scene", disconnect_scene);
 game.scene.start("load");
 
+window.addEventListener("resize", function(){
+  config.width = window.innerWidth;
+  config.height = window.innerHeight;
+});
 
 function startGame(){
   game.scene.start("gamescene");
@@ -194,3 +198,9 @@ window.getServerData = () => {
 };
 
 getServerData();
+
+// window.onerror = function(msg, url, line) {
+//     document.write("Error : " + msg + "<br><br>");
+//     document.write("Line number : " + line + "<br><br>");
+//     document.write("File : " + url);
+// };

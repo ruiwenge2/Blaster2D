@@ -15,8 +15,9 @@ class disconnect_scene extends Phaser.Scene {
     this.button = new Button(this, window.innerWidth / 2, window.innerHeight / 2, window.error.reload ? "Reload": "OK", () => {
       if(window.error.reload) location.reload();
       else {
-        this.sys.game.destroy(true, false);
+        this.scene.start("load");
         document.querySelector("main").style.display = "block";
+        document.querySelector("canvas").style.display = "none";
         document.getElementsByClassName("grecaptcha-badge")[0].style.display = "block";
         document.body.style.cursor = "auto";
       }

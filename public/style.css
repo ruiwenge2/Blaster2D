@@ -187,7 +187,3 @@ p {
 ::-ms-input-placeholder { /* Microsoft Edge */
   color: white;
 }
-
-canvas {
-  display: none;
-}
