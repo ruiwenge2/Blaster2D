@@ -79,6 +79,7 @@ function startGame() {
   document.querySelector("main").style.display = "none";
   document.querySelector("p").style.display = "none";
   game.scene.start("gamescene");
+    document.body.setAttribute("onbeforeunload", "return ''");
 }
 
 if (localStorage.getItem("name") && !loggedIn) {

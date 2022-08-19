@@ -26,7 +26,6 @@ class Game extends Phaser.Scene {
     this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.cameras.main.ignore(this.loadingtext);
-    document.body.setAttribute("onbeforeunload", "return ''");
   }
 
   create() {
