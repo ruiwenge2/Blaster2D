@@ -201,8 +201,3 @@ window.getServerData = () => {
 
 getServerData();
 
-// window.onerror = function(msg, url, line) {
-//     document.write("Error : " + msg + "<br><br>");
-//     document.write("Line number : " + line + "<br><br>");
-//     document.write("File : " + url);
-// };
