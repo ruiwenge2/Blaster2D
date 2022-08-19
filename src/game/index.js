@@ -31,8 +31,8 @@ class Game extends Phaser.Scene {
   create() {
     this.loaded = false;
     this.full_screen = false;
-    let url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
-    this.socket = io(url);
+    this.url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
+    this.socket = io(this.url);
     this.name = name || localStorage.getItem("name");
     this.coins = {};
     this.enemies = {};
@@ -151,7 +151,7 @@ class Game extends Phaser.Scene {
         this.room = room;
         this.loadingtext.destroy();
         this.name = data.players[this.socket.id].name;
-        if(url != "https://blaster2d.ruiwenge2.repl.co"){
+        if(this.url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", this.name);
         }
 

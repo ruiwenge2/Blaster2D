@@ -13,7 +13,7 @@ window.mouseData = {
   angle: 0
 };
 
-document.addEventListener("click", function(e){
+document.addEventListener("click", function(e) {
   window.mouseData.x = e.clientX;
   window.mouseData.y = e.clientY;
   window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
@@ -41,26 +41,25 @@ game.scene.add("gamescene", Game);
 game.scene.add("disconnect_scene", disconnect_scene);
 game.scene.start("load");
 
-window.addEventListener("resize", function(){
+window.addEventListener("resize", function() {
   config.width = window.innerWidth;
   config.height = window.innerHeight;
 });
 
-function startGame(){
-  game.scene.start("gamescene");
+function startGame() {
   document.querySelector("canvas").style.display = "block";
   let name = document.getElementById("input").value;
-  if(!name.replace(/\s/g, "")){
+  if (!name.replace(/\s/g, "")) {
     document.querySelector("p").style.display = "block";
     return;
   }
-  if(!loggedIn){
+  if (!loggedIn) {
     localStorage.setItem("name", name);
   } else {
     localStorage.setItem("name", "");
   }
-  
-  if(document.getElementById("server").value == "auto"){
+
+  if (document.getElementById("server").value == "auto") {
     localStorage.setItem("server", "auto");
   } else {
     window.chosenServer = document.getElementById("server").value;
@@ -68,36 +67,37 @@ function startGame(){
   }
 
   localStorage.setItem("gun", document.getElementById("gun").value);
-  
+
   window.started = true;
-  
+
   document.body.style.cursor = "crosshair";
-  
+
   window.addEventListener("resize", () => {
     game.scale.resize(window.innerWidth, window.innerHeight);
   });
-  
+
   document.querySelector("main").style.display = "none";
   document.querySelector("p").style.display = "none";
+  game.scene.start("gamescene");
 }
 
-if(localStorage.getItem("name") && !loggedIn){
+if (localStorage.getItem("name") && !loggedIn) {
   document.getElementById("input").value = localStorage.getItem("name");
 }
 
-if(loggedIn){
+if (loggedIn) {
   localStorage.setItem("name", "");
 }
 
-if(localStorage.getItem("server")){
+if (localStorage.getItem("server")) {
   document.getElementById("server").value = localStorage.getItem("server");
 }
-if(localStorage.getItem("gun")){
+if (localStorage.getItem("gun")) {
   document.getElementById("gun").value = localStorage.getItem("gun");
 }
 
-document.getElementById("playbtn").addEventListener("click", function(){
-  if(!window.rejoin){
+document.getElementById("playbtn").addEventListener("click", function() {
+  if (!window.rejoin) {
     window.room = false;
   } else {
     window.room = {
@@ -108,22 +108,22 @@ document.getElementById("playbtn").addEventListener("click", function(){
   startGame();
 });
 
-document.getElementById("createbtn").addEventListener("click", function(){
+document.getElementById("createbtn").addEventListener("click", function() {
   window.room = {
     mode: "create"
   };
   startGame();
 });
 
-document.getElementById("joinbtn").addEventListener("click", function(){
+document.getElementById("joinbtn").addEventListener("click", function() {
   let a;
-  if(autojoin){
+  if (autojoin) {
     a = promptmodal("", "Enter room code to join:", "Join", true, autojoin);
   } else {
     a = promptmodal("", "Enter room code to join:", "Join");
   }
   a.then(code => {
-    if(!document.getElementById("input").value.replace(/\s/g, "")){
+    if (!document.getElementById("input").value.replace(/\s/g, "")) {
       promptmodal("", "Enter your name: ", "OK", true).then(name => {
         document.getElementById("input").value = name;
         window.room = {
@@ -142,7 +142,7 @@ document.getElementById("joinbtn").addEventListener("click", function(){
   });
 });
 
-document.getElementById("howtoplay").addEventListener("click", function(){
+document.getElementById("howtoplay").addEventListener("click", function() {
   alertmodal("How To Play", `<p style="font-size: 18px">
   - WASD/Arrow keys to move<br>
   <br>- Click to shoot<br>
@@ -151,10 +151,10 @@ document.getElementById("howtoplay").addEventListener("click", function(){
   <br>- Press F for fullscreen, and L to leave game<br>
   <br>- Collect the gold for ammo<br>
   <br>- Kill as many players as you can<br>
-  <br>Happy playing!</p>`, "OK", true).then(() => {});
+  <br>Happy playing!</p>`, "OK", true).then(() => { });
 });
 
-if(autojoin){
+if (autojoin) {
   document.getElementById("joinbtn").click();
 }
 
@@ -169,7 +169,7 @@ const servers = {
   }
 };
 
-async function showServerData(num){
+async function showServerData(num) {
   try {
     let url = servers[num].url;
     let res = await fetch(url + "/stats");
@@ -178,7 +178,7 @@ async function showServerData(num){
     console.log(url, ": ", data.tps);
     servers[num].tps = data.tps;
     return data.tps;
-  } catch(e){
+  } catch (e) {
     console.log(e);
     document.getElementById("server" + num).innerHTML = `Server ${num} (offline)`;
     servers[num].tps = 0;
@@ -189,10 +189,10 @@ window.getServerData = () => {
   showServerData(1).then(() => {
     showServerData(2).then(() => {
       let keys = Object.values(servers);
-      keys = keys.sort(function(a, b){return b.tps - a.tps});
-      if(window.started) return;
+      keys = keys.sort(function(a, b) { return b.tps - a.tps });
+      if (window.started) return;
       document.getElementById("autoserver").innerHTML = `Auto (Server ${keys[0].num})`;
-      if(document.getElementById("server").value == "auto"){
+      if (document.getElementById("server").value == "auto") {
         window.chosenServer = keys[0].url;
       }
     });
