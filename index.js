@@ -9,7 +9,7 @@ const Filter = require("bad-words");
 const fs = require("fs");
 
 global.io = socketio(server, {
-  cors: { origin: "*" }
+  cors: { origin: "*" },
 });
 global.rooms = {
   main: {

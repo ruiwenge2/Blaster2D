@@ -26,13 +26,16 @@ class Game extends Phaser.Scene {
     this.cam = this.cameras.add(this.cameras.main.x, this.cameras.main.y, window.innerWidth, window.innerHeight);
     this.loadingtext = new Text(this, window.innerWidth / 2, window.innerHeight / 2, "Loading...", { fontSize: 100, fontFamily: "Arial" }).setOrigin(0.5);
     this.cameras.main.ignore(this.loadingtext);
+    document.body.setAttribute("onbeforeunload", "return ''");
   }
 
   create() {
     this.loaded = false;
     this.full_screen = false;
     this.url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
-    this.socket = io(this.url);
+    this.socket = io(this.url, {
+      closeOnBeforeunload: false
+    });
     this.name = name || localStorage.getItem("name");
     this.coins = {};
     this.enemies = {};
@@ -119,6 +122,7 @@ class Game extends Phaser.Scene {
         reload: false
       };
       game.scene.start("disconnect_scene");
+      document.body.removeAttribute("onbeforeunload");
       game.chatbox.destroy();
       window.rejoin = false;
     }
@@ -133,6 +137,7 @@ class Game extends Phaser.Scene {
         reload
       };
       game.scene.start("disconnect_scene");
+      document.body.removeAttribute("onbeforeunload");
       game.chatbox.destroy();
       window.rejoin = false;
     });
@@ -361,6 +366,7 @@ class Game extends Phaser.Scene {
         getServerData();
         window.rejoin = false;
         document.body.style.cursor = "auto";
+        document.body.removeAttribute("onbeforeunload");
       });
     });
 
@@ -763,6 +769,7 @@ class Game extends Phaser.Scene {
                 game.socket.disconnect();
                 getServerData();
                 document.body.style.cursor = "auto";
+                document.body.removeAttribute("onbeforeunload");
                 if(game.room == "main"){
                   window.rejoin = false;
                   game.scene.start("blank");
@@ -770,7 +777,6 @@ class Game extends Phaser.Scene {
                   window.rejoin = game.room;
                   document.getElementById("playbtn").click();
                 }
-
     
               }, { background: 0x00374ff });
               
@@ -801,6 +807,7 @@ class Game extends Phaser.Scene {
                   document.body.style.cursor = "auto";
                   window.rejoin = false;
                   game.died = false;
+                  document.body.removeAttribute("onbeforeunload");
                 }, { fontSize: 30 });
                 
                 game.leaveBtn.text.setDepth(102).setAlpha(0);
