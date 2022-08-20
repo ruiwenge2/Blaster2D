@@ -752,6 +752,7 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorX = 0;
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
+              document.body.removeAttribute("onbeforeunload");
               game.playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
                 window.removeEventListener("mousedown", game.shoot);
                 window.removeEventListener("touchstart", game.shoot);
@@ -768,7 +769,6 @@ class Game extends Phaser.Scene {
                 game.socket.disconnect();
                 getServerData();
                 document.body.style.cursor = "auto";
-                document.body.removeAttribute("onbeforeunload");
                 if(game.room == "main"){
                   window.rejoin = false;
                   game.scene.start("blank");
@@ -806,7 +806,6 @@ class Game extends Phaser.Scene {
                   document.body.style.cursor = "auto";
                   window.rejoin = false;
                   game.died = false;
-                  document.body.removeAttribute("onbeforeunload");
                 }, { fontSize: 30 });
                 
                 game.leaveBtn.text.setDepth(102).setAlpha(0);
@@ -820,7 +819,7 @@ class Game extends Phaser.Scene {
               game.tweens.add({
                 targets: game.deathRect,
                 duration: 300,
-                alpha:0.5
+                alpha: 0.5
               });
               
               game.tweens.add({
@@ -946,6 +945,8 @@ class Game extends Phaser.Scene {
         this.gun.angle2 = angle;
         this.pointerX = x;
         this.pointerY = y;
+        // this.cursor.x = x;
+        // this.cursor.y = y;
       } catch(e){
         console.log(e);
       }

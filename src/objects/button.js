@@ -26,7 +26,7 @@ class Button {
     this.button.height = this.text.height + 15;
     this.button.x = this.text.x - (this.text.width / 2) - 5;
     this.button.y = this.text.y - (this.text.height / 2) - 5;
-    this.button.setInteractive().on('pointerdown', onclick);
+    this.button.setInteractive({ cursor: "pointer" }).on('pointerdown', onclick);
     scene.add.existing(this);
   }
 

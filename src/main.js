@@ -13,10 +13,14 @@ window.mouseData = {
   angle: 0
 };
 
-document.addEventListener("click", function(e) {
+document.addEventListener("click", function(e){
   window.mouseData.x = e.clientX;
   window.mouseData.y = e.clientY;
   window.angle = Math.atan2(e.clientY - (window.innerHeight / 2), e.clientX - (window.innerWidth / 2));
+});
+
+document.addEventListener("contextmenu", function(e){
+  e.preventDefault();
 });
 
 const config = {
@@ -70,7 +74,7 @@ function startGame() {
 
   window.started = true;
 
-  document.body.style.cursor = "crosshair";
+  document.body.style.cursor = "url(/img/cursor.png) 15 15, auto";
 
   window.addEventListener("resize", () => {
     game.scale.resize(window.innerWidth, window.innerHeight);
