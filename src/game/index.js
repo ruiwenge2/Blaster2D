@@ -945,8 +945,6 @@ class Game extends Phaser.Scene {
         this.gun.angle2 = angle;
         this.pointerX = x;
         this.pointerY = y;
-        // this.cursor.x = x;
-        // this.cursor.y = y;
       } catch(e){
         console.log(e);
       }

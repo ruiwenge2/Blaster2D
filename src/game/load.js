@@ -24,7 +24,6 @@ class Load extends Phaser.Scene {
     this.load.image("arrow", "/img/gameObjects/arrow.png");
     this.load.image("grenade", "/img/gameObjects/grenade.png");
     this.load.image("explosion", "/img/gameObjects/explosion.png");
-    this.load.image("cursor", "/img/cursor.png");
     this.load.plugin("rexbbcodetextplugin", "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbbcodetextplugin.min.js", true);
   }
 
