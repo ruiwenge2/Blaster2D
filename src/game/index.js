@@ -465,7 +465,7 @@ class Game extends Phaser.Scene {
        this.cameras.main.ignore([this.arrowLeft, this.arrowRight, this.arrowUp, this.arrowDown]);
     }
   
-    this.gun = this.physics.add.sprite(this.player.x, this.player.y, "gun").setDepth(2);
+    this.gun = this.physics.add.sprite(this.player.x + Math.cos(0) * (radius + 29), this.player.y + Math.sin(0) * (radius + 29), "gun").setDepth(2);
 
     this.gun.angle2 = window.angle || 0;
     this.gun.angle = ((this.gun.angle2 * 180 / Math.PI) + 360) % 360;
