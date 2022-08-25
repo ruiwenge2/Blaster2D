@@ -420,8 +420,14 @@ class Game extends Phaser.Scene {
     //   }
     // }
 
-    this.background = this.add.tileSprite(0, 0, size, size, "grass").setOrigin(0).setDepth(0);
-    this.cam.ignore(this.background);
+    // this.background = this.add.tileSprite(0, 0, size, size, "grass").setOrigin(0).setDepth(0);
+    // this.cam.ignore(this.background);
+    for(let i = size / (ratio * 2); i < size; i += size / ratio){
+      for(let j = size / (ratio * 2); j < size; j += size / ratio){
+        let grass = this.add.image(i, j, "grass").setDepth(0);
+         this.cam.ignore(grass);
+      }
+    }
     
     // this.obstacle1 = this.physics.add.staticSprite(size / 2, size / 2 - 750, "obstacle").setDepth(0);
     // this.obstacle2 = this.physics.add.staticSprite(size / 2, size / 2 + 750, "obstacle").setDepth(0);
