@@ -336,6 +336,7 @@ class Game extends Phaser.Scene {
       };
       this.scene.start("disconnect_scene");
       window.rejoin = false;
+      document.body.removeAttribute("onbeforeunload");
     });
   }
 
@@ -496,6 +497,7 @@ class Game extends Phaser.Scene {
           };
           this.scene.start("disconnect_scene");
           window.rejoin = false;
+          document.body.removeAttribute("onbeforeunload");
           return;
         }
         let game = this;
@@ -979,6 +981,7 @@ class Game extends Phaser.Scene {
       };
       this.scene.start("disconnect_scene");
       window.rejoin = false;
+      document.body.removeAttribute("onbeforeunload");
       return;
     }
     
