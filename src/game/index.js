@@ -744,6 +744,7 @@ class Game extends Phaser.Scene {
               game.grenadesText.destroy();
               game.grenade_icon.destroy();
               game.shield.destroy();
+              
               if(game.arrowLeft){
                 game.arrowLeft.destroy();
                 game.arrowRight.destroy();
@@ -759,6 +760,7 @@ class Game extends Phaser.Scene {
               game.deathRect.scrollFactorY = 0;
               game.deathRect.setStrokeStyle(5, 0x0000000);
               document.body.removeAttribute("onbeforeunload");
+              
               game.playAgain = new Button(game, window.innerWidth / 2, window.innerHeight / 2 + 100, "Play Again", function(){
                 window.removeEventListener("mousedown", game.shoot);
                 window.removeEventListener("touchstart", game.shoot);
@@ -788,6 +790,7 @@ class Game extends Phaser.Scene {
               game.playAgain.text.setDepth(102).setAlpha(0);
               game.playAgain.button.setDepth(101).setAlpha(0);
               game.cameras.main.ignore([game.deathtext, game.infotext, game.deathRect, game.playAgain.text, game.playAgain.button]);
+              
               if(game.room != "main"){
                 game.switchWeapon = new Button(game, window.innerWidth - 150, 50, "Switch Weapon", function(){
                   selectmodal("Switch Weapon", "Choose a weapon: ", {
