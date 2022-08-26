@@ -32,6 +32,7 @@ class Grenade {
     setTimeout(() => {
       Object.values(rooms[this.room].players).forEach(player => {
         if(player.shield) return;
+        if(!player.spawned) return;
         let damage = 0;
         let distance = Math.hypot(this.x - player.x, this.y - player.y);
         if(distance <= 150){
