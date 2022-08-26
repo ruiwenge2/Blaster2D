@@ -169,7 +169,7 @@ const servers = {
     num: 1,
   },
   2: {
-    url: "https://blaster2d.herokuapp.com",
+    url: "https://blaster2d.onrender.com",
     num: 2
   }
 };
