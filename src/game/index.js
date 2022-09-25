@@ -146,6 +146,8 @@ class Game extends Phaser.Scene {
       promptmodal("", "Copy the link and share with your friends to play!", "Copy", true, `https://${location.host}/?code=${room}`, true).then((e) => {
         navigator.clipboard.writeText(e);
         this.focus = true;
+      }).catch(e => {
+        this.focus = true;
       });
     });
     
