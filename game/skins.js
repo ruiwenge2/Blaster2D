@@ -14,12 +14,12 @@ const skins = [
   {
     id: 2,
     url: "smileyface",
-    cost: 200
+    cost: 250
   },
   {
     id: 3,
     url: "target",
-    cost: 100
+    cost: 200
   },
   {
     id: 4,
@@ -34,12 +34,12 @@ const skins = [
   {
     id: 6,
     url: "thumbsup",
-    cost: 150
+    cost: 200
   },
   {
     id: 7,
     url: "expressionless",
-    cost: 200
+    cost: 300
   },
   {
     id: 8,
@@ -64,7 +64,7 @@ const skins = [
   {
     id: 12,
     url: "questionmark",
-    cost: 250
+    cost: 500
   }
 ];
 
