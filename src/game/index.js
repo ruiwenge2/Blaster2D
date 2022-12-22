@@ -50,6 +50,7 @@ class Game extends Phaser.Scene {
     this.shooting = false;
     this.shotBefore = false;
     this.focus = true;
+    this.kills = [];
     this.cameras.main.setZoom((window.innerWidth + window.innerHeight) / 2200);
     let game = this;
     grecaptcha.ready(function() {
@@ -95,6 +96,8 @@ class Game extends Phaser.Scene {
           this.grenadesText.y = window.innerHeight - 40;
           this.grenade_icon.x = window.innerWidth - 295;
           this.grenade_icon.y = window.innerHeight - 55;
+          this.killstext.x = window.innerWidth - 425;
+          this.killstext.y = 160;
           this.minimap.resize();
         }
   
@@ -173,6 +176,9 @@ class Game extends Phaser.Scene {
         this.fpstext = new Text(this, window.innerWidth - 150, 50, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
         this.tps = new Text(this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
         this.ping = new Text(this, window.innerWidth - 150, 110, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
+        this.killstext = this.add.rexBBCodeText(window.innerWidth - 425, 160, "", { fontSize: 16, fontFamily: "copperplate"}).setOrigin(0).setDepth(100);
+        this.killstext.scrollFactorX = 0;
+        this.killstext.scrollFactorY = 0;
         
         this.reloading = new Text(this, window.innerWidth - 300, window.innerHeight - 120, "", { fontSize: 30, fontFamily: "Arial" }).setOrigin(1);
         this.shots = new Text(this, window.innerWidth - 310, window.innerHeight - 80, "", { fontSize: 30, fontFamily: "Arial" }).setOrigin(1);
@@ -191,7 +197,7 @@ class Game extends Phaser.Scene {
         this.shield_icon.scrollFactorY = 0;
         this.shield_icon.visible = false;
 
-        this.cameras.main.ignore([this.playerstext, this.scorestext, this.fpstext, this.tps, this.ping, this.reloading, this.shots, this.bullet_icon, this.grenadesText, this.grenade_icon, this.shield, this.shield_icon]);
+        this.cameras.main.ignore([this.playerstext, this.scorestext, this.fpstext, this.tps, this.ping, this.reloading, this.shots, this.bullet_icon, this.grenadesText, this.grenade_icon, this.shield, this.shield_icon, this.killstext]);
         
         this.cam.ignore([this.player, this.nametext]);
   
@@ -717,7 +723,7 @@ class Game extends Phaser.Scene {
       }
     });
 
-    this.socket.on("player died", (id, shooter, shooterName) => {   
+    this.socket.on("player died", (id, shooter, shooterName, killword) => {   
       try {
         if(!this.verified) return;
         let game = this;
@@ -728,6 +734,8 @@ class Game extends Phaser.Scene {
           this.bar.destroy();
           this.nametext.destroy();
           
+          this.kills.push(`${shooterName} ${killword} ${this.name}`);
+          if(this.kills.length > 5) this.kills.shift();
           this.tweens.add({
             targets: [this.player],
             duration: 1000,
@@ -748,6 +756,7 @@ class Game extends Phaser.Scene {
               game.grenadesText.destroy();
               game.grenade_icon.destroy();
               game.shield.destroy();
+              game.killstext.destroy();
               
               if(game.arrowLeft){
                 game.arrowLeft.destroy();
@@ -865,6 +874,8 @@ class Game extends Phaser.Scene {
               game.minimap.removePlayer(id);
             }
           });
+          this.kills.push(`${shooterName} ${killword} ${playerName}`);
+          if(this.kills.length > 5) this.kills.shift();
         }
         if(shooter == this.socket.id){
           this.score++;
@@ -1024,6 +1035,8 @@ class Game extends Phaser.Scene {
     for(let num of Object.keys(colors)){
       this.playerstext.addColor(colors[num], num);
     }
+
+    this.killstext.setText(this.kills.join("\n"));
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
 

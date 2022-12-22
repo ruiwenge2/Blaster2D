@@ -204,7 +204,7 @@ class Player {
         if(this.health <= 0){
           this.health = 0;
           this.died = true;
-          io.to(this.room).emit("player died", this.id, bullet.shooter, bullet.shooterName);
+          io.to(this.room).emit("player died", this.id, bullet.shooter, bullet.shooterName, killWords[random(0, killWords.length - 1)]);
           if(rooms[this.room].players[bullet.shooter]){
             rooms[this.room].players[bullet.shooter].addScore();
           }
