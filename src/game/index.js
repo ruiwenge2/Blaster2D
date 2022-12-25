@@ -1035,8 +1035,11 @@ class Game extends Phaser.Scene {
     for(let num of Object.keys(colors)){
       this.playerstext.addColor(colors[num], num);
     }
-
-    this.killstext.setText(this.kills.join("\n"));
+    
+    if(!this.arrowLeft){
+      this.killstext.setText(this.kills.join("\n"));
+    }
+  
     
     this.fpstext.setText("FPS: " + Math.round(this.sys.game.loop.actualFps));
 
