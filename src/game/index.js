@@ -1,7 +1,8 @@
 import { size, playersize, coinsize, ratio, random, checkMovement, treesize, gamestate_rate, radius } from "../functions.js";
 import Text from "../objects/text.js";
 import Button from "../objects/button.js";
-import Bar from "../objects/bar.js";
+import Bar from "../objects/bar.js";x
+
 import Chatbox from "./chat.js";
 import Minimap from "./minimap.js";
 import trees from "../trees.json";
