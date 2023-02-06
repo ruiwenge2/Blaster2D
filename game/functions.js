@@ -35,7 +35,7 @@ module.exports.playerDead = function(id){
     check = rooms[room].diedPlayers.includes(id);
   })
   return check;
-}
+};
 
 module.exports.setUpRoom = function(room){
   if(Object.keys(rooms[room].players).length == 0){
@@ -60,7 +60,7 @@ module.exports.setUpRoom = function(room){
 module.exports.getUser = async function(user){
   let users = await db.get("users");
   return users[user];
-}
+};
 
 module.exports.deleteUser = function(user){
   db.get("users").then(users => {
@@ -83,7 +83,7 @@ module.exports.verify = async function(token, secret){
     }
   });
   return result.data;
-}
+};
 
 module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
   var dx = x1 - x2;
@@ -91,7 +91,7 @@ module.exports.circleCol = function(x1, y1, r1, x2, y2, r2){
   var distance = Math.sqrt(dx * dx + dy * dy);
   if (distance < r1 + r2) return true;
   return false;
-}
+};
 
 module.exports.goldRockCol = (x, y) => {
   let col = false;
@@ -101,8 +101,9 @@ module.exports.goldRockCol = (x, y) => {
     }
   });
   return col;
-}
+};
+
 module.exports.getTime = () => {
   let date = new Date();
   return `, [${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]`
-}
+};
