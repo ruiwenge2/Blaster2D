@@ -1,4 +1,4 @@
-const { random, circleCol } = require("./functions.js");
+const { random, circleCol, getTime } = require("./functions.js");
 const collide = require("line-circle-collision");
 const Grenade = require("./grenade");
 
@@ -213,7 +213,7 @@ class Player {
               rooms[this.room].timeleft = 30 * random(1, 4); // random amount of seconds until a bot joins
             }
           } else {
-            console.log(this.name + " left the room " + this.room);
+            console.log(this.name + " left the room " + this.room + getTime());
             rooms[this.room].diedPlayers.push(this.id);
           }
         }

@@ -1,4 +1,4 @@
-const { random, generateCode, checkUser, setUpRoom, verify, shoot, playerDead } = require("./functions.js");
+const { random, generateCode, checkUser, setUpRoom, verify, shoot, playerDead, getTime } = require("./functions.js");
 const Player = require("./player.js");
 
 const opposites = {
@@ -11,24 +11,25 @@ const opposites = {
 const banned = [];
 const possible = ["24.6.134.221", "184.103.221.193", "68.225.240.203"];
 
+
 const socketfunc = socket => {
   socket.on("join", async (name, gun, token, loggedIn, room, angle) => {
     try {
       let ip = socket.handshake.headers["x-forwarded-for"].split(", ")[0];
       if(banned.includes(ip)){
-        console.log(ip);
+        console.log(ip + getTime());
         socket.emit("kick", "You are banned.");
         return;
       }
       let verified = await verify(token, process.env.recaptcha_secret);
       if(!verified.success){
-        console.log(name + " is a bot");
+        console.log(name + " is a bot" + getTime());
         socket.emit("kick", "Invalid reCAPTCHA token, please try again.", true);
         socket.disconnect();
         return;
       }
       if(verified.score <= 0.2){
-        console.log(name + " has a low captcha score");
+        console.log(name + " has a low captcha score" + getTime());
         socket.emit("kick", "Low captcha score, please try again.");
         socket.disconnect();
         return;
@@ -72,14 +73,14 @@ const socketfunc = socket => {
       socket.emit("gamedata", rooms[code], code);
       socket.join(code);
       socket.broadcast.to(code).emit("new player", rooms[code].players[socket.id]);
-      console.log(rooms[code].players[socket.id].name + " joined the room " + code + ": " + ip);
+      console.log(rooms[code].players[socket.id].name + " joined the room " + code + ": " + ip + getTime());
     } catch(e){
       console.log(e);
     }
   });
 
   socket.on("join server 2", name => {
-    console.log(name + " joined server 2: " + socket.handshake.headers["x-forwarded-for"].split(",")[0]);
+    console.log(name + " joined server 2: " + socket.handshake.headers["x-forwarded-for"].split(",")[0] + getTime());
   });
 
   socket.on("player angle", (data, room) => {
@@ -105,14 +106,14 @@ const socketfunc = socket => {
       let name = rooms[room].players[socket.id].name;
       delete rooms[room].players[socket.id];
       io.to(room).emit("left", socket.id);
-      console.log(name + " left the room " + room);
+      console.log(name + " left the room " + room + getTime());
       let sockets = await io.in(room).fetchSockets();
       if(!sockets.length && room != "main"){
         setTimeout(async () => {
           let s = await io.in(room).fetchSockets();
           if(s.length) return;
           delete rooms[room];
-          console.log(`removed room ${room}`);
+          console.log(`removed room ${room}`+ getTime());
         }, 5000);
       }
     } catch(e){

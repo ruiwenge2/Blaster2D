@@ -8,7 +8,7 @@ class Text extends Phaser.GameObjects.Text {
       style.fontSize = 30;
       style.background = 0x0000ff;
     }
-    if(!("fontSize" in style)){
+    if(!("fontSize" in style)){ 
       style.fontSize = 30;
     }
     

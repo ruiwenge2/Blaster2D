@@ -102,3 +102,7 @@ module.exports.goldRockCol = (x, y) => {
   });
   return col;
 }
+module.exports.getTime = () => {
+  let date = new Date();
+  return `, [${date.getMonth()}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]`
+}
