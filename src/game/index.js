@@ -163,6 +163,7 @@ class Game extends Phaser.Scene {
         if(this.url != "https://blaster2d.ruiwenge2.repl.co"){
           io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", this.name);
         }
+      console.log("hello")
 
         
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, `skin_${data.players[this.socket.id].skin}`).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
