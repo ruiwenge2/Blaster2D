@@ -28,8 +28,8 @@ const socketfunc = socket => {
         socket.disconnect();
         return;
       }
-      if(verified.score <= 0.2){
-        console.log(name + " has a low captcha score" + getTime());
+      if(verified.score < 0.1){
+        console.log(name + " has a low captcha score " + verified.score + getTime());
         socket.emit("kick", "Low captcha score, please try again.");
         socket.disconnect();
         return;

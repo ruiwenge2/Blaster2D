@@ -165,7 +165,7 @@ if (autojoin) {
 
 const servers = {
   1: {
-    url: "https://blaster2d.ruiwenge2.repl.co",
+    url: "https://191bb644-256e-48ce-b188-a2dde4c165f4-00-1da43r3sj1wly.spock.replit.dev",
     num: 1,
   },
   2: {

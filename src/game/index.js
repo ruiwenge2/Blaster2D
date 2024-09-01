@@ -31,7 +31,7 @@ class Game extends Phaser.Scene {
   create() {
     this.loaded = false;
     this.full_screen = false;
-    this.url = window.room ? "https://blaster2d.ruiwenge2.repl.co": window.chosenServer;
+    this.url = window.room ? "https://191bb644-256e-48ce-b188-a2dde4c165f4-00-1da43r3sj1wly.spock.replit.dev": window.chosenServer;
     this.socket = io(this.url, {
       closeOnBeforeunload: false
     });
@@ -160,8 +160,8 @@ class Game extends Phaser.Scene {
         this.room = room;
         this.loadingtext.destroy();
         this.name = data.players[this.socket.id].name;
-        if(this.url != "https://blaster2d.ruiwenge2.repl.co"){
-          io("https://blaster2d.ruiwenge2.repl.co").emit("join server 2", this.name);
+        if(this.url != "https://191bb644-256e-48ce-b188-a2dde4c165f4-00-1da43r3sj1wly.spock.replit.dev"){
+          io("https://191bb644-256e-48ce-b188-a2dde4c165f4-00-1da43r3sj1wly.spock.replit.dev").emit("join server 2", this.name);
         }
       console.log("hello")
 
@@ -169,7 +169,7 @@ class Game extends Phaser.Scene {
         this.player = this.physics.add.sprite(data.players[this.socket.id].x, data.players[this.socket.id].y, `skin_${data.players[this.socket.id].skin}`).setScale(playersize / 100, playersize / 100).setDepth(2).setAlpha(0.5);
         this.bar = new Bar(this, this.player.x, this.player.y - radius - 20, 100, 2);
         this.nametext = new Text(this, this.player.x, this.player.y + radius + 20, this.name, { fontSize: 20, fontFamily: "sans-serif", color: loggedIn ? "blue": "white" }, 2, true);
-        this.playerstext = this.add.rexBBCodeText(20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
+        this.playerstext = new Text(this, 20, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0).setDepth(100);
         this.playerstext.scrollFactorX = 0;
         this.playerstext.scrollFactorY = 0;
         this.scorestext = new Text(this, 250, 20, "", { fontSize: 22, fontFamily: "Arial" }).setOrigin(0);
@@ -177,7 +177,7 @@ class Game extends Phaser.Scene {
         this.fpstext = new Text(this, window.innerWidth - 150, 50, "FPS: 60", { fontSize: 25, fontFamily: "copperplate" });
         this.tps = new Text(this, window.innerWidth - 150, 80, "TPS: 30", { fontSize: 25, fontFamily: "copperplate" });
         this.ping = new Text(this, window.innerWidth - 150, 110, "Ping: 0 ms", { fontSize: 25, fontFamily: "copperplate" });
-        this.killstext = this.add.rexBBCodeText(window.innerWidth - 425, 160, "", { fontSize: 16, fontFamily: "copperplate"}).setOrigin(0).setDepth(100);
+        this.killstext = new Text(this, window.innerWidth - 425, 160, "", { fontSize: 16, fontFamily: "copperplate"}).setOrigin(0).setDepth(100);
         this.killstext.scrollFactorX = 0;
         this.killstext.scrollFactorY = 0;
         
@@ -1027,15 +1027,14 @@ class Game extends Phaser.Scene {
     let text = "";
     let text2 = "";
     for(let p of sorted_players){
-      text += `[color=${p.bot ? "red": (p.account ? "blue": "white")}]${p.name}[/color]\n`; // #2b2bff
+      text += `${p.name}\n`; // #2b2bff
       text2 += p.score + "\n";
     }
     this.playerstext.setText(text);
+    console.log(this.playerstext);
     this.scorestext.setText(text2);
 
-    for(let num of Object.keys(colors)){
-      this.playerstext.addColor(colors[num], num);
-    }
+    console.log(colors)
     
     if(!this.arrowLeft){
       this.killstext.setText(this.kills.join("\n"));
